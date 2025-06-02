@@ -4,6 +4,7 @@
 #include <iostream>
 #include <mqtt_client.h>
 #include <downloader.h>
+#include "task_repository.h"
 
 Control::Control(const std::string &url_root, const std::string &client_id)
     : url_root_(url_root),
@@ -77,7 +78,10 @@ void Control::handleMessage(const std::string &code, const std::string &body)
     {
         // 处理播放列表
         printf("Received task, start caching");
-        task_repository_.saveTask(body);
+        std::string device_id = task_repository_.saveTask(body);
+        if (device_id.empty())
+            return;
+        this->refresh(device_id);
     }
     else if ("0005" == code)
     {
@@ -127,6 +131,45 @@ void Control::handleMessage(const std::string &code, const std::string &body)
             std::cerr << "配置参数格式无效 " << std::endl;
         }
     }
+}
+
+/// @brief 刷新播放器
+/// @param device_id
+void Control::refresh(const std::string device_id)
+{
+    auto playList = task_repository_.getPlayList(device_id);
+    for (const auto &item : playList)
+    {
+
+        Downloader::Task task{
+            item->download_url,
+            item->file_name,
+            item->id,
+            item->MD5,
+            item->type};
+
+        downloader_.add_task(task,
+                             [this](const std::string &file_name, const std::string &file_id, bool success, const std::string &error)
+                             {
+                                 if (success)
+                                 {
+                                     this->downloadCallback(file_name, file_id);
+                                 }
+                                 else
+                                 {
+                                     std::cout << "Failed: " << file_name << " ID: " << file_id << " Error: " << error << std::endl;
+                                 }
+                             });
+    }
+}
+
+/// @brief 文件下载完成回调
+/// @param file_name
+/// @param file_id
+void Control::downloadCallback(const std::string &file_name, const std::string &file_id)
+{
+    std::cout << "文件: " << file_name << " 下载完成。" << std::endl;
+    // 添加到播放列表
 }
 
 void Control::heartbeat(const std::int32_t &speed)

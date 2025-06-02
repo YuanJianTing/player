@@ -9,32 +9,32 @@
 #include <thread>
 #include <filesystem>
 
-class Downloader {
+class Downloader
+{
 public:
-    using DownloadCallback = std::function<void(const std::string& file_name, 
-                                              const std::string& file_id, 
-                                              bool success, 
-                                              const std::string& error)>;
+    using DownloadCallback = std::function<void(const std::string &file_name,
+                                                const std::string &file_id,
+                                                bool success,
+                                                const std::string &error)>;
 
-    Downloader(const std::string& url_root);
-    ~Downloader();
-
-    void add_task(const std::string& url, 
-                 const std::string& file_name, 
-                 const std::string& file_id, 
-                 const std::string& md5, 
-                 DownloadCallback callback);
-
-private:
-    struct Task {
+    struct Task
+    {
         std::string url;
         std::string file_name;
         std::string file_id;
         std::string md5;
+        int type; // 任务类型
         DownloadCallback callback;
     };
 
+    Downloader(const std::string &url_root);
+    ~Downloader();
+
+    void add_task(const Task &task, DownloadCallback callback);
+
+private:
     std::string url_root_;
+    std::string work_dir_;
     std::queue<Task> tasks_;
     std::mutex queue_mutex_;
     std::condition_variable queue_cv_;
@@ -42,10 +42,15 @@ private:
     bool stop_flag_;
 
     void worker();
-    void process_task(const Task& task);
-    size_t get_file_size(const std::string& url);
-    bool download_file_multithread(const std::string& url, const std::string& local_path);
-    bool verify_md5(const std::string& file_path, const std::string& expected_md5);
+    void process_task(const Task &task);
+    size_t get_file_size(const std::string &url);
+    bool download_file_multithread(const std::string &url, const std::string &local_path);
+    /// @brief 单线程下载文件
+    /// @param url
+    /// @param local_path
+    /// @return
+    bool download_file(const std::string &url, const std::string &local_path);
+    bool verify_md5(const std::string &file_path, const std::string &expected_md5);
 };
 
 #endif // DOWNLOADER_H

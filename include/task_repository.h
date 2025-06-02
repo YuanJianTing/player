@@ -39,7 +39,7 @@ public:
     TaskRepository();
     ~TaskRepository();
 
-    void saveTask(std::string data);
+    std::string saveTask(std::string data);
     std::vector<std::unique_ptr<MediaItem>> getPlayList(const std::string &device_id);
     std::string getTaskId(std::string device_id);
 

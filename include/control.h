@@ -20,6 +20,7 @@ private:
 
     void handleMessage(const std::string &code, const std::string &body);
     void heartbeat(const std::int32_t &speed);
+    void downloadCallback(const std::string &file_name, const std::string &file_id);
 
 public:
     Control(const std::string &url_root, const std::string &client_id);
@@ -27,6 +28,8 @@ public:
 
     // 启动控制器
     void start();
+    // 刷新播放器
+    void refresh(const std::string device_id);
     // 重置配置
     void reset_config();
 };

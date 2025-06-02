@@ -19,7 +19,7 @@ TaskRepository::~TaskRepository()
 {
 }
 
-void TaskRepository::saveTask(std::string data)
+std::string TaskRepository::saveTask(std::string data)
 {
     try
     {
@@ -29,7 +29,7 @@ void TaskRepository::saveTask(std::string data)
         if (!parsingSuccessful)
         {
             std::cerr << "数据解析失败： " << data << std::endl;
-            return;
+            return "";
         }
         std::string device = root["device"].asString();
         std::string taskId = root["taskId"].asString();
@@ -40,11 +40,13 @@ void TaskRepository::saveTask(std::string data)
         Json::StreamWriterBuilder wbuilder;
         std::string result = Json::writeString(wbuilder, items);
         saveFile(device + ".json", result);
+        return device;
     }
     catch (const std::exception &e)
     {
         std::cerr << "save task fail:" << e.what() << '\n';
     }
+    return "";
 }
 
 std::vector<std::unique_ptr<MediaItem>> TaskRepository::getPlayList(const std::string &device_id)
