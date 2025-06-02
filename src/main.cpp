@@ -9,7 +9,7 @@
 
 int main()
 {
-    printf("%s 向你问好!\n", "eplayer");
+    // printf("%s 向你问好!\n", "eplayer");
 
     std::string url_root = "http://114.55.52.37:8000/";
     std::string client_id = "6A10000000FF";
