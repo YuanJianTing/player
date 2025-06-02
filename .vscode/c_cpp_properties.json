@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include",
+                "/usr/include/aarch64-linux-gnu/curl",
+                "/usr/include/gstreamer-1.0",
+                "/usr/include/glib-2.0",
+                 "/usr/lib/aarch64-linux-gnu/glib-2.0/include",
+                "/usr/include/aarch64-linux-gnu"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}
