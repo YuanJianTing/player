@@ -10,8 +10,11 @@ namespace fs = std::filesystem;
 
 struct GStreamerPlayer::Impl {
     GstElement* pipeline = nullptr;
+    GstElement* overlayElem = nullptr; // æ–°å¢
     GstElement* source = nullptr;
     GstElement* sink = nullptr;
+
+    std::string overlayImagePath;
 
     ErrorCallback errorCallback;
     StateChangedCallback stateCallback;
@@ -20,10 +23,19 @@ struct GStreamerPlayer::Impl {
     State currentState = State::NULL_;
     std::mutex stateMutex;
 
+    guint busId = 0;
+
+    int videoOffsetX = 0;
+    int videoOffsetY = 0;
+    int overlayOffsetX = 0;
+    int overlayOffsetY = 0;
+    int outputWidth = 800;
+    int outputHeight = 1280;
+
     static gboolean busCallback(GstBus* bus, GstMessage* msg, gpointer data) {
         auto self = static_cast<Impl*>(data);
 
-        //std::cout << "busCallback£ºmsg= " << msg->type << std::endl;
+        //std::cout << "busCallbackï¼šmsg= " << msg->type << std::endl;
 
         switch (GST_MESSAGE_TYPE(msg)) {
         case GST_MESSAGE_ERROR: {
@@ -41,23 +53,33 @@ struct GStreamerPlayer::Impl {
                 g_free(debug);
             }
 
+            GMainLoop* loop = (GMainLoop*)data;
+            g_main_loop_quit(loop);
+            std::cout << "æ¨å‡ºç¨‹åº" << std::endl;
+            /* clean up */
+            gst_element_set_state(self->pipeline, GST_STATE_NULL);
+            gst_object_unref(self->pipeline);
+            g_source_remove(self->busId);
+            g_main_loop_unref(loop);
+
             if (self->errorCallback) {
                 self->errorCallback(ErrorType::PIPELINE_FAILURE, errorMsg);
             }
+
             break;
         }
-        case GST_MESSAGE_EOS://ÊÓÆµ²¥·ÅÍê³ÉÊ±
-            //ÖØĞÂ¿ªÊ¼²¥·Å
-            std::cout << "ÖØĞÂ¿ªÊ¼²¥·Å" << std::endl;
-            // Ê¹ÓÃg_idle_addÈ·±£ÔÚÖ÷Ïß³ÌÉÏÏÂÎÄÖĞÖ´ĞĞseek²Ù×÷
+        case GST_MESSAGE_EOS://è§†é¢‘æ’­æ”¾å®Œæˆæ—¶
+            //é‡æ–°å¼€å§‹æ’­æ”¾
+            std::cout << "é‡æ–°å¼€å§‹æ’­æ”¾" << std::endl;
+            // ä½¿ç”¨g_idle_addç¡®ä¿åœ¨ä¸»çº¿ç¨‹ä¸Šä¸‹æ–‡ä¸­æ‰§è¡Œseekæ“ä½œ
             //g_idle_add([](gpointer data) -> gboolean {
             //    auto pipeline = static_cast<GstElement*>(data);
             //    if (!gst_element_seek_simple(pipeline, GST_FORMAT_TIME,
             //        static_cast<GstSeekFlags>(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), 0)) {
             //        std::cerr << "Seek to start failed!" << std::endl;
             //    }
-            //    return G_SOURCE_REMOVE; // Ö»Ö´ĞĞÒ»´Î
-            //    }, gst_object_ref(self->pipeline)); // Ôö¼ÓÒıÓÃ¼ÆÊı·ÀÖ¹ÄÚ´æĞ¹Â©
+            //    return G_SOURCE_REMOVE; // åªæ‰§è¡Œä¸€æ¬¡
+            //    }, gst_object_ref(self->pipeline)); // å¢åŠ å¼•ç”¨è®¡æ•°é˜²æ­¢å†…å­˜æ³„æ¼
 
             gst_element_seek_simple(self->pipeline, GST_FORMAT_TIME,
                 static_cast<GstSeekFlags>(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), 0);
@@ -72,7 +94,7 @@ struct GStreamerPlayer::Impl {
             if (GST_MESSAGE_SRC(msg) == GST_OBJECT(self->pipeline)) {
                 GstState old_state, new_state, pending;
                 gst_message_parse_state_changed(msg, &old_state, &new_state, &pending);
-                //std::cout << "×´Ì¬±ä¸ü£º Old: " << old_state << ", New: " << new_state << std::endl;
+                //std::cout << "çŠ¶æ€å˜æ›´ï¼š Old: " << old_state << ", New: " << new_state << std::endl;
                 if (new_state == GST_STATE_PLAYING) {
                     std::cout << "Pipeline is playing" << std::endl;
                 }
@@ -117,7 +139,7 @@ GStreamerPlayer::~GStreamerPlayer() {
 bool GStreamerPlayer::load(const std::string& filePath) {
     stop();
 
-    // 1. ¸ü½¡×³µÄÎÄ¼ş¼ì²é
+    // 1. æ›´å¥å£®çš„æ–‡ä»¶æ£€æŸ¥
     try {
         if (!fs::exists(filePath)) {
             if (impl->errorCallback) {
@@ -135,57 +157,84 @@ bool GStreamerPlayer::load(const std::string& filePath) {
         return false;
     }
 
+
+    std::string videoBoxPart;
+    if (impl->videoOffsetX != 0 || impl->videoOffsetY != 0) {
+        videoBoxPart = " ! videobox border-alpha=0 left=" + std::to_string(impl->videoOffsetX) +
+            " top=" + std::to_string(impl->videoOffsetY);
+    }
+
+    std::string scaleCaps = " ! videoscale ! video/x-raw,width=" + std::to_string(impl->outputWidth) +
+        ",height=" + std::to_string(impl->outputHeight);
+
+
+    std::string overlayPart;
+    if (!impl->overlayImagePath.empty()) {
+        overlayPart = " ! gdkpixbufoverlay name=gdkpixbufoverlay0 location=\"" + impl->overlayImagePath + "\""
+            " offset-x=" + std::to_string(impl->overlayOffsetX) +
+            " offset-y=" + std::to_string(impl->overlayOffsetY);
+    }
+
+
 #ifdef _WIN32
-    //std::string uri = "file:///" + filePath;
-    //std::replace(uri.begin(), uri.end(), '\\', '/'); // WindowsÂ·¾¶×ª»»
-
-    std::string uri = filePath;
-    // ³¢ÊÔ¶àÖÖ¹ÜµÀ·½°¸
-    const char* pipeline_configs[] = {
-        // "playbin uri=%s",  // ·½°¸1£ºÊ¹ÓÃplaybin
-        // "uridecodebin uri=%s ! videoconvert ! autovideosink",  // ·½°¸2
-        "filesrc location=%s ! decodebin  ! d3dvideosink"  // ·½°¸3
-        // "filesrc location=%s ! decodebin  ! videoconvert ! autovideosink"  // ·½°¸3
-    };
-
+    //std::string pipelineStr = "filesrc location=\""+ filePath +"\" ! decodebin ! videoconvert" + overlayPart + " ! d3dvideosink";
+    std::string pipelineStr =
+        "filesrc location=\"" + filePath + "\" ! decodebin ! videoconvert" +
+        videoBoxPart + scaleCaps +  overlayPart + " ! d3dvideosink"; //    d3dvideosink
 #else
-     // 2. Ê¹ÓÃ¸ü¼òµ¥µÄ¹ÜµÀ²âÊÔ
-    //std::string uri = "file://" + filePath;
-    std::string uri =  filePath;
-    //std::replace(uri.begin(), uri.end(), '\\', '/'); // WindowsÂ·¾¶×ª»»
+    // é€‚ç”¨äºæ— å¤´Linuxç³»ç»Ÿï¼Œç›´æ¥è¾“å‡ºåˆ°ç‰©ç†å±å¹•
+    std::string pipelineStr =
+        "filesrc location=\"" + filePath + "\" ! qtdemux name=demux demux.video_0 ! h264parse ! avdec_h264 ! videoconvert" +
+         scaleCaps + overlayPart + " ! fbdevsink"; //é€‚ç”¨äºæ— å¤´ç³»ç»Ÿï¼škmssink ã€fbdevsink
+   
+    /*
+    filesrc location="/video/fl.mov" ! qtdemux ! h264parse ! avdec_h264 ! videoconvert \
+! videobox border-alpha=0 left=100 top=200 right=0 bottom=0 \
+! videoscale ! video/x-raw,width=800,height=1280 \
+! gdkpixbufoverlay name=gdkpixbufoverlay0 location="/video/6A00002F3344.png" offset-x=0 offset-y=0 \
+! fbdevsink
 
-    //gst-launch-1.0 filesrc location=/video/001_1734408210500.mp4 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! kmssink driver-name=vc4
-    // ³¢ÊÔ¶àÖÖ¹ÜµÀ·½°¸
-    const char* pipeline_configs[] = {
-        "filesrc location=%s ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! kmssink driver-name=vc4",//Ê÷İ®ÅÉÉè±¸
-       // "playbin uri=%s",  // ·½°¸1£ºÊ¹ÓÃplaybin
-       // "uridecodebin uri=%s ! videoconvert ! autovideosink",  // ·½°¸2
-        //"filesrc location=%s ! qtdemux ! queue ! h264parse ! avdec_h264 ! videoconvert ! autovideosink"  // ·½°¸3
-    };
+
+filesrc location="/video/fl.mov" ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! 
+videobox border-alpha=0 left=100 top=200 right=0 bottom=0 ! videoscale ! video/x-raw,width=800,height=1280 ! gdkpixbufoverlay name=gdkpixbufoverlay0 location="/video/6A00002F3344.png" offset-x=0 offset-y=0 ! fbdevsink
+    */
+
+    //std::string pipelineStr =
+    //    "filesrc location=\"" + filePath + "\" ! decodebin ! videoconvert ! videoscale ! video/x-raw,width=800,height=1280 ! fbdevsink"; //é€‚ç”¨äºæ— å¤´ç³»ç»Ÿï¼škmssinkã€fbdevsink
+
 #endif
    
 
     GError* error = nullptr;
-    bool pipeline_created = false;
+    bool pipeline_created = true;
 
-    for (size_t i = 0; i < sizeof(pipeline_configs) / sizeof(pipeline_configs[0]); ++i) {
-        char* pipeline_str = g_strdup_printf(pipeline_configs[i], uri.c_str());
+    //char* pipeline_str = pipelineStr.c_str();
 
-        std::cout << "²¥·ÅÊÓÆµÃüÁî£º " << pipeline_str << std::endl;
+    std::cout << "cmdï¼š " << pipelineStr << std::endl;
 
-        impl->pipeline = gst_parse_launch(pipeline_str, &error);
-        g_free(pipeline_str);
+    impl->pipeline = gst_parse_launch(pipelineStr.c_str(), &error);
 
-        if (impl->pipeline) {
-            std::cout << "Pipeline created with config " << i << std::endl;
-            pipeline_created = true;
-            break;
+    if (!impl->pipeline) {
+        if (impl->errorCallback) {
+            impl->errorCallback(ErrorType::PIPELINE_FAILURE, "Pipeline creation failed");
         }
-
         if (error) {
-            std::cerr << "Pipeline config " << i << " failed: " << error->message << std::endl;
+            std::cerr << "Pipeline error: " << error->message << std::endl;
             g_clear_error(&error);
         }
+        return false;
+    }
+
+    if (impl->pipeline) {
+        pipeline_created = true;
+        // æŸ¥æ‰¾ overlay å…ƒç´ 
+        impl->overlayElem = gst_bin_get_by_name(GST_BIN(impl->pipeline), "gdkpixbufoverlay0");
+        // å¦‚æœä½ åœ¨ pipeline å­—ç¬¦ä¸²é‡Œç”¨ name=gdkpixbufoverlay0ï¼Œæ‰èƒ½è¿™æ ·æŸ¥æ‰¾
+    }
+
+    if (error) {
+        std::cerr << "Pipeline config failed: " << error->message << std::endl;
+        g_clear_error(&error);
     }
 
     if (!pipeline_created) {
@@ -196,7 +245,7 @@ bool GStreamerPlayer::load(const std::string& filePath) {
         return false;
     }
 
-    // 3. ¸ü°²È«µÄbus´¦Àí
+    // 3. æ›´å®‰å…¨çš„buså¤„ç†
     GstBus* bus = gst_element_get_bus(impl->pipeline);
     if (!bus) {
         if (impl->errorCallback) {
@@ -205,17 +254,20 @@ bool GStreamerPlayer::load(const std::string& filePath) {
         return false;
     }
 
-    if (!gst_bus_add_watch(bus, Impl::busCallback, impl)) {
+    impl->busId = gst_bus_add_watch(bus, Impl::busCallback, impl);
+
+    if (!impl->busId) {
         if (impl->errorCallback) {
             impl->errorCallback(ErrorType::PIPELINE_FAILURE, "Failed to add bus watch");
         }
         gst_object_unref(bus);
+
         return false;
     }
     gst_object_unref(bus);
 
 
-    // 4. Ô¤¼ÓÔØ»ñÈ¡ĞÅÏ¢
+    // 4. é¢„åŠ è½½è·å–ä¿¡æ¯
     GstStateChangeReturn ret = gst_element_set_state(impl->pipeline, GST_STATE_READY);
     if (ret == GST_STATE_CHANGE_FAILURE) {
         if (impl->errorCallback) {
@@ -225,7 +277,7 @@ bool GStreamerPlayer::load(const std::string& filePath) {
         return false;
     }
 
-    // µÈ´ı×´Ì¬×ª»»Íê³É
+    // ç­‰å¾…çŠ¶æ€è½¬æ¢å®Œæˆ
     GstState state;
     if (gst_element_get_state(impl->pipeline, &state, nullptr, 5 * GST_SECOND) == GST_STATE_CHANGE_FAILURE) {
         if (impl->errorCallback) {
@@ -246,7 +298,7 @@ bool GStreamerPlayer::play() {
         return false;
     }
 
-    // È·±£´¦ÓÚPAUSED×´Ì¬ÒÔ»ñÈ¡Ê±³¤µÈĞÅÏ¢
+    // ç¡®ä¿å¤„äºPAUSEDçŠ¶æ€ä»¥è·å–æ—¶é•¿ç­‰ä¿¡æ¯
     GstStateChangeReturn ret = gst_element_set_state(impl->pipeline, GST_STATE_PAUSED);
     if (ret == GST_STATE_CHANGE_FAILURE) {
         if (impl->errorCallback) {
@@ -255,8 +307,8 @@ bool GStreamerPlayer::play() {
         return false;
     }
 
-    //std::cout << "µÈ´ı×´Ì¬×ª»»Íê³É " << std::endl;
-    // µÈ´ı×´Ì¬×ª»»Íê³É
+    //std::cout << "ç­‰å¾…çŠ¶æ€è½¬æ¢å®Œæˆ " << std::endl;
+    // ç­‰å¾…çŠ¶æ€è½¬æ¢å®Œæˆ
     GstState state;
     GstState pending;
     GstClockTime timeout = 5 * GST_SECOND;
@@ -269,12 +321,12 @@ bool GStreamerPlayer::play() {
     }
 
     
-   // std::cout << "ÏÖÔÚ³¢ÊÔ²¥·Å " << std::endl;
+   // std::cout << "ç°åœ¨å°è¯•æ’­æ”¾ " << std::endl;
 
-    // ÏÖÔÚ³¢ÊÔ²¥·Å
+    // ç°åœ¨å°è¯•æ’­æ”¾
     ret = gst_element_set_state(impl->pipeline, GST_STATE_PLAYING);
     if (ret == GST_STATE_CHANGE_FAILURE) {
-        // »ñÈ¡¾ßÌå´íÎóĞÅÏ¢
+        // è·å–å…·ä½“é”™è¯¯ä¿¡æ¯
         GstMessage* msg = gst_bus_poll(gst_element_get_bus(impl->pipeline), GST_MESSAGE_ERROR, 0);
         std::string errorMsg = "Unknown play error";
         if (msg) {
@@ -295,10 +347,18 @@ bool GStreamerPlayer::play() {
 
     impl->currentState = State::PLAYING;
 
-   //std::cout << "È·±£ÊÂ¼şÑ­»·Æô¶¯ " << std::endl;
-    // È·±£ÊÂ¼şÑ­»·Æô¶¯
+   //std::cout << "ç¡®ä¿äº‹ä»¶å¾ªç¯å¯åŠ¨ " << std::endl;
+    // ç¡®ä¿äº‹ä»¶å¾ªç¯å¯åŠ¨
     GMainLoop* loop = g_main_loop_new(nullptr, FALSE);
     g_main_loop_run(loop);
+
+    //std::cout << "æ¨å‡º------------------ " << std::endl;
+
+    ///* clean up */
+    //gst_element_set_state(impl->pipeline, GST_STATE_NULL);
+    //gst_object_unref(impl->pipeline);
+    //g_source_remove(impl->busId);
+    //g_main_loop_unref(loop);
 
     return true;
 }
@@ -362,4 +422,34 @@ int64_t GStreamerPlayer::getCurrentPosition() const {
         return position;
     }
     return 0;
+}
+
+/// <summary>
+/// æ›´æ–°æ˜¾ç¤ºå›¾ç‰‡
+/// </summary>
+/// <param name="imagePath"></param>
+void GStreamerPlayer::setOverlayImage(const std::string& imagePath) {
+    impl->overlayImagePath = imagePath;
+    if (impl->overlayElem) {
+        g_object_set(G_OBJECT(impl->overlayElem), "location", imagePath.c_str(), NULL);
+    }
+}
+
+void GStreamerPlayer::setVideoPosition(int x, int y) {
+    impl->videoOffsetX = x;
+    impl->videoOffsetY = y;
+}
+void GStreamerPlayer::setOverlayPosition(int x, int y) {
+    impl->overlayOffsetX = x;
+    impl->overlayOffsetY = y;
+    if (impl->overlayElem) {
+        g_object_set(G_OBJECT(impl->overlayElem),
+            "offset-x", x,
+            "offset-y", y,
+            NULL);
+    }
+}
+void GStreamerPlayer::setOutputSize(int width, int height) {
+    impl->outputWidth = width;
+    impl->outputHeight = height;
 }

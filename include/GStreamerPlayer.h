@@ -30,6 +30,31 @@ public:
     int64_t getDuration() const;
     int64_t getCurrentPosition() const;
 
+    /// <summary>
+    /// 更新显示图片
+    /// </summary>
+    /// <param name="imagePath"></param>
+    void setOverlayImage(const std::string& imagePath);
+
+    /// <summary>
+    /// 更新视频位置
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    void setVideoPosition(int x,int y);
+    /// <summary>
+    ///更新图片位置
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    void setOverlayPosition(int x, int y);
+    /// <summary>
+    /// 设置输出尺寸
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    void setOutputSize(int width, int height);
+
 private:
     struct Impl;
     Impl* impl;

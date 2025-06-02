@@ -1,15 +1,57 @@
-﻿# CMakeList.txt: 顶层 CMake 项目文件，在此处执行全局配置
-# 并包含子项目。
-#
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
+project(eplayer)
 
-# 如果支持，请为 MSVC 编译器启用热重载。
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project ("player")
+# 查找必要的库
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GST REQUIRED gstreamer-1.0)
+pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
-# 包含子项目。
-add_subdirectory ("player")
+find_package(CURL REQUIRED)
+find_package(OpenSSL REQUIRED)
+#find_package(nlohmann_json 3.4.0 REQUIRED)
+find_package(PahoMqttCpp REQUIRED)
+
+# 查找 Paho MQTT C 库（C++库的依赖）
+find_library(PAHO_MQTT_C_LIB paho-mqtt3as)
+find_library(PAHO_MQTT_CPP_LIB paho-mqttpp3)
+
+
+# 包含头文件
+include_directories(
+    include
+    ${GST_INCLUDE_DIRS}
+    ${CURL_INCLUDE_DIRS}
+    ${OPENSSL_INCLUDE_DIR}
+    ${JSONCPP_INCLUDE_DIRS}
+    #src
+    /usr/include/mqtt  # Paho MQTT C++ 头文件路径
+)
+
+# 将源代码添加到此项目的可执行文件。
+add_executable(eplayer
+   src/main.cpp
+   src/downloader.cpp
+   src/GStreamerPlayer.cpp
+   src/http_client.cpp
+   src/mqtt_client.cpp
+   src/control.cpp
+)
+
+#link_directories(${GSTREAMER_LIBRARY_DIRS})
+
+# 链接必要的库
+target_link_libraries(eplayer
+    ${CURL_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+    ${GST_LIBRARIES}
+    ${JSONCPP_LIBRARIES}
+    pthread
+    stdc++fs
+    ${PAHO_MQTT_CPP_LIB}
+    ${PAHO_MQTT_C_LIB}
+)
+
