@@ -7,29 +7,30 @@
 #include <control.h>
 #include <GStreamerPlayer.h>
 
-
 int main()
 {
     printf("%s 向你问好!\n", "eplayer");
 
     std::string url_root = "http://114.55.52.37:8000/";
-    std::string client_id="6A10000000FF";
+    std::string client_id = "6A10000000FF";
 
-    //GStreamerPlayer player;
+    // 创建工作目录
+    std::filesystem::create_directory("data");
 
+    // GStreamerPlayer player;
 
-    Control control(url_root,client_id);
-    //启动线程，执行后台任务
-    // 创建并启动控制线程
-    std::thread control_thread([&control]() {
+    Control control(url_root, client_id);
+    // 启动线程，执行后台任务
+    //  创建并启动控制线程
+    std::thread control_thread([&control]()
+                               {
         //启动线程，执行后台任务
-        control.start();
-    });
+        control.start(); });
 
     // 分离线程（如果不需等待线程结束）
     control_thread.detach();
 
-    //启动播放器
+    // 启动播放器
     std::cout << "启动播放器" << std::endl;
 
     std::string defaultVideoPath = "~/eplayer/庞各庄西瓜.mp4";
@@ -46,12 +47,11 @@ int main()
     // 模拟启动ui
     std::this_thread::sleep_for(std::chrono::seconds(60));
 
-
     // std::string url  ="api/resource/5%e5%ba%9e%e5%90%84%e5%ba%84%e8%a5%bf%e7%93%9c.mp4?sign=WlW%2f%2f%2byoqqdUXEj88Fa3C%2fRG%2faNpWelc%2ferRNJmze26emQcGFuh3Vw%3d%3d";
     // std::string file_name = "庞各庄西瓜.mp4";
     // std::string file_id = "0";
     // std::string md5="ada4f5a096cd2bf06f832b6828ce7df9";
-    
+
     // HttpClient client(url_root);
 
     // HttpClient::SystemInfo info;
@@ -75,11 +75,10 @@ int main()
     // });
 
     // 发布消息
-    //client.publish("command", "test message");
-
+    // client.publish("command", "test message");
 
     // Downloader downloader(url_root);
-    
+
     // downloader.add_task(url,file_name,file_id,md5,
     //     [](const std::string& file_name, const std::string& file_id, bool success, const std::string& error) {
     //         if (success) {
@@ -89,7 +88,5 @@ int main()
     //         }
     // });
 
-
-    
     return 0;
 }

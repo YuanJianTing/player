@@ -2,71 +2,54 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "shell",
-            "label": "Build with pkg-config",
-            "command": "g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "-std=c++17",
-                "${workspaceFolder}/src/*.cpp",
-                "-o",
-                "${workspaceFolder}/build/eplayer",
-                "-I${workspaceFolder}/src",
-                "$(pkg-config --cflags gstreamer-1.0)",
-                "$(pkg-config --libs gstreamer-1.0)",
-                "-lcurl",
-                "-lssl",
-                "-lcrypto",
-                "-lstdc++fs"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "cppbuild",
-            "label": "C/C++: g++ 构建活动文件",
-            "command": "/usr/bin/g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "-std=c++17",
-                "${workspaceFolder}/src/*.cpp",
-                "-o",
-                "${workspaceFolder}/build/eplayer",
-                "-I${workspaceFolder}/src",
-                "-lcurl",
-                "-lssl",
-                "-lcrypto",
-                "-lstdc++fs",
-                "-lgstreamer-1.0 -lgobject-2.0 -lglib-2.0"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "编译器: /usr/bin/g++"
-        },
-        {
             "label": "CMake 构建",
             "type": "shell",
             "command": "cmake --build ${workspaceFolder}/build --config Debug",
             "group": "build",
             "problemMatcher": []
+        },
+        {
+            "label": "cmake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S",
+                "${workspaceFolder}",
+                "-B",
+                "${workspaceFolder}/build",
+                "-DCMAKE_BUILD_TYPE=Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build",
+                "--config",
+                "Debug",
+                "--parallel",
+                "4"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build",
+                "--target",
+                "clean"
+            ]
         },
         {
             "type": "cppbuild",
