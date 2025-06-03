@@ -42,7 +42,17 @@ void Display::addMediaItem(const MediaItem &media, const std::string &local_path
     }
     else
     {
-        player_.load()
+        std::string defaultVideoPath = "data/files/1.mp4";
+        if (!player_.load(defaultVideoPath))
+        {
+            std::cout << "加载视频文件失败：" << defaultVideoPath << std::endl;
+            return;
+        }
+
+        if (!player_.play())
+        {
+            std::cout << "播放视频文件失败：" << defaultVideoPath << std::endl;
+        }
     }
 }
 
