@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include <nlohmann/json.hpp>
+#include <json/json.h>
 
 class HttpClient
 {

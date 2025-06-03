@@ -15,7 +15,7 @@ struct MediaItem
     int index;
     int left;
     int top;
-    int type;
+    int type; // 0 image 1 video
     int width;
     int height;
     std::string MD5;

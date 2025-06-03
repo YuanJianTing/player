@@ -1,12 +1,12 @@
 [
-    {
-        "name": "GCC",
-        "compilers": {
-            "C": "/usr/bin/gcc",
-            "CXX": "/usr/bin/g++"
-        },
-        "environmentVariables": {
-            "PATH": "/usr/bin:${env:PATH}"
-        }
+  {
+    "name": "GCC",
+    "compilers": {
+      "C": "/usr/bin/gcc",
+      "CXX": "/usr/bin/g++"
+    },
+    "environmentVariables": {
+      "PATH": "/usr/bin:${env:PATH}"
     }
+  }
 ]

@@ -5,6 +5,7 @@
 #include <mqtt_client.h>
 #include <downloader.h>
 #include "task_repository.h"
+#include "GStreamerImage.h"
 
 Control::Control(const std::string &url_root, const std::string &client_id)
     : url_root_(url_root),
@@ -20,6 +21,10 @@ Control::~Control()
     {
         mqtt_client_->disconnect();
     }
+}
+
+void Control::show()
+{
 }
 
 void Control::start()
@@ -170,6 +175,12 @@ void Control::downloadCallback(const std::string &file_name, const std::string &
 {
     std::cout << "文件: " << file_name << " 下载完成。" << std::endl;
     // 添加到播放列表
+    // GStreamerImage
+
+    if (file_name.find(".webp") != std::string::npos)
+    {
+        GStreamerImage bg(file_name); // 播放图片
+    }
 }
 
 void Control::heartbeat(const std::int32_t &speed)

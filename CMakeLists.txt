@@ -43,6 +43,8 @@ add_executable(eplayer
     src/control.cpp
     src/daemon_thread.cpp
     src/task_repository.cpp
+    src/GStreamerImage.cpp
+    src/display.cpp
 )
 
 # link_directories(${GSTREAMER_LIBRARY_DIRS})

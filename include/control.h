@@ -6,6 +6,8 @@
 #include "mqtt_client.h"
 #include "daemon_thread.h"
 #include "task_repository.h"
+#include "GStreamerPlayer.h"
+#include "display.h"
 
 class Control
 {
@@ -15,6 +17,8 @@ private:
     std::string client_id_;
     Downloader downloader_;
     TaskRepository task_repository_;
+    Display *display_;
+
     std::shared_ptr<MQTTClient> mqtt_client_;
     std::shared_ptr<DaemonThread> daemon_thread_;
 
@@ -22,10 +26,13 @@ private:
     void heartbeat(const std::int32_t &speed);
     void downloadCallback(const std::string &file_name, const std::string &file_id);
 
+    // void updateBackground(const std::string &file_id);
+
 public:
     Control(const std::string &url_root, const std::string &client_id);
     ~Control();
-
+    // 显示屏幕
+    void show();
     // 启动控制器
     void start();
     // 刷新播放器
