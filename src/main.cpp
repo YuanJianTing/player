@@ -17,9 +17,9 @@ int main()
     // 创建工作目录
     std::filesystem::create_directory("data");
 
-    GStreamerPlayer player;
+    // GStreamerPlayer player;
 
-    Control control(url_root, client_id, player);
+    Control control(url_root, client_id);
     // 启动线程，执行后台任务
     // 创建并启动控制线程
     std::thread control_thread([&control]()
@@ -33,24 +33,24 @@ int main()
     // 启动播放器
     std::cout << "启动播放器" << std::endl;
 
-    std::string defaultVideoPath = "data/files/1.mp4";
+    // std::string defaultVideoPath = "data/files/1.mp4";
 
-    // control.refresh(client_id);
+    control.show();
 
-    if (!player.load(defaultVideoPath))
-    {
-        std::cout << "load failed" << std::endl;
-        return 1;
-    }
+    // if (!player.load(defaultVideoPath))
+    // {
+    //     std::cout << "load failed" << std::endl;
+    //     return 1;
+    // }
 
-    std::cout << "Duration: " << player.getDuration() / 1000 << " ms" << std::endl;
+    // std::cout << "Duration: " << player.getDuration() / 1000 << " ms" << std::endl;
 
-    if (!player.play())
-    {
-        std::cout << "play failed" << std::endl;
-        return 1;
-    }
+    // if (!player.play())
+    // {
+    //     std::cout << "play failed" << std::endl;
+    //     return 1;
+    // }
     // 模拟启动ui
-    // std::this_thread::sleep_for(std::chrono::seconds(60));
+    std::this_thread::sleep_for(std::chrono::seconds(60));
     return 0;
 }

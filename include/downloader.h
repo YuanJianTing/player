@@ -8,41 +8,47 @@
 #include <condition_variable>
 #include <thread>
 #include <filesystem>
+#include "task_repository.h"
+#include <memory>
+#include <vector>
 
 class Downloader
 {
 public:
-    using DownloadCallback = std::function<void(const std::string &file_name,
-                                                const std::string &file_id,
+    using DownloadCallback = std::function<void(const MediaItem &media,
+                                                const std::string &local_path,
                                                 bool success,
                                                 const std::string &error)>;
 
-    struct Task
-    {
-        std::string url;
-        std::string file_name;
-        std::string file_id;
-        std::string md5;
-        int type; // 任务类型
-        DownloadCallback callback;
-    };
+    // struct Task
+    // {
+    //     // std::string url;
+    //     // std::string file_name;
+    //     // std::string file_id;
+    //     // std::string md5;
+    //     // int type; // 任务类型
+    //     std::unique_ptr<MediaItem> media;
+    //     DownloadCallback callback;
+    // };
 
     Downloader(const std::string &url_root);
     ~Downloader();
 
-    void add_task(const Task &task, DownloadCallback callback);
+    void setDownloadCallback(DownloadCallback callback);
+    void add_task(const MediaItem &media);
 
 private:
     std::string url_root_;
     std::string work_dir_;
-    std::queue<Task> tasks_;
+    DownloadCallback callback_;
+    std::queue<MediaItem> tasks_;
     std::mutex queue_mutex_;
     std::condition_variable queue_cv_;
     std::thread worker_thread_;
     bool stop_flag_;
 
     void worker();
-    void process_task(const Task &task);
+    void process_task(const MediaItem &task);
     size_t get_file_size(const std::string &url);
     bool download_file_multithread(const std::string &url, const std::string &local_path);
     /// @brief 单线程下载文件

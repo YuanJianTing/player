@@ -24,13 +24,14 @@ private:
 
     void handleMessage(const std::string &code, const std::string &body);
     void heartbeat(const std::int32_t &speed);
-    void downloadCallback(const std::string &file_name, const std::string &file_id);
+    void downloadCallback(const MediaItem &media, const std::string &local_path, bool success, const std::string &error);
 
     // void updateBackground(const std::string &file_id);
 
 public:
     Control(const std::string &url_root, const std::string &client_id);
     ~Control();
+
     // 显示屏幕
     void show();
     // 启动控制器

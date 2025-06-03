@@ -27,8 +27,8 @@ Control::Control(const std::string &url_root, const std::string &client_id)
     {
         display_ = std::make_shared<Display>(client_id); // 初始化显示器
     }
-
-    // display_()
+    downloader_.setDownloadCallback([this](const MediaItem &media, const std::string &local_path, bool success, const std::string &error)
+                                    { this->downloadCallback(media, local_path, success, error); });
 }
 
 Control::~Control()
@@ -46,6 +46,7 @@ Control::~Control()
 
 void Control::show()
 {
+    refresh(display_->getDeviceId());
 }
 
 void Control::start()
@@ -166,42 +167,30 @@ void Control::refresh(const std::string device_id)
     auto playList = task_repository_.getPlayList(device_id);
     for (const auto &item : playList)
     {
-
-        Downloader::Task task{
-            item->download_url,
-            item->file_name,
-            item->id,
-            item->MD5,
-            item->type};
-
-        downloader_.add_task(task,
-                             [this](const std::string &file_name, const std::string &file_id, bool success, const std::string &error)
-                             {
-                                 if (success)
-                                 {
-                                     this->downloadCallback(file_name, file_id);
-                                 }
-                                 else
-                                 {
-                                     std::cout << "Failed: " << file_name << " ID: " << file_id << " Error: " << error << std::endl;
-                                 }
-                             });
+        downloader_.add_task(*item);
+    }
+    if (display_->getDeviceId() == device_id)
+    {
+        display_->clear();
     }
 }
 
 /// @brief 文件下载完成回调
 /// @param file_name
 /// @param file_id
-void Control::downloadCallback(const std::string &file_name, const std::string &file_id)
+void Control::downloadCallback(const MediaItem &media, const std::string &local_path, bool success, const std::string &error)
 {
-    std::cout << "文件: " << file_name << " 下载完成。" << std::endl;
-    // 添加到播放列表
-    // display_
-
-    // if (file_name.find(".webp") != std::string::npos)
-    // {
-    //     GStreamerImage bg(file_name); // 播放图片
-    // }
+    if (success)
+    {
+        if (display_->getDeviceId() == media.device_id)
+        {
+            display_->addMediaItem(media, local_path);
+        }
+    }
+    else
+    {
+        std::cout << "Failed: " << media.file_name << " Error: " << error << std::endl;
+    }
 }
 
 void Control::heartbeat(const std::int32_t &speed)

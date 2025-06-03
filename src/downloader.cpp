@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <memory>
+#include <vector>
 
 Downloader::Downloader(const std::string &url_root)
     : url_root_(url_root), work_dir_("data/files/"), stop_flag_(false)
@@ -26,23 +28,14 @@ Downloader::~Downloader()
     }
 }
 
-// void Downloader::add_task(const std::string &url,
-//                           const std::string &file_name,
-//                           const std::string &file_id,
-//                           const std::string &md5,
-//                           DownloadCallback callback)
-// {
-//     std::lock_guard<std::mutex> lock(queue_mutex_);
-//     tasks_.emplace(Task{url, file_name, file_id, md5, callback});
-//     queue_cv_.notify_one();
-// }
-
-void Downloader::add_task(const Task &task, DownloadCallback callback)
+void Downloader::setDownloadCallback(DownloadCallback callback)
+{
+    callback_ = callback;
+}
+void Downloader::add_task(const MediaItem &task)
 {
     std::lock_guard<std::mutex> lock(queue_mutex_);
-    Task new_task = task;         // 复制task
-    new_task.callback = callback; // 设置回调函数
-    tasks_.push(std::move(new_task));
+    tasks_.push(task);
     queue_cv_.notify_one();
 }
 
@@ -50,7 +43,7 @@ void Downloader::worker()
 {
     while (true)
     {
-        Task task;
+        MediaItem task;
         {
             std::unique_lock<std::mutex> lock(queue_mutex_);
             queue_cv_.wait(lock, [&]
@@ -66,9 +59,10 @@ void Downloader::worker()
     }
 }
 
-void Downloader::process_task(const Task &task)
+void Downloader::process_task(const MediaItem &task)
 {
-    std::string full_url = (task.url.find("http") == 0) ? task.url : url_root_ + task.url;
+    std::string download_url = task.download_url;
+    std::string full_url = (download_url.find("http") == 0) ? download_url : url_root_ + download_url;
     std::string local_path = work_dir_ + task.file_name;
     int type = task.type;
 
@@ -76,9 +70,9 @@ void Downloader::process_task(const Task &task)
 
     if (std::filesystem::exists(local_path))
     {
-        if (verify_md5(local_path, task.md5))
+        if (verify_md5(local_path, task.MD5))
         {
-            task.callback(task.file_name, task.file_id, true, "");
+            callback_(task, local_path, true, "");
             return;
         }
         else
@@ -106,7 +100,7 @@ void Downloader::process_task(const Task &task)
         }
         if (success)
         {
-            if (!verify_md5(local_path, task.md5))
+            if (!verify_md5(local_path, task.MD5))
             {
                 success = false;
                 error_msg = "MD5 mismatch";
@@ -119,7 +113,8 @@ void Downloader::process_task(const Task &task)
         }
     }
 
-    task.callback(task.file_name, task.file_id, success, error_msg);
+    callback_(task, local_path, success, error_msg);
+    // task.callback(task.file_name, task.file_id, success, error_msg);
 }
 
 size_t Downloader::get_file_size(const std::string &url)

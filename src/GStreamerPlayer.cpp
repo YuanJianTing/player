@@ -183,12 +183,12 @@ bool GStreamerPlayer::load(const std::string &filePath)
         return false;
     }
 
-    // std::string videoBoxPart;
-    // if (impl->videoOffsetX != 0 || impl->videoOffsetY != 0)
-    // {
-    //     videoBoxPart = " ! videobox border-alpha=0 left=" + std::to_string(impl->videoOffsetX) +
-    //                    " top=" + std::to_string(impl->videoOffsetY);
-    // }
+    std::string videoBoxPart;
+    if (impl->videoOffsetX != 0 || impl->videoOffsetY != 0)
+    {
+        videoBoxPart = " ! videobox border-alpha=0 left=" + std::to_string(impl->videoOffsetX) +
+                       " top=" + std::to_string(impl->videoOffsetY);
+    }
 
     std::string scaleCaps = " ! videoscale ! video/x-raw,width=" + std::to_string(impl->outputWidth) +
                             ",height=" + std::to_string(impl->outputHeight);
@@ -207,27 +207,10 @@ bool GStreamerPlayer::load(const std::string &filePath)
         "filesrc location=\"" + filePath + "\" ! qtdemux name=demux demux.video_0 ! h264parse ! avdec_h264 ! videoconvert" +
         scaleCaps + overlayPart + " ! kmssink"; // 适用于无头系统：kmssink 、fbdevsink
 
-    /*
-    filesrc location="/video/fl.mov" ! qtdemux ! h264parse ! avdec_h264 ! videoconvert \
-! videobox border-alpha=0 left=100 top=200 right=0 bottom=0 \
-! videoscale ! video/x-raw,width=800,height=1280 \
-! gdkpixbufoverlay name=gdkpixbufoverlay0 location="/video/6A00002F3344.png" offset-x=0 offset-y=0 \
-! fbdevsink
-
-
-filesrc location="/video/fl.mov" ! qtdemux ! h264parse ! avdec_h264 ! videoconvert !
-videobox border-alpha=0 left=100 top=200 right=0 bottom=0 ! videoscale ! video/x-raw,width=800,height=1280 ! gdkpixbufoverlay name=gdkpixbufoverlay0 location="/video/6A00002F3344.png" offset-x=0 offset-y=0 ! fbdevsink
-    */
-
-    // std::string pipelineStr =
-    //     "filesrc location=\"" + filePath + "\" ! decodebin ! videoconvert ! videoscale ! video/x-raw,width=800,height=1280 ! fbdevsink"; //适用于无头系统：kmssink、fbdevsink
-
     GError *error = nullptr;
     bool pipeline_created = true;
 
-    // char* pipeline_str = pipelineStr.c_str();
-
-    std::cout << "cmd： " << pipelineStr << std::endl;
+    // std::cout << "cmd： " << pipelineStr << std::endl;
 
     impl->pipeline = gst_parse_launch(pipelineStr.c_str(), &error);
 
