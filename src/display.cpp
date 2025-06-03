@@ -4,7 +4,7 @@
 #include "GStreamerImage.h"
 #include <iostream>
 
-Display::Display(const std::string client_id, const Downloader downloader) : device_id_(client_id), downloader_(downloader)
+Display::Display(const std::string &client_id, const Downloader &downloader) : device_id_(client_id), downloader_(downloader)
 {
 
     player_.setErrorCallback([](GStreamerPlayer::ErrorType type, const std::string &msg)
@@ -24,7 +24,7 @@ Display::Display(const std::string client_id, const Downloader downloader) : dev
 
 Display::~Display()
 {
-    player_.stop();
+    destroyed();
 }
 
 void Display::refresh(const std::vector<std::unique_ptr<MediaItem>> media_items)
@@ -52,4 +52,9 @@ void Display::updateBackground(const std::unique_ptr<MediaItem> &item)
 
 void Display::updatePrice(const std::unique_ptr<MediaItem> &item)
 {
+}
+
+void Display::destroyed()
+{
+    player_.stop();
 }

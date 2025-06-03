@@ -17,7 +17,7 @@ private:
     std::string client_id_;
     Downloader downloader_;
     TaskRepository task_repository_;
-    Display *display_;
+    std::shared_ptr<Display> display_;
 
     std::shared_ptr<MQTTClient> mqtt_client_;
     std::shared_ptr<DaemonThread> daemon_thread_;

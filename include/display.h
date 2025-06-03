@@ -25,9 +25,10 @@ private:
     void updateBackground(const std::unique_ptr<MediaItem> &item);
 
 public:
-    Display(const std::string device_id, const Downloader downloader);
+    Display(const std::string &client_id, const Downloader &downloader);
     ~Display();
 
     void refresh(const std::vector<std::unique_ptr<MediaItem>> media_items); // 刷新显示
+    void destroyed();
 };
 #endif // !DISPLAY_H

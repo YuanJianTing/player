@@ -13,6 +13,22 @@ Control::Control(const std::string &url_root, const std::string &client_id)
       downloader_(url_root),
       task_repository_()
 {
+    // 查找显示器设备 ls /dev/fb*
+    // 使用 , 号分割 client_id
+    size_t comma_pos = client_id.find(',');
+    if (comma_pos > 0)
+    {
+        std::string client_a = client_id.substr(0, comma_pos);
+        std::string client_b = client_id.substr(comma_pos + 1);
+
+        display_ = std::make_shared<Display>(client_a); // 初始化显示器
+    }
+    else
+    {
+        display_ = std::make_shared<Display>(client_id); // 初始化显示器
+    }
+
+    // display_()
 }
 
 Control::~Control()
@@ -20,6 +36,11 @@ Control::~Control()
     if (mqtt_client_ && mqtt_client_->isConnected())
     {
         mqtt_client_->disconnect();
+    }
+
+    if (display_)
+    {
+        display_->destroyed();
     }
 }
 
@@ -175,12 +196,12 @@ void Control::downloadCallback(const std::string &file_name, const std::string &
 {
     std::cout << "文件: " << file_name << " 下载完成。" << std::endl;
     // 添加到播放列表
-    // GStreamerImage
+    // display_
 
-    if (file_name.find(".webp") != std::string::npos)
-    {
-        GStreamerImage bg(file_name); // 播放图片
-    }
+    // if (file_name.find(".webp") != std::string::npos)
+    // {
+    //     GStreamerImage bg(file_name); // 播放图片
+    // }
 }
 
 void Control::heartbeat(const std::int32_t &speed)
