@@ -190,8 +190,10 @@ bool GStreamerPlayer::load(const std::string &filePath)
                        " top=" + std::to_string(impl->videoOffsetY);
     }
 
-    std::string scaleCaps = " ! videoscale ! video/x-raw,width=" + std::to_string(impl->outputWidth) +
-                            ",height=" + std::to_string(impl->outputHeight);
+    // std::string scaleCaps = " ! videoscale ! video/x-raw,width=" + std::to_string(impl->outputWidth) +
+    //                         ",height=" + std::to_string(impl->outputHeight);
+
+    std::string scaleCaps = "";
 
     std::string overlayPart;
     if (!impl->overlayImagePath.empty())
@@ -205,12 +207,12 @@ bool GStreamerPlayer::load(const std::string &filePath)
     // 适用于无头Linux系统，直接输出到物理屏幕
     std::string pipelineStr =
         "filesrc location=\"" + filePath + "\" ! qtdemux name=demux demux.video_0 ! h264parse ! avdec_h264 ! videoconvert" +
-        scaleCaps + overlayPart + " ! kmssink"; // 适用于无头系统：kmssink 、fbdevsink
+        scaleCaps + overlayPart + " ! fbdevsink"; // 适用于无头系统：kmssink 、fbdevsink
 
     GError *error = nullptr;
     bool pipeline_created = true;
 
-    // std::cout << "cmd： " << pipelineStr << std::endl;
+    std::cout << "cmd： " << pipelineStr << std::endl;
 
     impl->pipeline = gst_parse_launch(pipelineStr.c_str(), &error);
 

@@ -34,7 +34,7 @@ void Display::addMediaItem(const MediaItem &media, const std::string &local_path
     if (media.type == 0 && media.group == 0)
     {
         // 更新背景图
-        updateBackground(media, local_path);
+        // updateBackground(media, local_path);
     }
     else if (media.type == 0 && media.group == 1)
     {
@@ -42,17 +42,17 @@ void Display::addMediaItem(const MediaItem &media, const std::string &local_path
     }
     else
     {
-        std::string defaultVideoPath = "data/files/1.mp4";
-        if (!player_.load(defaultVideoPath))
-        {
-            std::cout << "加载视频文件失败：" << defaultVideoPath << std::endl;
-            return;
-        }
+        // std::string defaultVideoPath = "/home/yuanjianting/player/data/files/FA1747287368705.mp4";
+        // if (!player_.load(defaultVideoPath))
+        // {
+        //     std::cout << "加载视频文件失败：" << defaultVideoPath << std::endl;
+        //     return;
+        // }
 
-        if (!player_.play())
-        {
-            std::cout << "播放视频文件失败：" << defaultVideoPath << std::endl;
-        }
+        // if (!player_.play())
+        // {
+        //     std::cout << "播放视频文件失败：" << defaultVideoPath << std::endl;
+        // }
     }
 }
 

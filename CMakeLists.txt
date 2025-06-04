@@ -23,6 +23,10 @@ find_package(PahoMqttCpp REQUIRED)
 find_library(PAHO_MQTT_C_LIB paho-mqtt3as)
 find_library(PAHO_MQTT_CPP_LIB paho-mqttpp3)
 
+# 图片相关库
+find_package(JPEG REQUIRED)
+find_package(PNG REQUIRED)
+
 # 包含头文件
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
@@ -30,6 +34,8 @@ include_directories(
     ${CURL_INCLUDE_DIRS}
     ${OPENSSL_INCLUDE_DIR}
     ${JSONCPP_INCLUDE_DIRS}
+    ${JPEG_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIR}
     /usr/include/mqtt # Paho MQTT C++ 头文件路径
 )
 
@@ -45,6 +51,8 @@ add_executable(eplayer
     src/task_repository.cpp
     src/GStreamerImage.cpp
     src/display.cpp
+    src/ImageDecoder.cpp
+    src/Framebuffer.cpp
 )
 
 # link_directories(${GSTREAMER_LIBRARY_DIRS})
@@ -59,4 +67,6 @@ target_link_libraries(eplayer
     stdc++fs
     ${PAHO_MQTT_CPP_LIB}
     ${PAHO_MQTT_C_LIB}
+    ${JPEG_LIBRARIES}
+    ${PNG_LIBRARIES}
 )

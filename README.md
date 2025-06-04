@@ -34,8 +34,10 @@ sudo apt install -y \
     libcurl4-openssl-dev \
     libssl-dev \
     libpaho-mqttpp-dev \
-    libpaho-mqtt-dev
-```
+    libpaho-mqtt-dev \
+    libpng-dev \
+    libjpeg-dev
+```+
 
 ## 安装开发工具（VSCode）
 
