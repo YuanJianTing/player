@@ -49,7 +49,8 @@ add_executable(eplayer
     src/control.cpp
     src/daemon_thread.cpp
     src/task_repository.cpp
-    src/GStreamerImage.cpp
+
+    # src/GStreamerImage.cpp
     src/display.cpp
     src/ImageDecoder.cpp
     src/Framebuffer.cpp

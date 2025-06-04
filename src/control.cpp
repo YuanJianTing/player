@@ -21,11 +21,11 @@ Control::Control(const std::string &url_root, const std::string &client_id)
         std::string client_a = client_id.substr(0, comma_pos);
         std::string client_b = client_id.substr(comma_pos + 1);
 
-        display_ = std::make_shared<Display>(client_a); // 初始化显示器
+        display_ = std::make_shared<Display>(client_a, "/dev/fb0"); // 初始化显示器
     }
     else
     {
-        display_ = std::make_shared<Display>(client_id); // 初始化显示器
+        display_ = std::make_shared<Display>(client_id, "/dev/fb1"); // 初始化显示器
     }
     downloader_.setDownloadCallback([this](const MediaItem &media, const std::string &local_path, bool success, const std::string &error)
                                     { this->downloadCallback(media, local_path, success, error); });

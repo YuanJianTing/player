@@ -4,7 +4,7 @@
 #include <string>
 #include <gst/gst.h>
 #include "GStreamerPlayer.h"
-#include "GStreamerImage.h"
+// #include "GStreamerImage.h"
 #include <memory>
 #include <vector>
 #include "task_repository.h"
@@ -14,16 +14,18 @@ class Display
 private:
     /* data */
     std::string device_id_;
+    const char *fb_device_;
     GStreamerPlayer player_;
-    GStreamerImage price_image_;
-    GStreamerImage background_image_;
+    // GStreamerImage price_image_;
+    // GStreamerImage background_image_;
     std::vector<MediaItem> media_items_;
 
     void updatePrice(const MediaItem &media, const std::string &local_path);
     void updateBackground(const MediaItem &media, const std::string &local_path);
+    void display_image(const char *image_path);
 
 public:
-    Display(const std::string &client_id);
+    Display(const std::string &client_id, const char *fb_device);
     ~Display();
 
     std::string getDeviceId();
