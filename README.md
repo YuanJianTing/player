@@ -26,10 +26,12 @@ sudo apt update
 sudo apt install -y build-essential cmake pkg-config
 
 # 安装核心库
+
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+
+apt-get install gstreamer1.0-plugins-base-apps
+
 sudo apt install -y \
-    libgstreamer1.0-dev \
-    libgstreamer-plugins-base1.0-dev \
-    libgstreamer-plugins-good1.0-dev \
     libjsoncpp-dev \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -44,6 +46,17 @@ sudo apt install -y \
 1. [下载VSCode安装包](https://code.visualstudio.com/download) 或使用命令安装：
 ```bash
 sudo snap install --classic code
+# 安装调试工具
+sudo apt-get install gdb
+
+# 如果使用非arm64架构，则安装交叉编译环境
+apt install gcc-aarch64-linux-gnu
+# 验证安装
+aarch64-linux-gnu-gcc --version
+
+# 安装drm_info 工具 记录下可用的 plane-id 和显示模式
+apt-get install drm-info
+
 ```
 
 2. 安装推荐扩展：

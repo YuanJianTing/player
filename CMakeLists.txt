@@ -10,7 +10,8 @@ set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # 查找必要的库
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GST REQUIRED gstreamer-1.0)
+pkg_check_modules(GST REQUIRED gstreamer-1.0
+    gstreamer-video-1.0)
 pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
 find_package(CURL REQUIRED)
@@ -49,11 +50,13 @@ add_executable(eplayer
     src/control.cpp
     src/daemon_thread.cpp
     src/task_repository.cpp
+    src/GstPlayer.cpp
 
     # src/GStreamerImage.cpp
     src/display.cpp
     src/ImageDecoder.cpp
     src/Framebuffer.cpp
+    src/Tools.cpp
 )
 
 # link_directories(${GSTREAMER_LIBRARY_DIRS})

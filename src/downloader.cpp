@@ -7,10 +7,12 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include "Tools.h"
 
 Downloader::Downloader(const std::string &url_root)
-    : url_root_(url_root), work_dir_("data/files/"), stop_flag_(false)
+    : url_root_(url_root), stop_flag_(false)
 {
+    work_dir_ = Tools::get_download_dir();
     std::filesystem::create_directory(work_dir_);
     worker_thread_ = std::thread(&Downloader::worker, this);
 }
@@ -63,10 +65,16 @@ void Downloader::process_task(const MediaItem &task)
 {
     std::string download_url = task.download_url;
     std::string full_url = (download_url.find("http") == 0) ? download_url : url_root_ + download_url;
-    std::string local_path = work_dir_ + task.file_name;
+    // std::string local_path = work_dir_ + task.file_name;
+    // task.file_name 中有可能包含中文，播放视频时如果存在中文会导致播放失败;此处使用 md5作为保存文件名
+
+    std::filesystem::path p(task.file_name);
+    std::string extension = p.extension().string(); // 包含点，如 ".mp4"
+
+    std::string local_path = work_dir_ + task.MD5 + extension;
     int type = task.type;
 
-    std::cout << "文件url: " << full_url << " local_path:" << local_path << std::endl;
+    // std::cout << "文件url: " << full_url << " local_path:" << local_path << std::endl;
 
     if (std::filesystem::exists(local_path))
     {
@@ -89,6 +97,8 @@ void Downloader::process_task(const MediaItem &task)
     while (attempt < max_retries && !success)
     {
         attempt++;
+        // success = download_file(full_url, local_path);
+        //  多线程下载有问题
         if (type == 0)
         {
             // 主题图片，不支持多线程下载
@@ -102,19 +112,23 @@ void Downloader::process_task(const MediaItem &task)
         {
             if (!verify_md5(local_path, task.MD5))
             {
+                std::cout << "MD5验证不通过。\n"
+                          << local_path
+                          << std::endl;
                 success = false;
                 error_msg = "MD5 mismatch";
                 std::filesystem::remove(local_path);
+                break; // 退出循环
             }
         }
         else
         {
+            std::cout << "单次下载文件失败" << std::endl;
             error_msg = "Download failed";
         }
     }
 
     callback_(task, local_path, success, error_msg);
-    // task.callback(task.file_name, task.file_id, success, error_msg);
 }
 
 size_t Downloader::get_file_size(const std::string &url)
@@ -170,7 +184,20 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
                 return;
             }
 
+                // 不接收响应头数据0代表不接收 1代表接收
+            curl_easy_setopt(curl, CURLOPT_HEADER, 0);
+                // 设置请求的URL地址
             curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+
+                // 设置ssl验证
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+
+                // CURLOPT_VERBOSE的值为1时，会显示详细的调试信息
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+            curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+
+                // 设置数据接收函数
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
 
@@ -178,13 +205,14 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
             range << start << "-" << end;
             curl_easy_setopt(curl, CURLOPT_RANGE, range.str().c_str());
 
-            curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-            curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-            curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-            curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
+            curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 
-            curl_easy_perform(curl);
+                // 设置超时时间
+            curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L); // set transport and time out time
+                //curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
 
+            CURLcode res =curl_easy_perform(curl);
+            std::cerr << "下载: " << curl_easy_strerror(res) << std::endl;
             fclose(fp);
             curl_easy_cleanup(curl); });
     }
@@ -217,10 +245,10 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
 /// @return
 bool Downloader::download_file(const std::string &url, const std::string &local_path)
 {
-    size_t file_size = get_file_size(url);
-    std::cout << "获取到文件大小: " << file_size << std::endl;
-    if (file_size == 0)
-        return false;
+    // size_t file_size = get_file_size(url);
+    // std::cout << "获取到文件大小: " << file_size << std::endl;
+    // if (file_size == 0)
+    //     return false;
 
     CURL *curl = curl_easy_init();
     if (!curl)
@@ -233,19 +261,53 @@ bool Downloader::download_file(const std::string &url, const std::string &local_
         return false;
     }
 
+    // 不接收响应头数据0代表不接收 1代表接收
+    curl_easy_setopt(curl, CURLOPT_HEADER, 0);
+    // 设置请求的URL地址
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+
+    // 设置ssl验证
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+
+    // CURLOPT_VERBOSE的值为1时，会显示详细的调试信息
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+    curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+
+    // 设置数据接收函数
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
 
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
+    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 
-    curl_easy_perform(curl);
+    // 设置超时时间
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L); // set transport and time out time
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
+
+    // curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+    // curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+
+    // curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+    // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
+    // curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
+    // curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
+
+    // 开启请求
+    CURLcode res = curl_easy_perform(curl);
+    // 释放文件资源
     fclose(fp);
+    // 释放curl
     curl_easy_cleanup(curl);
     return true;
+}
+
+// 下载文件数据接收函数
+size_t Downloader::dl_req_reply(void *buffer, size_t size, size_t nmemb, void *user_p)
+{
+    FILE *fp = (FILE *)user_p;
+    size_t return_size = fwrite(buffer, size, nmemb, fp);
+    // cout << (char *)buffer << endl;
+    return return_size;
 }
 
 bool Downloader::verify_md5(const std::string &file_path, const std::string &expected_md5)
@@ -297,6 +359,9 @@ bool Downloader::verify_md5(const std::string &file_path, const std::string &exp
     {
         md5_str << std::hex << std::setw(2) << std::setfill('0') << (int)result[i];
     }
+
+    std::cout << "计算的MD5: " << md5_str.str() << std::endl;
+    std::cout << "期望的MD5: " << expected_md5 << std::endl;
 
     return md5_str.str() == expected_md5;
 }

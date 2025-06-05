@@ -56,6 +56,7 @@ private:
     /// @param local_path
     /// @return
     bool download_file(const std::string &url, const std::string &local_path);
+    size_t dl_req_reply(void *buffer, size_t size, size_t nmemb, void *user_p);
     bool verify_md5(const std::string &file_path, const std::string &expected_md5);
 };
 

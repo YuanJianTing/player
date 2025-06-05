@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include "task_repository.h"
+#include "GstPlayer.h"
 
 class Display
 {
@@ -15,7 +16,8 @@ private:
     /* data */
     std::string device_id_;
     const char *fb_device_;
-    GStreamerPlayer player_;
+    // GStreamerPlayer player_;
+    GstPlayer player_;
     // GStreamerImage price_image_;
     // GStreamerImage background_image_;
     std::vector<MediaItem> media_items_;

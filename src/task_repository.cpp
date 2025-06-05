@@ -9,9 +9,11 @@
 #include <cstring> // for strerror
 #include <memory>
 #include <vector>
+#include "Tools.h"
 
-TaskRepository::TaskRepository() : work_dir_("data/task")
+TaskRepository::TaskRepository()
 {
+    work_dir_ = Tools::get_repository_dir();
     std::filesystem::create_directory(work_dir_);
 }
 
@@ -113,7 +115,7 @@ void TaskRepository::saveTaskId(std::string device_id, std::string task_id)
 
 std::string TaskRepository::readFile(std::string file_name)
 {
-    std::string full_path = work_dir_ + "/" + file_name;
+    std::string full_path = work_dir_ + file_name;
     // 判断文件是否存在
     if (std::filesystem::exists(full_path))
     {
@@ -148,7 +150,7 @@ void TaskRepository::saveFile(std::string file_name, std::string content)
     }
 
     // 拼接完整路径
-    std::string full_path = work_dir_ + "/" + file_name;
+    std::string full_path = work_dir_ + file_name;
 
     // 打开文件（二进制写入模式）
     FILE *fp = fopen(full_path.c_str(), "wb");

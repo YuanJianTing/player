@@ -164,6 +164,7 @@ void Control::handleMessage(const std::string &code, const std::string &body)
 /// @param device_id
 void Control::refresh(const std::string device_id)
 {
+    std::cout << "刷新设备播放列表: " << device_id << std::endl;
     auto playList = task_repository_.getPlayList(device_id);
     for (const auto &item : playList)
     {
