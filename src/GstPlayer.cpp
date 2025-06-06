@@ -16,111 +16,6 @@ GstPlayer::~GstPlayer()
     cleanup();
 }
 
-void GstPlayer::setup_sinks()
-{
-    // 视频渲染器
-    GstElement *video_sink = nullptr;
-    const char *sink_name = nullptr;
-    switch (video_sink_type_)
-    {
-    case VideoSinkType::FBDEVSINK:
-        sink_name = "fbdevsink";
-        break;
-    case VideoSinkType::XVIMAGESINK:
-        sink_name = "ximagesink";
-        break;
-    case VideoSinkType::KMSSINK:
-        sink_name = "kmssink";
-        break;
-    default:
-        break;
-    }
-
-    if (sink_name)
-    {
-        video_sink = gst_element_factory_make(sink_name, nullptr);
-        if (!video_sink)
-        {
-            std::cerr << "WARNING: " << sink_name << " not available, using default" << std::endl;
-        }
-        else
-        {
-
-            std::cout << "视频皮肤：---------- " << sink_name << std::endl;
-
-            GstElementFactory *factory = gst_element_get_factory(video_sink_);
-            bool is_supported = gst_element_factory_has_interface(factory, "GstVideoOverlay");
-            std::cout << "检查渲染器是否支持位置控制:" << is_supported << std::endl;
-
-            if (is_supported)
-            {
-                std::cout << "设置视频位置----------" << std::endl;
-
-                GstVideoOverlay *overlay = GST_VIDEO_OVERLAY(video_sink_);
-                gst_video_overlay_set_render_rectangle(overlay,
-                                                       0, 0,
-                                                       800, 1280);
-
-                // GstElement *videobox = gst_element_factory_make("videobox", "position_filter");
-                // g_object_set(videobox,
-                //              "border-alpha", 0,
-                //              "left", 0,
-                //              "top", 0,
-                //              "right", 800,
-                //              "bottom", 1280,
-                //              nullptr);
-
-                // // 动态插入到pipeline中
-                // GstElement *queue = gst_element_factory_make("queue", nullptr);
-                // gst_bin_add_many(GST_BIN(playbin_), queue, videobox, nullptr);
-                // gst_element_link_many(queue, videobox, video_sink_, nullptr);
-            }
-
-            // std::string rectangle = "0,0,800,1280";
-            // g_object_set(video_sink_,
-            //              "render-rectangle", rectangle.c_str(),
-            //              nullptr);
-
-            g_object_set(playbin_, "video-sink", video_sink, nullptr);
-        }
-    }
-
-    // 音频处理
-    if (!audio_enabled_)
-    {
-        GstElement *fake_audio = gst_element_factory_make("fakesink", nullptr);
-        g_object_set(playbin_, "audio-sink", fake_audio, nullptr);
-    }
-
-    // switch (video_sink_type_)
-    // {
-    // case VideoSinkType::FBDEVSINK:
-    //     video_sink = gst_element_factory_make("fbdevsink", "fbdevsink");
-    //     break;
-    // case VideoSinkType::XVIMAGESINK:
-    //     video_sink = gst_element_factory_make("ximagesink", "ximagesink");
-    //     break;
-    // case VideoSinkType::KMSSINK:
-    //     video_sink = gst_element_factory_make("kmssink", "kmssink");
-    //     break;
-    // default:
-    //     // 使用 playbin 默认选择
-    //     break;
-    // }
-
-    // if (video_sink)
-    // {
-    //     g_object_set(playbin_, "video-sink", video_sink, nullptr);
-    // }
-
-    // // 设置音频
-    // if (!audio_enabled_)
-    // {
-    //     GstElement *fake_audio = gst_element_factory_make("fakesink", "fakeaudio");
-    //     g_object_set(playbin_, "audio-sink", fake_audio, nullptr);
-    // }
-}
-
 void GstPlayer::initialize()
 {
 
@@ -130,9 +25,15 @@ void GstPlayer::initialize()
         std::cerr << "Failed to create playbin" << std::endl;
         return;
     }
+    // 初始化主循环
+    main_loop_ = g_main_loop_new(nullptr, FALSE);
 
-    // 初始设置 Sink
-    // setup_sinks();
+    // 启动主循环线程
+    main_loop_thread_ = g_thread_new("gst-main-loop", [](gpointer data) -> gpointer
+                                     {
+            GstPlayer* player = static_cast<GstPlayer*>(data);
+            g_main_loop_run(player->main_loop_);
+            return nullptr; }, this);
 
     // 设置总线监听
     GstBus *bus = gst_element_get_bus(playbin_);
@@ -140,13 +41,50 @@ void GstPlayer::initialize()
     gst_object_unref(bus);
 }
 
+void GstPlayer::set_window_size(const int x, const int y, const int width, const int height)
+{
+    std::cout << "设置窗口大小：" << x << "," << y << "," << width << "," << height << std::endl;
+
+    GValue render_rectangle = G_VALUE_INIT;
+    g_value_init(&render_rectangle, GST_TYPE_ARRAY);
+    // 设置位置及大小
+    for (int val : {x, y, width, height})
+    {
+        GValue item = G_VALUE_INIT;
+        g_value_init(&item, G_TYPE_INT);
+        g_value_set_int(&item, val);
+        gst_value_array_append_value(&render_rectangle, &item);
+    }
+
+    const gchar *property_name = "render-rectangle";
+    video_sink_ = gst_element_factory_make_with_properties("kmssink", 1, &property_name, &render_rectangle);
+    g_value_unset(&render_rectangle);
+    g_object_set(video_sink_, "can-scale", false, NULL);
+    g_object_set(playbin_, "video-sink", video_sink_, NULL);
+
+    gst_object_unref(video_sink_);
+    video_sink_ = nullptr;
+}
+
 void GstPlayer::cleanup()
 {
+    if (main_loop_)
+    {
+        g_main_loop_quit(main_loop_);
+        g_thread_join(main_loop_thread_);
+        g_main_loop_unref(main_loop_);
+        main_loop_ = nullptr;
+    }
     if (playbin_)
     {
         gst_element_set_state(playbin_, GST_STATE_NULL);
         gst_object_unref(playbin_);
         playbin_ = nullptr;
+    }
+    if (video_sink_)
+    {
+        gst_object_unref(video_sink_);
+        video_sink_ = nullptr;
     }
 }
 
@@ -181,36 +119,8 @@ void GstPlayer::set_uri(const std::string &uri)
     if (!playbin_)
         return;
     g_object_set(playbin_, "uri", uri.c_str(), nullptr);
-    current_uri_index_ = 0;
-
-    std::cout << "设置播放器皮肤" << std::endl;
-
-    GValue render_rectangle = G_VALUE_INIT;
-    g_value_init(&render_rectangle, GST_TYPE_ARRAY);
-    // 设置位置及大小
-
-    int x = 0;
-    int y = 0;
-    int width = 1280;
-    int height = 720;
-    for (int val : {x, y, width, height})
-    {
-        GValue item = G_VALUE_INIT;
-        g_value_init(&item, G_TYPE_INT);
-        g_value_set_int(&item, val);
-        gst_value_array_append_value(&render_rectangle, &item);
-    }
-
-    const gchar *property_name = "render-rectangle";
-    video_sink_ = gst_element_factory_make_with_properties("kmssink", 1, &property_name, &render_rectangle);
-
-    g_value_unset(&render_rectangle);
-
-    g_object_set(video_sink_, "can-scale", true, NULL);
-
-    g_object_set(playbin_, "video-sink", video_sink_, NULL);
-
-    // g_object_set(playbin_, "can-scale", video_sink_, NULL);
+    // 确保每次切换视频都设置窗口
+    set_window_size(display_settings_.x, display_settings_.y, display_settings_.width, display_settings_.height);
 }
 void GstPlayer::add_uri(const std::string &uri)
 {
@@ -234,6 +144,7 @@ void GstPlayer::set_playlist(const std::vector<std::string> &uris, bool loop)
     current_uri_index_ = 0;
     if (!playlist_.empty())
     {
+        current_uri_index_ = 0;
         set_uri(playlist_[0]);
     }
 }
@@ -276,8 +187,17 @@ int64_t GstPlayer::get_position() const
 // 总线消息处理
 gboolean GstPlayer::bus_callback(GstBus *bus, GstMessage *msg, gpointer data)
 {
+    // 打印消息类型用于调试
+    // std::cout << "Received message: " << GST_MESSAGE_TYPE_NAME(msg) << std::endl;
     GstPlayer *player = static_cast<GstPlayer *>(data);
-    player->handle_message(msg);
+    // 确保在主线程中处理消息
+    g_idle_add([](gpointer data) -> gboolean
+               {
+        auto* msg_data = static_cast<std::pair<GstPlayer*, GstMessage*>*>(data);
+        msg_data->first->handle_message(msg_data->second);
+        delete msg_data;
+        return G_SOURCE_REMOVE; }, new std::pair<GstPlayer *, GstMessage *>(player, gst_message_ref(msg)));
+
     return TRUE;
 }
 
@@ -286,31 +206,40 @@ void GstPlayer::handle_message(GstMessage *msg)
     switch (GST_MESSAGE_TYPE(msg))
     {
     case GST_MESSAGE_EOS:
-        if (eos_cb_)
-            eos_cb_();
+        // state_ = State::STOPPED;
+        //  先停止并重置管道
+        gst_element_set_state(playbin_, GST_STATE_READY);
+
         if (!playlist_.empty() && ++current_uri_index_ < playlist_.size())
         {
+            std::cout << "切换下一个视频" << std::endl;
+
             set_uri(playlist_[current_uri_index_]);
             play();
         }
         else if (loop_playlist_ && !playlist_.empty())
         {
+            std::cout << "回到第一个视频" << std::endl;
             current_uri_index_ = 0;
-            set_uri(playlist_[0]);
+            set_uri(playlist_[current_uri_index_]);
             play();
         }
         else
         {
+            std::cout << "播放列表为空，结束播放" << std::endl;
             state_ = State::STOPPED;
         }
+
+        if (eos_cb_)
+            eos_cb_();
         break;
     case GST_MESSAGE_DURATION_CHANGED:
-        if (duration_cb_)
-            duration_cb_(get_duration());
+        // if (duration_cb_)
+        //     duration_cb_(get_duration());
         break;
     case GST_MESSAGE_STATE_CHANGED:
-        if (position_cb_)
-            position_cb_(get_position());
+        // if (position_cb_)
+        //     position_cb_(get_position());
         break;
     case GST_MESSAGE_ERROR:
         gchar *debug;
@@ -323,23 +252,13 @@ void GstPlayer::handle_message(GstMessage *msg)
     default:
         break;
     }
+    gst_message_unref(msg);
 }
 
-void GstPlayer::set_video_sink_type(VideoSinkType type)
+// 回调设置
+void GstPlayer::set_eos_callback(EosCallback cb)
 {
-    video_sink_type_ = type;
-    if (playbin_)
-    {
-        setup_sinks();
-    }
-}
-void GstPlayer::enable_audio(bool enable)
-{
-    audio_enabled_ = enable;
-    if (playbin_)
-    {
-        setup_sinks();
-    }
+    eos_cb_ = cb;
 }
 
 void GstPlayer::set_video_display(const VideoDisplaySettings &settings)
@@ -367,32 +286,5 @@ void GstPlayer::set_video_display(const VideoDisplaySettings &settings)
         }
     }
 
-    setup_sinks();
-}
-
-void GstPlayer::reset_video_display()
-{
-    set_video_display({.x = 0,
-                       .y = 0,
-                       .width = 0,
-                       .height = 0,
-                       .alpha = 1.0,
-                       .force_aspect_ratio = true,
-                       .sink_type = "autovideosink"});
-}
-
-// 回调设置
-void GstPlayer::set_duration_callback(DurationCallback cb)
-{
-    duration_cb_ = cb;
-}
-
-void GstPlayer::set_position_callback(PositionCallback cb)
-{
-    position_cb_ = cb;
-}
-
-void GstPlayer::set_eos_callback(EosCallback cb)
-{
-    eos_cb_ = cb;
+    set_window_size(display_settings_.x, display_settings_.y, display_settings_.width, display_settings_.height);
 }

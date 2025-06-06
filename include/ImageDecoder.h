@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <webp/decode.h>
+#include <webp/demux.h>
 
 struct ImageData
 {
@@ -23,6 +25,11 @@ public:
 
     // 解码 JPEG
     static ImageData decodeJPEG(const std::string &filepath);
+
+    // 解码 WEBP
+    static bool decodeWebP(const std::string &filePath,
+                           std::vector<uint8_t> &output,
+                           int &width, int &height);
 };
 
 #endif // IMAGE_DECODER_H

@@ -38,7 +38,9 @@ sudo apt install -y \
     libpaho-mqttpp-dev \
     libpaho-mqtt-dev \
     libpng-dev \
-    libjpeg-dev
+    libjpeg-dev \
+    curl \
+    libwebp-dev
 ```+
 
 ## 安装开发工具（VSCode）

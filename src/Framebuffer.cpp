@@ -83,7 +83,7 @@ void Framebuffer::draw_to_framebuffer(uint8_t *fb_ptr, const fb_var_screeninfo &
  * @param img         要绘制的图片数据
  */
 void Framebuffer::draw_image_to_framebuffer(uint8_t *fb_ptr, const fb_var_screeninfo &vinfo,
-                                            const ImageData &img)
+                                            const ImageData &img, const int offset_x, const int offset_y)
 {
     // 计算每行字节数
     size_t fb_row_bytes = vinfo.xres * (vinfo.bits_per_pixel / 8);
@@ -112,7 +112,7 @@ void Framebuffer::draw_image_to_framebuffer(uint8_t *fb_ptr, const fb_var_screen
             uint32_t pixel = (a << 24) | (r << 16) | (g << 8) | b;
 
             // 调用单个像素绘制
-            draw_to_framebuffer(fb_ptr, vinfo, x, y, pixel);
+            draw_to_framebuffer(fb_ptr, vinfo, offset_x + x, offset_y + y, pixel);
         }
     }
 }

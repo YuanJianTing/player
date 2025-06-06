@@ -4,7 +4,7 @@
         {
             "label": "CMake 构建",
             "type": "shell",
-            "command": "cmake --build ${workspaceFolder}/build --config Debug",
+            "command": "cmake -DCMAKE_BUILD_TYPE=Debug -B ${workspaceFolder}/build -S ${workspaceFolder} && make -C ${workspaceFolder}/build -j$(nproc)", //cmake -DCMAKE_BUILD_TYPE=Debug -B ${workspaceFolder}/build -S ${workspaceFolder} && make -C ${workspaceFolder}/build -j$(nproc)
             "group": "build",
             "problemMatcher": []
         },

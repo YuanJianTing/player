@@ -24,7 +24,7 @@ private:
 
     void updatePrice(const MediaItem &media, const std::string &local_path);
     void updateBackground(const MediaItem &media, const std::string &local_path);
-    void display_image(const char *image_path);
+    void display_image(const char *image_path, const int offset_x, const int offset_y);
 
 public:
     Display(const std::string &client_id, const char *fb_device);

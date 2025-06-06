@@ -17,29 +17,9 @@
 Display::Display(const std::string &client_id, const char *fb_device) : device_id_(client_id), fb_device_(fb_device)
 {
 
-    // player_.setErrorCallback([](GStreamerPlayer::ErrorType type, const std::string &msg)
-    //                          { std::cerr << "Error (" << static_cast<int>(type) << "): " << msg << std::endl; });
-
-    // player_.setStateChangedCallback([](GStreamerPlayer::State state)
-    //                                 {
-    //     const char* states[] = { "NULL", "READY", "PAUSED", "PLAYING" };
-    //     std::cout << "State changed to: " << states[static_cast<int>(state)] << std::endl; });
-
-    // player_.setEOSCallback([]()
-    //                        {
-    //                            std::cout << "End of stream reached" << std::endl;
-    //                            // player->seek(0);
-    //                        });
-
     // 设置回调
-    player_.set_duration_callback([](int64_t duration)
-                                  { std::cout << "Duration: " << duration / GST_SECOND << "s" << std::endl; });
-
-    player_.set_position_callback([](int64_t pos)
-                                  { std::cout << "Position: " << pos / GST_SECOND << "s\r" << std::flush; });
-
-    player_.set_eos_callback([]()
-                             { std::cout << "\nEnd of stream" << std::endl; });
+    // player_.set_eos_callback([]()
+    //                          { std::cout << "\nEnd of stream" << std::endl; });
 }
 
 Display::~Display()
@@ -64,49 +44,29 @@ void Display::addMediaItem(const MediaItem &media, const std::string &local_path
     else
     {
 
-        // std::string defaultVideoPath = "file:///root/work/player/data/files/FA1747287368705.mp4";
         std::cout << "加载视频文件：" << local_path << std::endl;
         player_.add_uri("file://" + local_path);
         if (player_.getState() != GstPlayer::State::PLAYING)
         {
-
+            player_.set_video_display({media.left, media.top, media.width, media.height});
             std::cout << "没有开始播放，启动播放" << std::endl;
             //  开始播放
             player_.play();
-
-            // player_.set_video_display({.x = 0,
-            //                            .y = 0,
-            //                            .width = 800,
-            //                            .height = 1280,
-            //                            .sink_type = "kmssink"});
         }
-
-        // if (!player_.load(defaultVideoPath))
-        // {
-        //     std::cout << "加载视频文件失败：" << defaultVideoPath << std::endl;
-        //     return;
-        // }
-
-        // if (!player_.play())
-        // {
-        //     std::cout << "播放视频文件失败：" << defaultVideoPath << std::endl;
-        // }
     }
 }
 
 void Display::updateBackground(const MediaItem &media, const std::string &local_path)
 {
-    // background_image_.updateImage(local_path);
-    display_image(local_path.c_str());
+    display_image(local_path.c_str(), media.left, media.top);
 }
 
 void Display::updatePrice(const MediaItem &media, const std::string &local_path)
 {
-    // price_image_.updateImage(local_path);
-    // display_image(local_path.c_str());
+    display_image(local_path.c_str(), media.left, media.top);
 }
 
-void Display::display_image(const char *image_path)
+void Display::display_image(const char *image_path, const int offset_x, const int offset_y)
 {
     // 1. 打开framebuffer设备
     int fb_fd = open(fb_device_, O_RDWR);
@@ -142,7 +102,7 @@ void Display::display_image(const char *image_path)
     ImageData img = ImageDecoder::decode(image_path);
 
     // 6. 将图片数据复制到framebuffer
-    Framebuffer::draw_image_to_framebuffer(fb_ptr, vinfo, img);
+    Framebuffer::draw_image_to_framebuffer(fb_ptr, vinfo, img, offset_x, offset_y);
 
     // 7. 清理
     munmap(fb_ptr, fb_size);
@@ -153,6 +113,9 @@ void Display::clear()
 {
     player_.clear_list();
     media_items_.clear();
+
+    if (player_.getState() == GstPlayer::State::PLAYING)
+        player_.stop();
 }
 
 std::string Display::getDeviceId()

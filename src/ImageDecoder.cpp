@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <fstream>
 #include <jpeglib.h>
+#include <webp/decode.h>
+#include <webp/demux.h>
 
 ImageData ImageDecoder::decode(const std::string &filepath)
 {
@@ -29,7 +31,14 @@ ImageData ImageDecoder::decode(const std::string &filepath)
     }
     else
     {
-        throw std::runtime_error("Unsupported image format");
+        std::vector<uint8_t> imageData;
+        int width = 0, height = 0;
+
+        if (!ImageDecoder::decodeWebP(filepath, imageData, width, height))
+        {
+            throw std::runtime_error("Unsupported image format");
+        }
+        return {imageData, width, height, 4}; // 假设 WebP 返回 RGBA 数据
     }
 }
 
@@ -173,4 +182,41 @@ ImageData ImageDecoder::decodeJPEG(const std::string &filepath)
     fclose(fp);
 
     return {pixels, width, height, channels}; // 返回 RGB 或 Grayscale 数据
+}
+
+bool ImageDecoder::decodeWebP(const std::string &filePath,
+                              std::vector<uint8_t> &output,
+                              int &width, int &height)
+{
+    // 读取文件数据
+    std::ifstream file(filePath, std::ios::binary);
+    if (!file)
+        return false;
+
+    std::vector<uint8_t> fileData((std::istreambuf_iterator<char>(file)),
+                                  std::istreambuf_iterator<char>());
+
+    // 解码WebP
+    WebPBitstreamFeatures features;
+    if (WebPGetFeatures(fileData.data(), fileData.size(), &features) != VP8_STATUS_OK)
+    {
+        return false;
+    }
+
+    width = features.width;
+    height = features.height;
+
+    // 分配输出缓冲区
+    output.resize(width * height * 4); // RGBA格式
+
+    // 解码为RGBA
+    uint8_t *decodedData = WebPDecodeRGBA(fileData.data(), fileData.size(), &width, &height);
+    if (!decodedData)
+        return false;
+
+    // 复制数据到输出
+    std::copy(decodedData, decodedData + output.size(), output.begin());
+    WebPFree(decodedData);
+
+    return true;
 }

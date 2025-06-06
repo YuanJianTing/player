@@ -8,5 +8,16 @@
     "environmentVariables": {
       "PATH": "/usr/bin:${env:PATH}"
     }
+  },
+  {
+    "name": "ARM64 GCC",
+    "toolchainFile": "${workspaceFolder}/toolchain.cmake",
+    "compilers": {
+      "C": "/usr/bin/aarch64-linux-gnu-gcc",
+      "C++": "/usr/bin/aarch64-linux-gnu-g++"
+    },
+    "preferredGenerator": {
+      "name": "Unix Makefiles"
+    }
   }
 ]

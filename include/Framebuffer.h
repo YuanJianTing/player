@@ -29,7 +29,7 @@ public:
      * @param img         要绘制的图片数据
      */
     static void draw_image_to_framebuffer(uint8_t *fb_ptr, const fb_var_screeninfo &vinfo,
-                                          const ImageData &img);
+                                          const ImageData &img, const int offset_x, const int offset_y);
 };
 
 #endif // FRAME_BUFFER_H
