@@ -36,6 +36,7 @@ public:
 
     void setDownloadCallback(DownloadCallback callback);
     void add_task(const MediaItem &media);
+    void update_url(const std::string &url);
 
 private:
     std::string url_root_;

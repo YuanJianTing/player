@@ -10,10 +10,17 @@ set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # 查找必要的库
 find_package(PkgConfig REQUIRED)
+
+pkg_search_module(QRENCODE REQUIRED libqrencode)
+
 pkg_check_modules(GST REQUIRED gstreamer-1.0
     gstreamer-video-1.0)
 pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 pkg_check_modules(WEBP REQUIRED libwebp libwebpdemux libwebpmux)
+
+# 字体支持
+find_package(Freetype REQUIRED)
+
 
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
@@ -41,6 +48,7 @@ include_directories(
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIR}
     ${WEBP_INCLUDE_DIRS}
+    ${QRENCODE_INCLUDE_DIRS}
     /usr/include/mqtt # Paho MQTT C++ 头文件路径
 )
 
@@ -62,6 +70,8 @@ add_executable(eplayer
     src/Framebuffer.cpp
     src/Tools.cpp
     src/GstConcatPlayer.cpp
+    src/QrCodeGenerator.cpp
+    src/TextRenderer.cpp
 )
 
 # link_directories(${GSTREAMER_LIBRARY_DIRS})
@@ -79,4 +89,6 @@ target_link_libraries(eplayer
     ${JPEG_LIBRARIES}
     ${PNG_LIBRARIES}
     ${WEBP_LIBRARIES}
+    ${QRENCODE_LIBRARIES}
+    Freetype::Freetype
 )

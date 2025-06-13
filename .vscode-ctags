@@ -1,0 +1,558 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/root/work/player/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+$(VERBOSE).SILENT	build/Makefile	/^$(VERBOSE).SILENT:$/;"	t
+$(VERBOSE)MAKESILENT	build/Makefile	/^$(VERBOSE)MAKESILENT = -s$/;"	m
+%	build/Makefile	/^% : %,v$/;"	t
+%	build/Makefile	/^% : RCS\/%$/;"	t
+%	build/Makefile	/^% : RCS\/%,v$/;"	t
+%	build/Makefile	/^% : SCCS\/s.%$/;"	t
+%	build/Makefile	/^% : s.%$/;"	t
+ARCHITECTURE_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define ARCHITECTURE_ID$/;"	d	file:
+ARCHITECTURE_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define ARCHITECTURE_ID /;"	d	file:
+ARCHITECTURE_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define ARCHITECTURE_ID$/;"	d	file:
+CMAKE_BINARY_DIR	build/Makefile	/^CMAKE_BINARY_DIR = \/root\/work\/player\/build$/;"	m
+CMAKE_COMMAND	build/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_SOURCE_DIR	build/Makefile	/^CMAKE_SOURCE_DIR = \/root\/work\/player$/;"	m
+COMPILER_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_ID /;"	d	file:
+COMPILER_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_ID /;"	d	file:
+COMPILER_VERSION	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION /;"	d	file:
+COMPILER_VERSION	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION /;"	d	file:
+COMPILER_VERSION_INTERNAL	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_INTERNAL /;"	d	file:
+COMPILER_VERSION_INTERNAL_STR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_INTERNAL_STR /;"	d	file:
+COMPILER_VERSION_INTERNAL_STR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_INTERNAL_STR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^  # define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^  # define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_MAJOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^  # define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^  # define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_MINOR /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^  # define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^  # define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_PATCH /;"	d	file:
+COMPILER_VERSION_TWEAK	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define COMPILER_VERSION_TWEAK /;"	d	file:
+COMPILER_VERSION_TWEAK	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define COMPILER_VERSION_TWEAK /;"	d	file:
+COMPILER_VERSION_TWEAK	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define COMPILER_VERSION_TWEAK /;"	d	file:
+COMPILER_VERSION_TWEAK	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define COMPILER_VERSION_TWEAK /;"	d	file:
+CONTROL_H	include/control.h	/^#define CONTROL_H$/;"	d
+CXX_STD	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#      define CXX_STD /;"	d	file:
+CXX_STD	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#    define CXX_STD /;"	d	file:
+CXX_STD	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define CXX_STD /;"	d	file:
+C_VERSION	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define C_VERSION /;"	d	file:
+C_VERSION	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define C_VERSION$/;"	d	file:
+C_VERSION	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define C_VERSION /;"	d	file:
+Control	include/control.h	/^class Control$/;"	c
+Control	src/control.cpp	/^Control::Control(const std::string &url_root, const std::string &client_id)$/;"	f	class:Control
+DAEMON_THREAD_H	include/daemon_thread.h	/^#define DAEMON_THREAD_H$/;"	d
+DEC	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#define DEC(/;"	d	file:
+DEC	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define DEC(/;"	d	file:
+DECODE_FAILURE	include/GStreamerPlayer.h	/^    enum class ErrorType { FILE_NOT_FOUND, PIPELINE_FAILURE, DECODE_FAILURE };$/;"	e	enum:GStreamerPlayer::ErrorType
+DISPLAY_H	include/display.h	/^#define DISPLAY_H$/;"	d
+DOWNLOADER_H	include/downloader.h	/^#define DOWNLOADER_H$/;"	d
+DaemonThread	include/daemon_thread.h	/^class DaemonThread {$/;"	c
+DaemonThread	src/daemon_thread.cpp	/^DaemonThread::DaemonThread(MQTTClient* mqtt_client, int speed_seconds)$/;"	f	class:DaemonThread
+Display	include/display.h	/^class Display$/;"	c
+Display	src/display.cpp	/^Display::Display(const std::string &client_id, const char *fb_device) : device_id_(client_id), f/;"	f	class:Display
+DownloadCallback	include/downloader.h	/^    using DownloadCallback = std::function<void(const MediaItem &media,$/;"	t	class:Downloader
+Downloader	include/downloader.h	/^class Downloader$/;"	c
+Downloader	src/downloader.cpp	/^Downloader::Downloader(const std::string &url_root)$/;"	f	class:Downloader
+EOSCallback	include/GStreamerPlayer.h	/^    using EOSCallback = std::function<void()>;$/;"	t	class:GStreamerPlayer
+EQUALS	build/Makefile	/^EQUALS = =$/;"	m
+ERROR	include/GStreamerPlayer.h	/^    enum class State { NULL_, READY, PAUSED, PLAYING, ERROR};$/;"	e	enum:GStreamerPlayer::State
+EosCallback	include/GstPlayer.h	/^    using EosCallback = std::function<void()>;$/;"	t	class:GstPlayer
+ErrorCallback	include/GStreamerPlayer.h	/^    using ErrorCallback = std::function<void(ErrorType, const std::string&)>;$/;"	t	class:GStreamerPlayer
+ErrorCorrection	include/QrCodeGenerator.h	/^    enum class ErrorCorrection$/;"	g	class:QrCodeGenerator
+ErrorType	include/GStreamerPlayer.h	/^    enum class ErrorType { FILE_NOT_FOUND, PIPELINE_FAILURE, DECODE_FAILURE };$/;"	g	class:GStreamerPlayer
+FILE_NOT_FOUND	include/GStreamerPlayer.h	/^    enum class ErrorType { FILE_NOT_FOUND, PIPELINE_FAILURE, DECODE_FAILURE };$/;"	e	enum:GStreamerPlayer::ErrorType
+FRAME_BUFFER_H	include/Framebuffer.h	/^#define FRAME_BUFFER_H$/;"	d
+Framebuffer	include/Framebuffer.h	/^class Framebuffer$/;"	c
+GSTREAMER_IMAGE_H	include/GStreamerImage.h	/^#define GSTREAMER_IMAGE_H$/;"	d
+GSTREAMER_PLAYER_H	include/GStreamerPlayer.h	/^#define GSTREAMER_PLAYER_H$/;"	d
+GST_PLAYER_H	include/GstPlayer.h	/^#define GST_PLAYER_H$/;"	d
+GStreamerImage	include/GStreamerImage.h	/^class GStreamerImage$/;"	c
+GStreamerImage	src/GStreamerImage.cpp	/^GStreamerImage::GStreamerImage() : pipeline_(nullptr)$/;"	f	class:GStreamerImage
+GStreamerPlayer	include/GStreamerPlayer.h	/^class GStreamerPlayer {$/;"	c
+GStreamerPlayer	src/GStreamerPlayer.cpp	/^GStreamerPlayer::GStreamerPlayer() : impl(new Impl())$/;"	f	class:GStreamerPlayer
+GstConcatPlayer	include/GstConcatPlayer.h	/^class GstConcatPlayer$/;"	c
+GstConcatPlayer	src/GstConcatPlayer.cpp	/^GstConcatPlayer::GstConcatPlayer()$/;"	f	class:GstConcatPlayer
+GstPlayer	include/GstPlayer.h	/^class GstPlayer$/;"	c
+GstPlayer	src/GstPlayer.cpp	/^GstPlayer::GstPlayer()$/;"	f	class:GstPlayer
+HEX	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#define HEX(/;"	d	file:
+HEX	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define HEX(/;"	d	file:
+HTTP_CLIENT_H	include/http_client.h	/^#define HTTP_CLIENT_H$/;"	d
+High	include/QrCodeGenerator.h	/^        High$/;"	e	enum:QrCodeGenerator::ErrorCorrection
+HttpClient	include/http_client.h	/^class HttpClient$/;"	c
+HttpClient	src/http_client.cpp	/^HttpClient::HttpClient(const std::string &url_root) : url_root_(url_root)$/;"	f	class:HttpClient
+ID_VOID_MAIN	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define ID_VOID_MAIN$/;"	d	file:
+IMAGE_DECODER_H	include/ImageDecoder.h	/^#define IMAGE_DECODER_H$/;"	d
+ImageData	include/ImageDecoder.h	/^struct ImageData$/;"	s
+ImageDecoder	include/ImageDecoder.h	/^class ImageDecoder$/;"	c
+Impl	src/GStreamerPlayer.cpp	/^struct GStreamerPlayer::Impl$/;"	s	class:GStreamerPlayer	file:
+Low	include/QrCodeGenerator.h	/^        Low,$/;"	e	enum:QrCodeGenerator::ErrorCorrection
+MD5	include/task_repository.h	/^    std::string MD5;$/;"	m	struct:MediaItem	typeref:typename:std::string
+MQTTCallback	include/mqtt_client.h	/^        MQTTCallback(MQTTClient& client) : client_(client) {}$/;"	f	class:MQTTClient::MQTTCallback
+MQTTCallback	include/mqtt_client.h	/^    class MQTTCallback : public mqtt::callback {$/;"	c	class:MQTTClient
+MQTTClient	include/mqtt_client.h	/^class MQTTClient {$/;"	c
+MQTTClient	src/mqtt_client.cpp	/^MQTTClient::MQTTClient(const std::string &mqtt_url,$/;"	f	class:MQTTClient
+MQTT_CLIENT_H	include/mqtt_client.h	/^#define MQTT_CLIENT_H$/;"	d
+MediaItem	include/task_repository.h	/^struct MediaItem$/;"	s
+Medium	include/QrCodeGenerator.h	/^        Medium,$/;"	e	enum:QrCodeGenerator::ErrorCorrection
+MessageCallback	include/mqtt_client.h	/^    using MessageCallback = std::function<void(const std::string& code, const std::string& body)/;"	t	class:MQTTClient
+NULL_	include/GStreamerPlayer.h	/^    enum class State { NULL_, READY, PAUSED, PLAYING, ERROR};$/;"	e	enum:GStreamerPlayer::State
+PAUSED	include/GStreamerPlayer.h	/^    enum class State { NULL_, READY, PAUSED, PLAYING, ERROR};$/;"	e	enum:GStreamerPlayer::State
+PAUSED	include/GstPlayer.h	/^        PAUSED,$/;"	e	enum:GstPlayer::State
+PIPELINE_FAILURE	include/GStreamerPlayer.h	/^    enum class ErrorType { FILE_NOT_FOUND, PIPELINE_FAILURE, DECODE_FAILURE };$/;"	e	enum:GStreamerPlayer::ErrorType
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define PLATFORM_ID$/;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define PLATFORM_ID$/;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define PLATFORM_ID$/;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define PLATFORM_ID /;"	d	file:
+PLATFORM_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define PLATFORM_ID$/;"	d	file:
+PLAYING	include/GStreamerPlayer.h	/^    enum class State { NULL_, READY, PAUSED, PLAYING, ERROR};$/;"	e	enum:GStreamerPlayer::State
+PLAYING	include/GstPlayer.h	/^        PLAYING,$/;"	e	enum:GstPlayer::State
+PlayList	include/task_repository.h	/^    struct PlayList$/;"	s	class:TaskRepository
+QrCodeGenerator	include/QrCodeGenerator.h	/^class QrCodeGenerator$/;"	c
+Quartile	include/QrCodeGenerator.h	/^        Quartile,$/;"	e	enum:QrCodeGenerator::ErrorCorrection
+READY	include/GStreamerPlayer.h	/^    enum class State { NULL_, READY, PAUSED, PLAYING, ERROR};$/;"	e	enum:GStreamerPlayer::State
+RM	build/Makefile	/^RM = \/usr\/bin\/cmake -E rm -f$/;"	m
+SHELL	build/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SIMULATE_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_ID /;"	d	file:
+SIMULATE_ID	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_ID /;"	d	file:
+SIMULATE_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_ID /;"	d	file:
+SIMULATE_ID	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_ID /;"	d	file:
+SIMULATE_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MAJOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_VERSION_MAJOR /;"	d	file:
+SIMULATE_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_MINOR	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_VERSION_MINOR /;"	d	file:
+SIMULATE_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#   define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#   define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define SIMULATE_VERSION_PATCH /;"	d	file:
+SIMULATE_VERSION_PATCH	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^# define SIMULATE_VERSION_PATCH /;"	d	file:
+STOPPED	include/GstPlayer.h	/^        STOPPED$/;"	e	enum:GstPlayer::State
+STRINGIFY	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#define STRINGIFY(/;"	d	file:
+STRINGIFY	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define STRINGIFY(/;"	d	file:
+STRINGIFY_HELPER	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#define STRINGIFY_HELPER(/;"	d	file:
+STRINGIFY_HELPER	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#define STRINGIFY_HELPER(/;"	d	file:
+State	include/GStreamerPlayer.h	/^    enum class State { NULL_, READY, PAUSED, PLAYING, ERROR};$/;"	g	class:GStreamerPlayer
+State	include/GstPlayer.h	/^    enum class State$/;"	g	class:GstPlayer
+StateChangedCallback	include/GStreamerPlayer.h	/^    using StateChangedCallback = std::function<void(State)>;$/;"	t	class:GStreamerPlayer
+SystemInfo	include/http_client.h	/^    struct SystemInfo$/;"	s	class:HttpClient
+TASK_REPOSITORY_H	include/task_repository.h	/^#define TASK_REPOSITORY_H$/;"	d
+TOOLS_H	include/Tools.h	/^#define TOOLS_H$/;"	d
+TaskRepository	include/task_repository.h	/^class TaskRepository$/;"	c
+TaskRepository	src/task_repository.cpp	/^TaskRepository::TaskRepository()$/;"	f	class:TaskRepository
+Tools	include/Tools.h	/^class Tools$/;"	c
+VideoDisplaySettings	include/GstPlayer.h	/^struct VideoDisplaySettings$/;"	s
+WriteCallback	src/http_client.cpp	/^static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)$/;"	f	typeref:typename:size_t	file:
+__anon95a9c6e80102	src/GstPlayer.cpp	/^                                     {$/;"	f	function:GstPlayer::initialize	typeref:typename:gpointer	file:
+__anon95a9c6e80202	src/GstPlayer.cpp	/^               {$/;"	f	function:GstPlayer::bus_callback	typeref:typename:gboolean	file:
+__anonc418f4ee0102	src/control.cpp	/^                                    { this->downloadCallback(media, local_path, success, error);/;"	f	function:Control::Control	file:
+__anonc418f4ee0202	src/control.cpp	/^                                     { this->handleMessage(code, body); });$/;"	f	function:Control::start	file:
+__anonc96a823c0102	src/downloader.cpp	/^                           { return stop_flag_ || !tasks_.empty(); });$/;"	f	function:Downloader::worker	file:
+__anonc96a823c0202	src/downloader.cpp	/^                             {$/;"	f	function:Downloader::download_file_multithread	file:
+__has_include	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^#  define __has_include(/;"	d	file:
+__has_include	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^#  define __has_include(/;"	d	file:
+account_	include/mqtt_client.h	/^    std::string account_;$/;"	m	class:MQTTClient	typeref:typename:std::string
+addMediaItem	src/display.cpp	/^void Display::addMediaItem(const MediaItem &media, const std::string &local_path)$/;"	f	class:Display	typeref:typename:void
+add_task	src/downloader.cpp	/^void Downloader::add_task(const MediaItem &task)$/;"	f	class:Downloader	typeref:typename:void
+add_uri	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::add_uri(const std::string &uri)$/;"	f	class:GstConcatPlayer	typeref:typename:void
+add_uri	src/GstPlayer.cpp	/^void GstPlayer::add_uri(const std::string &uri)$/;"	f	class:GstPlayer	typeref:typename:void
+all	build/Makefile	/^all: cmake_check_build_system$/;"	t
+appName	include/http_client.h	/^        std::string appName;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+busCallback	src/GStreamerPlayer.cpp	/^    static gboolean busCallback(GstBus *bus, GstMessage *msg, gpointer data)$/;"	f	struct:GStreamerPlayer::Impl	typeref:typename:gboolean	file:
+busId	src/GStreamerPlayer.cpp	/^    guint busId = 0;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:guint	file:
+bus_callback	src/GstConcatPlayer.cpp	/^gboolean GstConcatPlayer::bus_callback(GstBus *bus, GstMessage *msg, gpointer user_data)$/;"	f	class:GstConcatPlayer	typeref:typename:gboolean
+bus_callback	src/GstPlayer.cpp	/^gboolean GstPlayer::bus_callback(GstBus *bus, GstMessage *msg, gpointer data)$/;"	f	class:GstPlayer	typeref:typename:gboolean
+callback_	include/downloader.h	/^    DownloadCallback callback_;$/;"	m	class:Downloader	typeref:typename:DownloadCallback
+callback_	include/mqtt_client.h	/^    std::shared_ptr<MQTTCallback> callback_;$/;"	m	class:MQTTClient	typeref:typename:std::shared_ptr<MQTTCallback>
+channels	include/ImageDecoder.h	/^    int channels;                \/\/ 通道数 (3=RGB, 4=RGBA)$/;"	m	struct:ImageData	typeref:typename:int
+clean	build/Makefile	/^clean:$/;"	t
+clean/fast	build/Makefile	/^clean\/fast: clean$/;"	t
+cleanup	src/GstPlayer.cpp	/^void GstPlayer::cleanup()$/;"	f	class:GstPlayer	typeref:typename:void
+clear	src/display.cpp	/^void Display::clear()$/;"	f	class:Display	typeref:typename:void
+clear_list	src/GstPlayer.cpp	/^void GstPlayer::clear_list()$/;"	f	class:GstPlayer	typeref:typename:void
+client_	include/mqtt_client.h	/^        MQTTClient& client_;$/;"	m	class:MQTTClient::MQTTCallback	typeref:typename:MQTTClient &
+client_	include/mqtt_client.h	/^    std::shared_ptr<mqtt::async_client> client_;$/;"	m	class:MQTTClient	typeref:typename:std::shared_ptr<mqtt::async_client>
+client_id_	include/control.h	/^    std::string client_id_;$/;"	m	class:Control	typeref:typename:std::string
+client_id_	include/mqtt_client.h	/^    std::string client_id_;$/;"	m	class:MQTTClient	typeref:typename:std::string
+cmake_check_build_system	build/Makefile	/^cmake_check_build_system:$/;"	t
+cmake_force	build/Makefile	/^cmake_force:$/;"	t
+concat_	include/GstConcatPlayer.h	/^    GstElement *concat_ = nullptr;$/;"	m	class:GstConcatPlayer	typeref:typename:GstElement *
+confirm_url	include/task_repository.h	/^    std::string confirm_url;$/;"	m	struct:MediaItem	typeref:typename:std::string
+conn_opts_	include/mqtt_client.h	/^    mqtt::connect_options conn_opts_;$/;"	m	class:MQTTClient	typeref:typename:mqtt::connect_options
+connect	src/mqtt_client.cpp	/^void MQTTClient::connect()$/;"	f	class:MQTTClient	typeref:typename:void
+const	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define const$/;"	d	file:
+create_pipeline	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::create_pipeline()$/;"	f	class:GstConcatPlayer	typeref:typename:void
+currentState	src/GStreamerPlayer.cpp	/^    State currentState = State::NULL_;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:State	file:
+current_uri_index_	include/GstPlayer.h	/^    size_t current_uri_index_ = 0;$/;"	m	class:GstPlayer	typeref:typename:size_t
+customerCode	include/http_client.h	/^        std::string customerCode;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+customerName	include/http_client.h	/^        std::string customerName;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+daemon_thread_	include/control.h	/^    std::shared_ptr<DaemonThread> daemon_thread_;$/;"	m	class:Control	typeref:typename:std::shared_ptr<DaemonThread>
+decode	src/ImageDecoder.cpp	/^ImageData ImageDecoder::decode(const std::string &filepath)$/;"	f	class:ImageDecoder	typeref:typename:ImageData
+decodeJPEG	src/ImageDecoder.cpp	/^ImageData ImageDecoder::decodeJPEG(const std::string &filepath)$/;"	f	class:ImageDecoder	typeref:typename:ImageData
+decodePNG	src/ImageDecoder.cpp	/^ImageData ImageDecoder::decodePNG(const std::string &filepath)$/;"	f	class:ImageDecoder	typeref:typename:ImageData
+decodeWebP	src/ImageDecoder.cpp	/^bool ImageDecoder::decodeWebP(const std::string &filePath,$/;"	f	class:ImageDecoder	typeref:typename:bool
+default_target	build/Makefile	/^default_target: all$/;"	t
+depend	build/Makefile	/^depend:$/;"	t
+destroyed	src/GStreamerImage.cpp	/^void GStreamerImage::destroyed()$/;"	f	class:GStreamerImage	typeref:typename:void
+destroyed	src/display.cpp	/^void Display::destroyed()$/;"	f	class:Display	typeref:typename:void
+device	include/task_repository.h	/^        std::string device;$/;"	m	struct:TaskRepository::PlayList	typeref:typename:std::string
+device_id	include/task_repository.h	/^    std::string device_id;$/;"	m	struct:MediaItem	typeref:typename:std::string
+device_id_	include/display.h	/^    std::string device_id_;$/;"	m	class:Display	typeref:typename:std::string
+disconnect	src/mqtt_client.cpp	/^void MQTTClient::disconnect()$/;"	f	class:MQTTClient	typeref:typename:void
+display_	include/control.h	/^    std::shared_ptr<Display> display_;$/;"	m	class:Control	typeref:typename:std::shared_ptr<Display>
+display_image	src/display.cpp	/^void Display::display_image(const ImageData *image_data, const int offset_x, const int offset_y)$/;"	f	class:Display	typeref:typename:void
+display_image	src/display.cpp	/^void Display::display_image(const char *image_path, const int offset_x, const int offset_y)$/;"	f	class:Display	typeref:typename:void
+display_settings_	include/GstPlayer.h	/^    VideoDisplaySettings display_settings_;$/;"	m	class:GstPlayer	typeref:typename:VideoDisplaySettings
+dl_req_reply	src/downloader.cpp	/^size_t Downloader::dl_req_reply(void *buffer, size_t size, size_t nmemb, void *user_p)$/;"	f	class:Downloader	typeref:typename:size_t
+downloadCallback	src/control.cpp	/^void Control::downloadCallback(const MediaItem &media, const std::string &local_path, bool succe/;"	f	class:Control	typeref:typename:void
+download_file	src/downloader.cpp	/^bool Downloader::download_file(const std::string &url, const std::string &local_path)$/;"	f	class:Downloader	typeref:typename:bool
+download_file_multithread	src/downloader.cpp	/^bool Downloader::download_file_multithread(const std::string &url, const std::string &local_path/;"	f	class:Downloader	typeref:typename:bool
+download_url	include/task_repository.h	/^    std::string download_url;$/;"	m	struct:MediaItem	typeref:typename:std::string
+downloader_	include/control.h	/^    Downloader downloader_;$/;"	m	class:Control	typeref:typename:Downloader
+draw_image_to_framebuffer	src/Framebuffer.cpp	/^void Framebuffer::draw_image_to_framebuffer(uint8_t *fb_ptr, const fb_var_screeninfo &vinfo,$/;"	f	class:Framebuffer	typeref:typename:void
+draw_to_framebuffer	src/Framebuffer.cpp	/^void Framebuffer::draw_to_framebuffer(uint8_t *fb_ptr, const fb_var_screeninfo &vinfo,$/;"	f	class:Framebuffer	typeref:typename:void
+ec_level_	include/QrCodeGenerator.h	/^    ErrorCorrection ec_level_;$/;"	m	class:QrCodeGenerator	typeref:typename:ErrorCorrection
+edit_cache	build/Makefile	/^edit_cache:$/;"	t
+edit_cache/fast	build/Makefile	/^edit_cache\/fast: edit_cache$/;"	t
+eosCallback	src/GStreamerPlayer.cpp	/^    EOSCallback eosCallback;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:EOSCallback	file:
+eos_cb_	include/GstConcatPlayer.h	/^    std::function<void()> eos_cb_;$/;"	m	class:GstConcatPlayer	typeref:typename:std::function<void ()>
+eos_cb_	include/GstPlayer.h	/^    EosCallback eos_cb_;$/;"	m	class:GstPlayer	typeref:typename:EosCallback
+eplayer	build/Makefile	/^eplayer: cmake_check_build_system$/;"	t
+eplayer/fast	build/Makefile	/^eplayer\/fast:$/;"	t
+errorCallback	src/GStreamerPlayer.cpp	/^    ErrorCallback errorCallback;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:ErrorCallback	file:
+fb_device_	include/display.h	/^    const char *fb_device_;$/;"	m	class:Display	typeref:typename:const char *
+file_name	include/task_repository.h	/^    std::string file_name;$/;"	m	struct:MediaItem	typeref:typename:std::string
+generateASCII	src/QrCodeGenerator.cpp	/^std::string QrCodeGenerator::generateASCII(const std::string &text) const$/;"	f	class:QrCodeGenerator	typeref:typename:std::string
+generatePNG	src/QrCodeGenerator.cpp	/^std::vector<uint8_t> QrCodeGenerator::generatePNG(const std::string &text, int size) const$/;"	f	class:QrCodeGenerator	typeref:typename:std::vector<uint8_t>
+getCurrentPosition	src/GStreamerPlayer.cpp	/^int64_t GStreamerPlayer::getCurrentPosition() const$/;"	f	class:GStreamerPlayer	typeref:typename:int64_t
+getCurrentState	src/GStreamerPlayer.cpp	/^GStreamerPlayer::State GStreamerPlayer::getCurrentState() const$/;"	f	class:GStreamerPlayer	typeref:typename:GStreamerPlayer::State
+getDeviceId	src/display.cpp	/^std::string Display::getDeviceId()$/;"	f	class:Display	typeref:typename:std::string
+getDuration	src/GStreamerPlayer.cpp	/^int64_t GStreamerPlayer::getDuration() const$/;"	f	class:GStreamerPlayer	typeref:typename:int64_t
+getPlayList	src/task_repository.cpp	/^std::vector<std::unique_ptr<MediaItem>> TaskRepository::getPlayList(const std::string &device_id/;"	f	class:TaskRepository	typeref:typename:std::vector<std::unique_ptr<MediaItem>>
+getState	include/GstPlayer.h	/^    State getState() const { return state_; }$/;"	f	class:GstPlayer	typeref:typename:State
+getSystemInfo	src/http_client.cpp	/^bool HttpClient::getSystemInfo(SystemInfo &info, std::string &error_msg)$/;"	f	class:HttpClient	typeref:typename:bool
+getTaskId	src/task_repository.cpp	/^std::string TaskRepository::getTaskId(std::string device_id)$/;"	f	class:TaskRepository	typeref:typename:std::string
+get_device_ip	src/Tools.cpp	/^std::string Tools::get_device_ip()$/;"	f	class:Tools	typeref:typename:std::string
+get_download_dir	src/Tools.cpp	/^std::string Tools::get_download_dir()$/;"	f	class:Tools	typeref:typename:std::string
+get_duration	src/GstPlayer.cpp	/^int64_t GstPlayer::get_duration() const$/;"	f	class:GstPlayer	typeref:typename:int64_t
+get_file_size	src/downloader.cpp	/^size_t Downloader::get_file_size(const std::string &url)$/;"	f	class:Downloader	typeref:typename:size_t
+get_position	src/GstPlayer.cpp	/^int64_t GstPlayer::get_position() const$/;"	f	class:GstPlayer	typeref:typename:int64_t
+get_repository_dir	src/Tools.cpp	/^std::string Tools::get_repository_dir()$/;"	f	class:Tools	typeref:typename:std::string
+get_work_dir	src/Tools.cpp	/^std::string Tools::get_work_dir()$/;"	f	class:Tools	typeref:typename:std::string
+group	include/task_repository.h	/^    int group;$/;"	m	struct:MediaItem	typeref:typename:int
+handleMessage	src/control.cpp	/^void Control::handleMessage(const std::string &code, const std::string &body)$/;"	f	class:Control	typeref:typename:void
+handleMessage	src/mqtt_client.cpp	/^void MQTTClient::handleMessage(mqtt::const_message_ptr msg)$/;"	f	class:MQTTClient	typeref:typename:void
+handle_message	src/GstPlayer.cpp	/^void GstPlayer::handle_message(GstMessage *msg)$/;"	f	class:GstPlayer	typeref:typename:void
+heartbeat	src/control.cpp	/^void Control::heartbeat(const std::int32_t &speed)$/;"	f	class:Control	typeref:typename:void
+height	include/GstPlayer.h	/^    int height = 0; \/\/ 显示高度（0表示自动）$/;"	m	struct:VideoDisplaySettings	typeref:typename:int
+height	include/ImageDecoder.h	/^    int height;                  \/\/ 图片高度$/;"	m	struct:ImageData	typeref:typename:int
+height	include/task_repository.h	/^    int height;$/;"	m	struct:MediaItem	typeref:typename:int
+help	build/Makefile	/^help:$/;"	t
+host	include/http_client.h	/^        std::string host;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+id	include/task_repository.h	/^    std::string id;$/;"	m	struct:MediaItem	typeref:typename:std::string
+impl	include/GStreamerPlayer.h	/^    Impl* impl;$/;"	m	class:GStreamerPlayer	typeref:typename:Impl *
+index	include/task_repository.h	/^    int index;$/;"	m	struct:MediaItem	typeref:typename:int
+info_arch	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v	typeref:typename:char const *
+info_arch	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v	typeref:typename:char const *
+info_compiler	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";$/;"	v	typeref:typename:char const *
+info_compiler	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";$/;"	v	typeref:typename:char const *
+info_cray	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";$/;"	v	typeref:typename:char const *
+info_cray	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";$/;"	v	typeref:typename:char const *
+info_language_extensions_default	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^const char* info_language_extensions_default = "INFO" ":" "extensions_default["$/;"	v	typeref:typename:const char *
+info_language_extensions_default	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^const char* info_language_extensions_default = "INFO" ":" "extensions_default["$/;"	v	typeref:typename:const char *
+info_language_standard_default	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^const char* info_language_standard_default =$/;"	v	typeref:typename:const char *
+info_language_standard_default	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^const char* info_language_standard_default = "INFO" ":" "standard_default["$/;"	v	typeref:typename:const char *
+info_platform	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";$/;"	v	typeref:typename:char const *
+info_platform	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";$/;"	v	typeref:typename:char const *
+info_simulate	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";$/;"	v	typeref:typename:char const *
+info_simulate	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";$/;"	v	typeref:typename:char const *
+info_simulate_version	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const info_simulate_version[] = {$/;"	v	typeref:typename:char const[]
+info_simulate_version	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_simulate_version[] = {$/;"	v	typeref:typename:char const[]
+info_version	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const info_version[] = {$/;"	v	typeref:typename:char const[]
+info_version	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";$/;"	v	typeref:typename:char const *
+info_version	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version[] = {$/;"	v	typeref:typename:char const[]
+info_version	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";$/;"	v	typeref:typename:char const *
+info_version_internal	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const info_version_internal[] = {$/;"	v	typeref:typename:char const[]
+info_version_internal	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* info_version_internal = "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INT/;"	v	typeref:typename:char const *
+info_version_internal	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version_internal[] = {$/;"	v	typeref:typename:char const[]
+info_version_internal	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_version_internal = "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INT/;"	v	typeref:typename:char const *
+initialize	src/GstPlayer.cpp	/^void GstPlayer::initialize()$/;"	f	class:GstPlayer	typeref:typename:void
+isConnected	src/daemon_thread.cpp	/^bool DaemonThread::isConnected() const {$/;"	f	class:DaemonThread	typeref:typename:bool
+isConnected	src/mqtt_client.cpp	/^bool MQTTClient::isConnected() const$/;"	f	class:MQTTClient	typeref:typename:bool
+language	include/http_client.h	/^        std::string language;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+left	include/task_repository.h	/^    int left;$/;"	m	struct:MediaItem	typeref:typename:int
+link_decodebin_to_concat	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::link_decodebin_to_concat(GstElement *decodebin)$/;"	f	class:GstConcatPlayer	typeref:typename:void
+list	include/task_repository.h	/^        std::vector<MediaItem> list;$/;"	m	struct:TaskRepository::PlayList	typeref:typename:std::vector<MediaItem>
+load	src/GStreamerPlayer.cpp	/^bool GStreamerPlayer::load(const std::string &filePath)$/;"	f	class:GStreamerPlayer	typeref:typename:bool
+loop_playlist_	include/GstPlayer.h	/^    bool loop_playlist_ = true;$/;"	m	class:GstPlayer	typeref:typename:bool
+main	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^int main(argc, argv) int argc; char *argv[];$/;"	f
+main	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^void main() {}$/;"	f	typeref:typename:void
+main	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^int main(int argc, char* argv[])$/;"	f	typeref:typename:int
+main	src/main.cpp	/^int main()$/;"	f	typeref:typename:int
+main_loop_	include/GstPlayer.h	/^    GMainLoop *main_loop_;$/;"	m	class:GstPlayer	typeref:typename:GMainLoop *
+main_loop_thread_	include/GstPlayer.h	/^    GThread *main_loop_thread_;$/;"	m	class:GstPlayer	typeref:typename:GThread *
+media_items_	include/display.h	/^    std::vector<MediaItem> media_items_;$/;"	m	class:Display	typeref:typename:std::vector<MediaItem>
+message_arrived	include/mqtt_client.h	/^        void message_arrived(mqtt::const_message_ptr msg) override {$/;"	f	class:MQTTClient::MQTTCallback	typeref:typename:void
+message_callback_	include/mqtt_client.h	/^    MessageCallback message_callback_;$/;"	m	class:MQTTClient	typeref:typename:MessageCallback
+mqtt	include/http_client.h	/^        std::string mqtt;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+mqtt_client_	include/control.h	/^    std::shared_ptr<MQTTClient> mqtt_client_;$/;"	m	class:Control	typeref:typename:std::shared_ptr<MQTTClient>
+mqtt_client_	include/daemon_thread.h	/^    MQTTClient* mqtt_client_;      \/\/ MQTT客户端指针$/;"	m	class:DaemonThread	typeref:typename:MQTTClient *
+mqtt_url_	include/mqtt_client.h	/^    std::string mqtt_url_;$/;"	m	class:MQTTClient	typeref:typename:std::string
+ntpServer	include/http_client.h	/^        std::string ntpServer;$/;"	m	struct:HttpClient::SystemInfo	typeref:typename:std::string
+on_pad_added	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::on_pad_added(GstElement *decodebin, GstPad *pad, gpointer user_data)$/;"	f	class:GstConcatPlayer	typeref:typename:void
+outputHeight	src/GStreamerPlayer.cpp	/^    int outputHeight = 1280;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:int	file:
+outputWidth	src/GStreamerPlayer.cpp	/^    int outputWidth = 800;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:int	file:
+overlayElem	src/GStreamerPlayer.cpp	/^    GstElement *overlayElem = nullptr; \/\/ 新增$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:GstElement *	file:
+overlayImagePath	src/GStreamerPlayer.cpp	/^    std::string overlayImagePath;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:std::string	file:
+overlayOffsetX	src/GStreamerPlayer.cpp	/^    int overlayOffsetX = 0;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:int	file:
+overlayOffsetY	src/GStreamerPlayer.cpp	/^    int overlayOffsetY = 0;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:int	file:
+password_	include/mqtt_client.h	/^    std::string password_;$/;"	m	class:MQTTClient	typeref:typename:std::string
+pause	src/GStreamerPlayer.cpp	/^bool GStreamerPlayer::pause()$/;"	f	class:GStreamerPlayer	typeref:typename:bool
+pause	src/GstPlayer.cpp	/^void GstPlayer::pause()$/;"	f	class:GstPlayer	typeref:typename:void
+performGetRequest	src/http_client.cpp	/^std::string HttpClient::performGetRequest(const std::string &url, std::string &error_msg)$/;"	f	class:HttpClient	typeref:typename:std::string
+pipeline	src/GStreamerPlayer.cpp	/^    GstElement *pipeline = nullptr;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:GstElement *	file:
+pipeline_	include/GStreamerImage.h	/^    GstElement *pipeline_;$/;"	m	class:GStreamerImage	typeref:typename:GstElement *
+pipeline_	include/GstConcatPlayer.h	/^    GstElement *pipeline_ = nullptr;$/;"	m	class:GstConcatPlayer	typeref:typename:GstElement *
+pipeline_	include/GstPlayer.h	/^    GstElement *pipeline_ = nullptr;$/;"	m	class:GstPlayer	typeref:typename:GstElement *
+pixels	include/ImageDecoder.h	/^    std::vector<uint8_t> pixels; \/\/ 存储 RGB\/RGBA 数据$/;"	m	struct:ImageData	typeref:typename:std::vector<uint8_t>
+play	src/GStreamerPlayer.cpp	/^bool GStreamerPlayer::play()$/;"	f	class:GStreamerPlayer	typeref:typename:bool
+play	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::play()$/;"	f	class:GstConcatPlayer	typeref:typename:void
+play	src/GstPlayer.cpp	/^void GstPlayer::play()$/;"	f	class:GstPlayer	typeref:typename:void
+play_time	include/task_repository.h	/^    int play_time;$/;"	m	struct:MediaItem	typeref:typename:int
+playbin_	include/GstPlayer.h	/^    GstElement *playbin_ = nullptr;$/;"	m	class:GstPlayer	typeref:typename:GstElement *
+player_	include/display.h	/^    GstPlayer player_;$/;"	m	class:Display	typeref:typename:GstPlayer
+playlist_	include/GstPlayer.h	/^    std::vector<std::string> playlist_;$/;"	m	class:GstPlayer	typeref:typename:std::vector<std::string>
+preinstall	build/Makefile	/^preinstall: all$/;"	t
+preinstall/fast	build/Makefile	/^preinstall\/fast:$/;"	t
+process_task	src/downloader.cpp	/^void Downloader::process_task(const MediaItem &task)$/;"	f	class:Downloader	typeref:typename:void
+publish	src/daemon_thread.cpp	/^void DaemonThread::publish(const std::string& topic, const std::string& data) {$/;"	f	class:DaemonThread	typeref:typename:void
+publish	src/mqtt_client.cpp	/^void MQTTClient::publish(const std::string &command,$/;"	f	class:MQTTClient	typeref:typename:void
+qnxnto	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v	typeref:typename:char const *
+qnxnto	build/CMakeFiles/3.25.1/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v	typeref:typename:char const *
+queue_cv_	include/downloader.h	/^    std::condition_variable queue_cv_;$/;"	m	class:Downloader	typeref:typename:std::condition_variable
+queue_mutex_	include/downloader.h	/^    std::mutex queue_mutex_;$/;"	m	class:Downloader	typeref:typename:std::mutex
+readFile	src/task_repository.cpp	/^std::string TaskRepository::readFile(std::string file_name)$/;"	f	class:TaskRepository	typeref:typename:std::string
+rebuild_cache	build/Makefile	/^rebuild_cache:$/;"	t
+rebuild_cache/fast	build/Makefile	/^rebuild_cache\/fast: rebuild_cache$/;"	t
+refresh	src/control.cpp	/^void Control::refresh(const std::string device_id)$/;"	f	class:Control	typeref:typename:void
+reset_config	src/control.cpp	/^void Control::reset_config()$/;"	f	class:Control	typeref:typename:void
+run	src/daemon_thread.cpp	/^void DaemonThread::run() {$/;"	f	class:DaemonThread	typeref:typename:void
+runLoop	src/daemon_thread.cpp	/^void DaemonThread::runLoop() {$/;"	f	class:DaemonThread	typeref:typename:void
+saveFile	src/task_repository.cpp	/^void TaskRepository::saveFile(std::string file_name, std::string content)$/;"	f	class:TaskRepository	typeref:typename:void
+saveTask	src/task_repository.cpp	/^std::string TaskRepository::saveTask(std::string data)$/;"	f	class:TaskRepository	typeref:typename:std::string
+saveTaskId	src/task_repository.cpp	/^void TaskRepository::saveTaskId(std::string device_id, std::string task_id)$/;"	f	class:TaskRepository	typeref:typename:void
+seek	src/GStreamerPlayer.cpp	/^bool GStreamerPlayer::seek(int64_t nanoseconds)$/;"	f	class:GStreamerPlayer	typeref:typename:bool
+seek	src/GstPlayer.cpp	/^void GstPlayer::seek(int64_t position_ns)$/;"	f	class:GstPlayer	typeref:typename:void
+seek_to_start	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::seek_to_start()$/;"	f	class:GstConcatPlayer	typeref:typename:void
+sendRegisterMessage	src/mqtt_client.cpp	/^void MQTTClient::sendRegisterMessage()$/;"	f	class:MQTTClient	typeref:typename:void
+setDownloadCallback	src/downloader.cpp	/^void Downloader::setDownloadCallback(DownloadCallback callback)$/;"	f	class:Downloader	typeref:typename:void
+setEOSCallback	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setEOSCallback(EOSCallback callback)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+setErrorCallback	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setErrorCallback(ErrorCallback callback)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+setMessageCallback	src/mqtt_client.cpp	/^void MQTTClient::setMessageCallback(MessageCallback callback)$/;"	f	class:MQTTClient	typeref:typename:void
+setOutputSize	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setOutputSize(int width, int height)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+setOverlayImage	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setOverlayImage(const std::string &imagePath)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+setOverlayPosition	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setOverlayPosition(int x, int y)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+setStateChangedCallback	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setStateChangedCallback(StateChangedCallback callback)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+setVideoPosition	src/GStreamerPlayer.cpp	/^void GStreamerPlayer::setVideoPosition(int x, int y)$/;"	f	class:GStreamerPlayer	typeref:typename:void
+set_eos_callback	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::set_eos_callback(std::function<void()> cb)$/;"	f	class:GstConcatPlayer	typeref:typename:void
+set_eos_callback	src/GstPlayer.cpp	/^void GstPlayer::set_eos_callback(EosCallback cb)$/;"	f	class:GstPlayer	typeref:typename:void
+set_playlist	src/GstPlayer.cpp	/^void GstPlayer::set_playlist(const std::vector<std::string> &uris, bool loop)$/;"	f	class:GstPlayer	typeref:typename:void
+set_uri	src/GstPlayer.cpp	/^void GstPlayer::set_uri(const std::string &uri)$/;"	f	class:GstPlayer	typeref:typename:void
+set_video_display	src/GstPlayer.cpp	/^void GstPlayer::set_video_display(const VideoDisplaySettings &settings)$/;"	f	class:GstPlayer	typeref:typename:void
+set_window_size	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::set_window_size(int x, int y, int width, int height)$/;"	f	class:GstConcatPlayer	typeref:typename:void
+set_window_size	src/GstPlayer.cpp	/^void GstPlayer::set_window_size(const int x, const int y, const int width, const int height)$/;"	f	class:GstPlayer	typeref:typename:void
+show	src/control.cpp	/^void Control::show()$/;"	f	class:Control	typeref:typename:void
+show_config	src/control.cpp	/^void Control::show_config()$/;"	f	class:Control	typeref:typename:void
+show_config	src/display.cpp	/^void Display::show_config()$/;"	f	class:Display	typeref:typename:void
+sink	src/GStreamerPlayer.cpp	/^    GstElement *sink = nullptr;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:GstElement *	file:
+size	include/task_repository.h	/^    int64_t size;$/;"	m	struct:MediaItem	typeref:typename:int64_t
+source	src/GStreamerPlayer.cpp	/^    GstElement *source = nullptr;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:GstElement *	file:
+speed_seconds_	include/daemon_thread.h	/^    int speed_seconds_;            \/\/ 心跳间隔秒数$/;"	m	class:DaemonThread	typeref:typename:int
+src/Framebuffer.cpp.i	build/Makefile	/^src\/Framebuffer.cpp.i:$/;"	t
+src/Framebuffer.cpp.o	build/Makefile	/^src\/Framebuffer.cpp.o:$/;"	t
+src/Framebuffer.cpp.s	build/Makefile	/^src\/Framebuffer.cpp.s:$/;"	t
+src/Framebuffer.i	build/Makefile	/^src\/Framebuffer.i: src\/Framebuffer.cpp.i$/;"	t
+src/Framebuffer.o	build/Makefile	/^src\/Framebuffer.o: src\/Framebuffer.cpp.o$/;"	t
+src/Framebuffer.s	build/Makefile	/^src\/Framebuffer.s: src\/Framebuffer.cpp.s$/;"	t
+src/GStreamerPlayer.cpp.i	build/Makefile	/^src\/GStreamerPlayer.cpp.i:$/;"	t
+src/GStreamerPlayer.cpp.o	build/Makefile	/^src\/GStreamerPlayer.cpp.o:$/;"	t
+src/GStreamerPlayer.cpp.s	build/Makefile	/^src\/GStreamerPlayer.cpp.s:$/;"	t
+src/GStreamerPlayer.i	build/Makefile	/^src\/GStreamerPlayer.i: src\/GStreamerPlayer.cpp.i$/;"	t
+src/GStreamerPlayer.o	build/Makefile	/^src\/GStreamerPlayer.o: src\/GStreamerPlayer.cpp.o$/;"	t
+src/GStreamerPlayer.s	build/Makefile	/^src\/GStreamerPlayer.s: src\/GStreamerPlayer.cpp.s$/;"	t
+src/GstConcatPlayer.cpp.i	build/Makefile	/^src\/GstConcatPlayer.cpp.i:$/;"	t
+src/GstConcatPlayer.cpp.o	build/Makefile	/^src\/GstConcatPlayer.cpp.o:$/;"	t
+src/GstConcatPlayer.cpp.s	build/Makefile	/^src\/GstConcatPlayer.cpp.s:$/;"	t
+src/GstConcatPlayer.i	build/Makefile	/^src\/GstConcatPlayer.i: src\/GstConcatPlayer.cpp.i$/;"	t
+src/GstConcatPlayer.o	build/Makefile	/^src\/GstConcatPlayer.o: src\/GstConcatPlayer.cpp.o$/;"	t
+src/GstConcatPlayer.s	build/Makefile	/^src\/GstConcatPlayer.s: src\/GstConcatPlayer.cpp.s$/;"	t
+src/GstPlayer.cpp.i	build/Makefile	/^src\/GstPlayer.cpp.i:$/;"	t
+src/GstPlayer.cpp.o	build/Makefile	/^src\/GstPlayer.cpp.o:$/;"	t
+src/GstPlayer.cpp.s	build/Makefile	/^src\/GstPlayer.cpp.s:$/;"	t
+src/GstPlayer.i	build/Makefile	/^src\/GstPlayer.i: src\/GstPlayer.cpp.i$/;"	t
+src/GstPlayer.o	build/Makefile	/^src\/GstPlayer.o: src\/GstPlayer.cpp.o$/;"	t
+src/GstPlayer.s	build/Makefile	/^src\/GstPlayer.s: src\/GstPlayer.cpp.s$/;"	t
+src/ImageDecoder.cpp.i	build/Makefile	/^src\/ImageDecoder.cpp.i:$/;"	t
+src/ImageDecoder.cpp.o	build/Makefile	/^src\/ImageDecoder.cpp.o:$/;"	t
+src/ImageDecoder.cpp.s	build/Makefile	/^src\/ImageDecoder.cpp.s:$/;"	t
+src/ImageDecoder.i	build/Makefile	/^src\/ImageDecoder.i: src\/ImageDecoder.cpp.i$/;"	t
+src/ImageDecoder.o	build/Makefile	/^src\/ImageDecoder.o: src\/ImageDecoder.cpp.o$/;"	t
+src/ImageDecoder.s	build/Makefile	/^src\/ImageDecoder.s: src\/ImageDecoder.cpp.s$/;"	t
+src/QrCodeGenerator.cpp.i	build/Makefile	/^src\/QrCodeGenerator.cpp.i:$/;"	t
+src/QrCodeGenerator.cpp.o	build/Makefile	/^src\/QrCodeGenerator.cpp.o:$/;"	t
+src/QrCodeGenerator.cpp.s	build/Makefile	/^src\/QrCodeGenerator.cpp.s:$/;"	t
+src/QrCodeGenerator.i	build/Makefile	/^src\/QrCodeGenerator.i: src\/QrCodeGenerator.cpp.i$/;"	t
+src/QrCodeGenerator.o	build/Makefile	/^src\/QrCodeGenerator.o: src\/QrCodeGenerator.cpp.o$/;"	t
+src/QrCodeGenerator.s	build/Makefile	/^src\/QrCodeGenerator.s: src\/QrCodeGenerator.cpp.s$/;"	t
+src/Tools.cpp.i	build/Makefile	/^src\/Tools.cpp.i:$/;"	t
+src/Tools.cpp.o	build/Makefile	/^src\/Tools.cpp.o:$/;"	t
+src/Tools.cpp.s	build/Makefile	/^src\/Tools.cpp.s:$/;"	t
+src/Tools.i	build/Makefile	/^src\/Tools.i: src\/Tools.cpp.i$/;"	t
+src/Tools.o	build/Makefile	/^src\/Tools.o: src\/Tools.cpp.o$/;"	t
+src/Tools.s	build/Makefile	/^src\/Tools.s: src\/Tools.cpp.s$/;"	t
+src/control.cpp.i	build/Makefile	/^src\/control.cpp.i:$/;"	t
+src/control.cpp.o	build/Makefile	/^src\/control.cpp.o:$/;"	t
+src/control.cpp.s	build/Makefile	/^src\/control.cpp.s:$/;"	t
+src/control.i	build/Makefile	/^src\/control.i: src\/control.cpp.i$/;"	t
+src/control.o	build/Makefile	/^src\/control.o: src\/control.cpp.o$/;"	t
+src/control.s	build/Makefile	/^src\/control.s: src\/control.cpp.s$/;"	t
+src/daemon_thread.cpp.i	build/Makefile	/^src\/daemon_thread.cpp.i:$/;"	t
+src/daemon_thread.cpp.o	build/Makefile	/^src\/daemon_thread.cpp.o:$/;"	t
+src/daemon_thread.cpp.s	build/Makefile	/^src\/daemon_thread.cpp.s:$/;"	t
+src/daemon_thread.i	build/Makefile	/^src\/daemon_thread.i: src\/daemon_thread.cpp.i$/;"	t
+src/daemon_thread.o	build/Makefile	/^src\/daemon_thread.o: src\/daemon_thread.cpp.o$/;"	t
+src/daemon_thread.s	build/Makefile	/^src\/daemon_thread.s: src\/daemon_thread.cpp.s$/;"	t
+src/display.cpp.i	build/Makefile	/^src\/display.cpp.i:$/;"	t
+src/display.cpp.o	build/Makefile	/^src\/display.cpp.o:$/;"	t
+src/display.cpp.s	build/Makefile	/^src\/display.cpp.s:$/;"	t
+src/display.i	build/Makefile	/^src\/display.i: src\/display.cpp.i$/;"	t
+src/display.o	build/Makefile	/^src\/display.o: src\/display.cpp.o$/;"	t
+src/display.s	build/Makefile	/^src\/display.s: src\/display.cpp.s$/;"	t
+src/downloader.cpp.i	build/Makefile	/^src\/downloader.cpp.i:$/;"	t
+src/downloader.cpp.o	build/Makefile	/^src\/downloader.cpp.o:$/;"	t
+src/downloader.cpp.s	build/Makefile	/^src\/downloader.cpp.s:$/;"	t
+src/downloader.i	build/Makefile	/^src\/downloader.i: src\/downloader.cpp.i$/;"	t
+src/downloader.o	build/Makefile	/^src\/downloader.o: src\/downloader.cpp.o$/;"	t
+src/downloader.s	build/Makefile	/^src\/downloader.s: src\/downloader.cpp.s$/;"	t
+src/http_client.cpp.i	build/Makefile	/^src\/http_client.cpp.i:$/;"	t
+src/http_client.cpp.o	build/Makefile	/^src\/http_client.cpp.o:$/;"	t
+src/http_client.cpp.s	build/Makefile	/^src\/http_client.cpp.s:$/;"	t
+src/http_client.i	build/Makefile	/^src\/http_client.i: src\/http_client.cpp.i$/;"	t
+src/http_client.o	build/Makefile	/^src\/http_client.o: src\/http_client.cpp.o$/;"	t
+src/http_client.s	build/Makefile	/^src\/http_client.s: src\/http_client.cpp.s$/;"	t
+src/main.cpp.i	build/Makefile	/^src\/main.cpp.i:$/;"	t
+src/main.cpp.o	build/Makefile	/^src\/main.cpp.o:$/;"	t
+src/main.cpp.s	build/Makefile	/^src\/main.cpp.s:$/;"	t
+src/main.i	build/Makefile	/^src\/main.i: src\/main.cpp.i$/;"	t
+src/main.o	build/Makefile	/^src\/main.o: src\/main.cpp.o$/;"	t
+src/main.s	build/Makefile	/^src\/main.s: src\/main.cpp.s$/;"	t
+src/mqtt_client.cpp.i	build/Makefile	/^src\/mqtt_client.cpp.i:$/;"	t
+src/mqtt_client.cpp.o	build/Makefile	/^src\/mqtt_client.cpp.o:$/;"	t
+src/mqtt_client.cpp.s	build/Makefile	/^src\/mqtt_client.cpp.s:$/;"	t
+src/mqtt_client.i	build/Makefile	/^src\/mqtt_client.i: src\/mqtt_client.cpp.i$/;"	t
+src/mqtt_client.o	build/Makefile	/^src\/mqtt_client.o: src\/mqtt_client.cpp.o$/;"	t
+src/mqtt_client.s	build/Makefile	/^src\/mqtt_client.s: src\/mqtt_client.cpp.s$/;"	t
+src/task_repository.cpp.i	build/Makefile	/^src\/task_repository.cpp.i:$/;"	t
+src/task_repository.cpp.o	build/Makefile	/^src\/task_repository.cpp.o:$/;"	t
+src/task_repository.cpp.s	build/Makefile	/^src\/task_repository.cpp.s:$/;"	t
+src/task_repository.i	build/Makefile	/^src\/task_repository.i: src\/task_repository.cpp.i$/;"	t
+src/task_repository.o	build/Makefile	/^src\/task_repository.o: src\/task_repository.cpp.o$/;"	t
+src/task_repository.s	build/Makefile	/^src\/task_repository.s: src\/task_repository.cpp.s$/;"	t
+start	src/control.cpp	/^void Control::start()$/;"	f	class:Control	typeref:typename:void
+start	src/daemon_thread.cpp	/^void DaemonThread::start() {$/;"	f	class:DaemonThread	typeref:typename:void
+stateCallback	src/GStreamerPlayer.cpp	/^    StateChangedCallback stateCallback;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:StateChangedCallback	file:
+stateMutex	src/GStreamerPlayer.cpp	/^    std::mutex stateMutex;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:std::mutex	file:
+state_	include/GstPlayer.h	/^    State state_ = State::STOPPED;$/;"	m	class:GstPlayer	typeref:typename:State
+stop	src/GStreamerPlayer.cpp	/^bool GStreamerPlayer::stop()$/;"	f	class:GStreamerPlayer	typeref:typename:bool
+stop	src/GstConcatPlayer.cpp	/^void GstConcatPlayer::stop()$/;"	f	class:GstConcatPlayer	typeref:typename:void
+stop	src/GstPlayer.cpp	/^void GstPlayer::stop()$/;"	f	class:GstPlayer	typeref:typename:void
+stop	src/daemon_thread.cpp	/^void DaemonThread::stop() {$/;"	f	class:DaemonThread	typeref:typename:void
+stop_flag_	include/daemon_thread.h	/^    std::atomic<bool> stop_flag_;  \/\/ 线程停止标志$/;"	m	class:DaemonThread	typeref:typename:std::atomic<bool>
+stop_flag_	include/downloader.h	/^    bool stop_flag_;$/;"	m	class:Downloader	typeref:typename:bool
+subscribe	src/mqtt_client.cpp	/^void MQTTClient::subscribe()$/;"	f	class:MQTTClient	typeref:typename:void
+sync_play	include/task_repository.h	/^    bool sync_play;$/;"	m	struct:MediaItem	typeref:typename:bool
+taskCode	include/task_repository.h	/^        int taskCode;$/;"	m	struct:TaskRepository::PlayList	typeref:typename:int
+taskId	include/task_repository.h	/^        std::string taskId;$/;"	m	struct:TaskRepository::PlayList	typeref:typename:std::string
+task_id_	include/daemon_thread.h	/^    std::string task_id_;          \/\/ 当前任务ID$/;"	m	class:DaemonThread	typeref:typename:std::string
+task_repository_	include/control.h	/^    TaskRepository task_repository_;$/;"	m	class:Control	typeref:typename:TaskRepository
+tasks_	include/downloader.h	/^    std::queue<MediaItem> tasks_;$/;"	m	class:Downloader	typeref:typename:std::queue<MediaItem>
+thread_	include/daemon_thread.h	/^    std::unique_ptr<std::thread> thread_; \/\/ 使用unique_ptr管理线程$/;"	m	class:DaemonThread	typeref:typename:std::unique_ptr<std::thread>
+top	include/task_repository.h	/^    int top;$/;"	m	struct:MediaItem	typeref:typename:int
+type	include/task_repository.h	/^    int type; \/\/ 0 image 1 video$/;"	m	struct:MediaItem	typeref:typename:int
+updateBackground	src/display.cpp	/^void Display::updateBackground(const MediaItem &media, const std::string &local_path)$/;"	f	class:Display	typeref:typename:void
+updateImage	src/GStreamerImage.cpp	/^void GStreamerImage::updateImage(const std::string image_path)$/;"	f	class:GStreamerImage	typeref:typename:void
+updatePrice	src/display.cpp	/^void Display::updatePrice(const MediaItem &media, const std::string &local_path)$/;"	f	class:Display	typeref:typename:void
+updateTask	src/daemon_thread.cpp	/^void DaemonThread::updateTask(const std::string& task_id) {$/;"	f	class:DaemonThread	typeref:typename:void
+update_url	src/control.cpp	/^void Control::update_url(const std::string &url)$/;"	f	class:Control	typeref:typename:void
+update_url	src/downloader.cpp	/^void Downloader::update_url(const std::string &url)$/;"	f	class:Downloader	typeref:typename:void
+uris_	include/GstConcatPlayer.h	/^    std::vector<std::string> uris_;$/;"	m	class:GstConcatPlayer	typeref:typename:std::vector<std::string>
+urlEncode	src/mqtt_client.cpp	/^std::string MQTTClient::urlEncode(const std::string &value)$/;"	f	class:MQTTClient	typeref:typename:std::string
+url_root_	include/control.h	/^    std::string url_root_;$/;"	m	class:Control	typeref:typename:std::string
+url_root_	include/downloader.h	/^    std::string url_root_;$/;"	m	class:Downloader	typeref:typename:std::string
+url_root_	include/http_client.h	/^    std::string url_root_;$/;"	m	class:HttpClient	typeref:typename:std::string
+verify_md5	src/downloader.cpp	/^bool Downloader::verify_md5(const std::string &file_path, const std::string &expected_md5)$/;"	f	class:Downloader	typeref:typename:bool
+videoOffsetX	src/GStreamerPlayer.cpp	/^    int videoOffsetX = 0;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:int	file:
+videoOffsetY	src/GStreamerPlayer.cpp	/^    int videoOffsetY = 0;$/;"	m	struct:GStreamerPlayer::Impl	typeref:typename:int	file:
+video_convert_	include/GstConcatPlayer.h	/^    GstElement *video_convert_ = nullptr;$/;"	m	class:GstConcatPlayer	typeref:typename:GstElement *
+video_sink_	include/GstConcatPlayer.h	/^    GstElement *video_sink_ = nullptr;$/;"	m	class:GstConcatPlayer	typeref:typename:GstElement *
+video_sink_	include/GstPlayer.h	/^    GstElement *video_sink_ = nullptr; \/\/ 独立的视频渲染器实例$/;"	m	class:GstPlayer	typeref:typename:GstElement *
+volatile	build/CMakeFiles/3.25.1/CompilerIdC/CMakeCCompilerId.c	/^# define volatile$/;"	d	file:
+width	include/GstPlayer.h	/^    int width = 0;  \/\/ 显示宽度（0表示自动）$/;"	m	struct:VideoDisplaySettings	typeref:typename:int
+width	include/ImageDecoder.h	/^    int width;                   \/\/ 图片宽度$/;"	m	struct:ImageData	typeref:typename:int
+width	include/task_repository.h	/^    int width;$/;"	m	struct:MediaItem	typeref:typename:int
+work_dir_	include/downloader.h	/^    std::string work_dir_;$/;"	m	class:Downloader	typeref:typename:std::string
+work_dir_	include/task_repository.h	/^    std::string work_dir_;$/;"	m	class:TaskRepository	typeref:typename:std::string
+worker	src/downloader.cpp	/^void Downloader::worker()$/;"	f	class:Downloader	typeref:typename:void
+worker_thread_	include/downloader.h	/^    std::thread worker_thread_;$/;"	m	class:Downloader	typeref:typename:std::thread
+x	include/GstPlayer.h	/^    int x = 0;      \/\/ 显示区域左上角X坐标$/;"	m	struct:VideoDisplaySettings	typeref:typename:int
+y	include/GstPlayer.h	/^    int y = 0;      \/\/ 显示区域左上角Y坐标$/;"	m	struct:VideoDisplaySettings	typeref:typename:int
+~Control	src/control.cpp	/^Control::~Control()$/;"	f	class:Control
+~DaemonThread	src/daemon_thread.cpp	/^DaemonThread::~DaemonThread() {$/;"	f	class:DaemonThread
+~Display	src/display.cpp	/^Display::~Display()$/;"	f	class:Display
+~Downloader	src/downloader.cpp	/^Downloader::~Downloader()$/;"	f	class:Downloader
+~GStreamerImage	src/GStreamerImage.cpp	/^GStreamerImage::~GStreamerImage()$/;"	f	class:GStreamerImage
+~GStreamerPlayer	src/GStreamerPlayer.cpp	/^GStreamerPlayer::~GStreamerPlayer()$/;"	f	class:GStreamerPlayer
+~GstConcatPlayer	src/GstConcatPlayer.cpp	/^GstConcatPlayer::~GstConcatPlayer()$/;"	f	class:GstConcatPlayer
+~GstPlayer	src/GstPlayer.cpp	/^GstPlayer::~GstPlayer()$/;"	f	class:GstPlayer
+~MQTTClient	src/mqtt_client.cpp	/^MQTTClient::~MQTTClient()$/;"	f	class:MQTTClient
+~TaskRepository	src/task_repository.cpp	/^TaskRepository::~TaskRepository()$/;"	f	class:TaskRepository

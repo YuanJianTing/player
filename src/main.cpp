@@ -20,8 +20,9 @@ int main()
 
     // return 0;
 
-    // std::string url_root = "http://192.168.4.26:4011/";
-    std::string url_root = "http://114.55.52.37:8000/";
+    std::string url_root = "http://192.168.4.26:4011/";
+    // std::string url_root = "http://114.55.52.37:8000/";
+    // std::string url_root = "";
     std::string client_id = "6A10000000FF";
 
 #if defined(debug) || defined(DEBUG)
@@ -35,6 +36,12 @@ int main()
     std::filesystem::create_directory(work_dir);
 
     Control control(url_root, client_id);
+
+    if (url_root.empty())
+    {
+        control.show_config();
+    }
+
     // 启动线程，执行后台任务
     // 创建并启动控制线程
     std::thread control_thread([&control]()

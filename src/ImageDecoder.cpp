@@ -5,6 +5,7 @@
 #include <jpeglib.h>
 #include <webp/decode.h>
 #include <webp/demux.h>
+#include <iostream>
 
 ImageData ImageDecoder::decode(const std::string &filepath)
 {

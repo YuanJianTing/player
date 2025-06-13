@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "ImageDecoder.h"
 
 class Tools
 {
@@ -15,6 +16,12 @@ public:
 
     // 获取任务保存目录
     static std::string get_repository_dir();
+
+    static std::string get_device_ip();
+    // 生成图片
+    static ImageData create_image(const uint32_t color, const int img_width, const int img_height);
+    // 获取wifi ssid
+    static std::string get_current_wifi_ssid();
 };
 
 #endif // TOOLS_H

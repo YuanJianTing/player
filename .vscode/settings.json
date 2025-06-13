@@ -74,7 +74,9 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "filesystem": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp"
     },
     "editor.formatOnSave": true,
     "cmake.parallelJobs": 4

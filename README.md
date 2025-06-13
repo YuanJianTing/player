@@ -30,6 +30,8 @@ sudo apt install -y build-essential cmake pkg-config
 sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 
 apt-get install gstreamer1.0-plugins-base-apps
+# 字体支持
+apt install libfreetype6-dev
 
 sudo apt install -y \
     libjsoncpp-dev \
@@ -58,6 +60,9 @@ aarch64-linux-gnu-gcc --version
 
 # 安装drm_info 工具 记录下可用的 plane-id 和显示模式
 apt-get install drm-info
+
+# 如果在x86、x64设备中调试，则需要安装 qemu arm64模拟器
+sudo apt install qemu-system-arm
 
 ```
 

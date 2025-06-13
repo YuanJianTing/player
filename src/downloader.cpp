@@ -365,3 +365,8 @@ bool Downloader::verify_md5(const std::string &file_path, const std::string &exp
 
     return md5_str.str() == expected_md5;
 }
+
+void Downloader::update_url(const std::string &url)
+{
+    url_root_ = url;
+}

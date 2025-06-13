@@ -40,5 +40,7 @@ public:
     void refresh(const std::string device_id);
     // 重置配置
     void reset_config();
+    void show_config();
+    void update_url(const std::string &url);
 };
 #endif // CONTROL_H

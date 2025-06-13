@@ -40,12 +40,13 @@ Control::~Control()
 
     if (display_)
     {
-        display_->destroyed();
+        display_->~Display();
     }
 }
 
 void Control::show()
 {
+    display_->show_info();
     refresh(display_->getDeviceId());
 }
 
@@ -219,4 +220,15 @@ void Control::reset_config()
     {
         mqtt_client_->disconnect();
     }
+}
+
+void Control::show_config()
+{
+    display_->show_config();
+}
+
+void Control::update_url(const std::string &url)
+{
+    url_root_ = url;
+    downloader_.update_url(url);
 }
