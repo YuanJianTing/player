@@ -4,6 +4,9 @@
 #include <json/json.h>
 #include <sstream>
 #include "Tools.h"
+#include <cctype>
+#include <iomanip>
+#include <string>
 
 MQTTClient::MQTTClient(const std::string &mqtt_url,
                        const std::string &client_id,
@@ -169,21 +172,33 @@ void MQTTClient::sendRegisterMessage()
 
 std::string MQTTClient::urlEncode(const std::string &value)
 {
-    if (value.empty() || value.size() == 0)
-        return value;
-
-    CURL *curl = curl_easy_init();
-    if (curl)
+    if (value.empty())
     {
-        char *output = curl_easy_escape(curl, value.c_str(), value.length());
-        if (output)
-        {
-            std::string result(output);
-            curl_free(output);
-            curl_easy_cleanup(curl);
-            return result;
-        }
-        curl_easy_cleanup(curl);
+        return value;
     }
-    return value;
+
+    std::ostringstream escaped;
+    escaped.fill('0');
+    escaped << std::hex;
+
+    for (auto c : value)
+    {
+        // 保留字母数字和特定字符不编码
+        if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+        {
+            escaped << c;
+        }
+        // 空格编码为 '+'
+        else if (c == ' ')
+        {
+            escaped << '+';
+        }
+        // 其他字符进行百分号编码
+        else
+        {
+            escaped << '%' << std::setw(2) << static_cast<int>(static_cast<unsigned char>(c));
+        }
+    }
+
+    return escaped.str();
 }

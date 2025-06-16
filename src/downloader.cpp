@@ -1,5 +1,5 @@
 #include "downloader.h"
-#include <curl/curl.h>
+#include <httplib.h>
 #include <openssl/evp.h>
 #include <fstream>
 #include <sstream>
@@ -7,6 +7,11 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <queue>
+#include <filesystem>
 #include "Tools.h"
 
 Downloader::Downloader(const std::string &url_root)
@@ -14,6 +19,32 @@ Downloader::Downloader(const std::string &url_root)
 {
     work_dir_ = Tools::get_download_dir();
     std::filesystem::create_directory(work_dir_);
+    // 解析URL获取主机和端口
+    size_t protocol_pos = url_root.find("://");
+    if (protocol_pos == std::string::npos)
+    {
+        throw std::runtime_error("Invalid URL format");
+    }
+
+    std::string protocol = url_root.substr(0, protocol_pos);
+    std::string host_port_path = url_root.substr(protocol_pos + 3);
+
+    size_t slash_pos = host_port_path.find('/');
+    std::string host_port = host_port_path.substr(0, slash_pos);
+
+    size_t colon_pos = host_port.find(':');
+    if (colon_pos != std::string::npos)
+    {
+        std::string host_ = host_port.substr(0, colon_pos);
+        int port_ = std::stoi(host_port.substr(colon_pos + 1));
+    }
+    else
+    {
+        std::string host_ = host_port;
+        int port_ = (protocol == "https") ? 443 : 80;
+    }
+
+    is_https_ = (protocol == "https");
     worker_thread_ = std::thread(&Downloader::worker, this);
 }
 
@@ -34,6 +65,7 @@ void Downloader::setDownloadCallback(DownloadCallback callback)
 {
     callback_ = callback;
 }
+
 void Downloader::add_task(const MediaItem &task)
 {
     std::lock_guard<std::mutex> lock(queue_mutex_);
@@ -65,16 +97,11 @@ void Downloader::process_task(const MediaItem &task)
 {
     std::string download_url = task.download_url;
     std::string full_url = (download_url.find("http") == 0) ? download_url : url_root_ + download_url;
-    // std::string local_path = work_dir_ + task.file_name;
-    // task.file_name 中有可能包含中文，播放视频时如果存在中文会导致播放失败;此处使用 md5作为保存文件名
 
     std::filesystem::path p(task.file_name);
-    std::string extension = p.extension().string(); // 包含点，如 ".mp4"
-
+    std::string extension = p.extension().string();
     std::string local_path = work_dir_ + task.MD5 + extension;
     int type = task.type;
-
-    // std::cout << "文件url: " << full_url << " local_path:" << local_path << std::endl;
 
     if (std::filesystem::exists(local_path))
     {
@@ -97,8 +124,6 @@ void Downloader::process_task(const MediaItem &task)
     while (attempt < max_retries && !success)
     {
         attempt++;
-        // success = download_file(full_url, local_path);
-        //  多线程下载有问题
         if (type == 0)
         {
             // 主题图片，不支持多线程下载
@@ -108,17 +133,17 @@ void Downloader::process_task(const MediaItem &task)
         {
             success = download_file_multithread(full_url, local_path);
         }
+
         if (success)
         {
             if (!verify_md5(local_path, task.MD5))
             {
                 std::cout << "MD5验证不通过。\n"
-                          << local_path
-                          << std::endl;
+                          << local_path << std::endl;
                 success = false;
                 error_msg = "MD5 mismatch";
                 std::filesystem::remove(local_path);
-                break; // 退出循环
+                break;
             }
         }
         else
@@ -133,24 +158,39 @@ void Downloader::process_task(const MediaItem &task)
 
 size_t Downloader::get_file_size(const std::string &url)
 {
-    CURL *curl = curl_easy_init();
-    double filesize = 0.0;
-    if (curl)
+    try
     {
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
-        curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
-        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-        curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-        CURLcode res = curl_easy_perform(curl);
-        if (res == CURLE_OK)
+        size_t protocol_pos = url.find("://");
+        if (protocol_pos == std::string::npos)
         {
-            curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
+            return 0;
         }
-        curl_easy_cleanup(curl);
+
+        std::string protocol = url.substr(0, protocol_pos);
+        std::string host_port_path = url.substr(protocol_pos + 3);
+
+        size_t slash_pos = host_port_path.find('/');
+        std::string path = host_port_path.substr(slash_pos);
+
+        httplib::Client client(url_root_);
+        client.set_connection_timeout(10);
+
+        if (is_https_)
+        {
+            client.enable_server_certificate_verification(false);
+        }
+
+        auto res = client.Head(path.c_str());
+        if (res && res->has_header("Content-Length"))
+        {
+            return std::stoul(res->get_header_value("Content-Length"));
+        }
     }
-    return static_cast<size_t>(filesize);
+    catch (...)
+    {
+        return 0;
+    }
+    return 0;
 }
 
 bool Downloader::download_file_multithread(const std::string &url, const std::string &local_path)
@@ -165,6 +205,19 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
 
     std::vector<std::thread> threads;
     std::vector<std::string> temp_files(thread_count);
+    std::vector<bool> download_results(thread_count, false);
+
+    size_t protocol_pos = url.find("://");
+    if (protocol_pos == std::string::npos)
+    {
+        return 0;
+    }
+
+    std::string protocol = url.substr(0, protocol_pos);
+    std::string host_port_path = url.substr(protocol_pos + 3);
+
+    size_t slash_pos = host_port_path.find('/');
+    std::string path = host_port_path.substr(slash_pos);
 
     for (int i = 0; i < thread_count; ++i)
     {
@@ -173,48 +226,33 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
 
         temp_files[i] = local_path + ".part" + std::to_string(i);
 
-        threads.emplace_back([=, &temp_files]()
+        threads.emplace_back([=, &download_results]()
                              {
-            CURL* curl = curl_easy_init();
-            if (!curl) return;
+            try {
+                httplib::Client client(url_root_);
+                client.set_connection_timeout(10);
+                client.set_read_timeout(30);
+                
+                if (protocol == "https") {
+                    client.enable_server_certificate_verification(false);
+                }
 
-            FILE* fp = fopen(temp_files[i].c_str(), "wb");
-            if (!fp) {
-                curl_easy_cleanup(curl);
-                return;
-            }
+                std::string range = "bytes=" + std::to_string(start) + "-" + std::to_string(end);
+                auto res = client.Get(path.c_str(), {
+                    {"Range", range}
+                });
 
-                // 不接收响应头数据0代表不接收 1代表接收
-            curl_easy_setopt(curl, CURLOPT_HEADER, 0);
-                // 设置请求的URL地址
-            curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-
-                // 设置ssl验证
-            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
-
-                // CURLOPT_VERBOSE的值为1时，会显示详细的调试信息
-            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
-            curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
-
-                // 设置数据接收函数
-            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
-            curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-
-            std::ostringstream range;
-            range << start << "-" << end;
-            curl_easy_setopt(curl, CURLOPT_RANGE, range.str().c_str());
-
-            curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-
-                // 设置超时时间
-            curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L); // set transport and time out time
-                //curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
-
-            CURLcode res =curl_easy_perform(curl);
-            std::cerr << "下载: " << curl_easy_strerror(res) << std::endl;
-            fclose(fp);
-            curl_easy_cleanup(curl); });
+                if (res && res->status == 206) {
+                    std::ofstream out(temp_files[i], std::ios::binary);
+                    if (out) {
+                        out << res->body;
+                        out.close();
+                        download_results[i] = true;
+                    }
+                }
+            } catch (...) {
+                download_results[i] = false;
+            } });
     }
 
     for (auto &t : threads)
@@ -223,9 +261,26 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
             t.join();
     }
 
+    // 检查所有部分是否下载成功
+    for (bool result : download_results)
+    {
+        if (!result)
+        {
+            // 清理临时文件
+            for (const auto &temp_file : temp_files)
+            {
+                std::filesystem::remove(temp_file);
+            }
+            return false;
+        }
+    }
+
+    // 合并文件
     std::ofstream output(local_path, std::ios::binary);
     if (!output.is_open())
+    {
         return false;
+    }
 
     for (int i = 0; i < thread_count; ++i)
     {
@@ -239,75 +294,47 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
     return true;
 }
 
-/// @brief 单线程下载文件
-/// @param url
-/// @param local_path
-/// @return
 bool Downloader::download_file(const std::string &url, const std::string &local_path)
 {
-    // size_t file_size = get_file_size(url);
-    // std::cout << "获取到文件大小: " << file_size << std::endl;
-    // if (file_size == 0)
-    //     return false;
-
-    CURL *curl = curl_easy_init();
-    if (!curl)
-        return false;
-
-    FILE *fp = fopen(local_path.c_str(), "wb");
-    if (!fp)
+    try
     {
-        curl_easy_cleanup(curl);
+        size_t protocol_pos = url.find("://");
+        if (protocol_pos == std::string::npos)
+        {
+            return false;
+        }
+
+        std::string protocol = url.substr(0, protocol_pos);
+        std::string host_port_path = url.substr(protocol_pos + 3);
+
+        size_t slash_pos = host_port_path.find('/');
+        std::string path = host_port_path.substr(slash_pos);
+
+        httplib::Client client(url_root_);
+        client.set_connection_timeout(10);
+        client.set_read_timeout(30);
+
+        if (is_https_)
+        {
+            client.enable_server_certificate_verification(false);
+        }
+
+        auto res = client.Get(path.c_str());
+        if (res && res->status == 200)
+        {
+            std::ofstream out(local_path, std::ios::binary);
+            if (out)
+            {
+                out << res->body;
+                return true;
+            }
+        }
+    }
+    catch (...)
+    {
         return false;
     }
-
-    // 不接收响应头数据0代表不接收 1代表接收
-    curl_easy_setopt(curl, CURLOPT_HEADER, 0);
-    // 设置请求的URL地址
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-
-    // 设置ssl验证
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
-
-    // CURLOPT_VERBOSE的值为1时，会显示详细的调试信息
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
-    curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
-
-    // 设置数据接收函数
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-
-    // 设置超时时间
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L); // set transport and time out time
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
-
-    // curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
-    // curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-
-    // curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-    // curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-    // curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-
-    // 开启请求
-    CURLcode res = curl_easy_perform(curl);
-    // 释放文件资源
-    fclose(fp);
-    // 释放curl
-    curl_easy_cleanup(curl);
-    return true;
-}
-
-// 下载文件数据接收函数
-size_t Downloader::dl_req_reply(void *buffer, size_t size, size_t nmemb, void *user_p)
-{
-    FILE *fp = (FILE *)user_p;
-    size_t return_size = fwrite(buffer, size, nmemb, fp);
-    // cout << (char *)buffer << endl;
-    return return_size;
+    return false;
 }
 
 bool Downloader::verify_md5(const std::string &file_path, const std::string &expected_md5)
@@ -369,4 +396,30 @@ bool Downloader::verify_md5(const std::string &file_path, const std::string &exp
 void Downloader::update_url(const std::string &url)
 {
     url_root_ = url;
+    // 解析URL获取主机和端口
+    size_t protocol_pos = url.find("://");
+    if (protocol_pos == std::string::npos)
+    {
+        throw std::runtime_error("Invalid URL format");
+    }
+
+    std::string protocol = url.substr(0, protocol_pos);
+    std::string host_port_path = url.substr(protocol_pos + 3);
+
+    size_t slash_pos = host_port_path.find('/');
+    std::string host_port = host_port_path.substr(0, slash_pos);
+
+    size_t colon_pos = host_port.find(':');
+    if (colon_pos != std::string::npos)
+    {
+        std::string host_ = host_port.substr(0, colon_pos);
+        int port_ = std::stoi(host_port.substr(colon_pos + 1));
+    }
+    else
+    {
+        std::string host_ = host_port;
+        int port_ = (protocol == "https") ? 443 : 80;
+    }
+
+    is_https_ = (protocol == "https");
 }

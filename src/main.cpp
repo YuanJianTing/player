@@ -14,11 +14,12 @@ int main()
 #if defined(debug) || defined(DEBUG)
     // 设置 日志输出
     putenv("GST_DEBUG=3"); // 设置中等详细级别的调试输出
+    putenv("EPLAYER_DIR=/home/ubuntu/work/player/data")
 // std::cout << "Release version" << std::endl;
 #endif
 
-    // 创建工作目录 EPLAYER_DIR  export EPLAYER_DIR=/mnt/user_downloads
-    std::string work_dir = Tools::get_work_dir();
+        // 创建工作目录 EPLAYER_DIR  export EPLAYER_DIR=/mnt/user_downloads
+        std::string work_dir = Tools::get_work_dir();
     std::filesystem::create_directory(work_dir);
 
     Control control(url_root, client_id);

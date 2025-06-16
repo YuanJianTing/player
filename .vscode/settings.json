@@ -76,7 +76,18 @@
         "filesystem": "cpp",
         "queue": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "csignal": "cpp",
+        "any": "cpp",
+        "complex": "cpp",
+        "coroutine": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "optional": "cpp",
+        "source_location": "cpp",
+        "future": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp"
     },
     "editor.formatOnSave": true,
     "cmake.parallelJobs": 4

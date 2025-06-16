@@ -2,84 +2,102 @@ cmake_minimum_required(VERSION 3.10)
 project(eplayer)
 
 # 设置交叉编译工具链（通过外部传入或在此指定）
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/aarch64-toolchain.cmake")
-endif()
+# if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+# set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/aarch64-toolchain.cmake")
+# endif()
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 # 设置源码根目录变量
 set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
+# 启用 SSL 支持（MQTT 需要）
 set(PAHO_WITH_SSL ON CACHE BOOL "Enable SSL support")
-
-
-include(FetchContent)
-
-# 设置交叉编译的系统根目录
-set(CMAKE_SYSROOT /usr/aarch64-linux-gnu)
-set(CMAKE_FIND_ROOT_PATH ${CMAKE_SYSROOT})
-
 
 # 查找必要的库
 find_package(PkgConfig REQUIRED)
 
-# 设置 pkg-config 路径以查找 ARM64 库
-set(ENV{PKG_CONFIG_PATH} "/usr/lib/aarch64-linux-gnu/pkgconfig")
-set(ENV{PKG_CONFIG_LIBDIR} "/usr/lib/aarch64-linux-gnu/pkgconfig")
-set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
-
-
-set(QRENCODE_INCLUDE_DIRS "/usr/include/aarch64-linux-gnu")
-set(QRENCODE_LIBRARIES "/usr/lib/aarch64-linux-gnu/libqrencode.so")
-
-pkg_search_module(QRENCODE REQUIRED libqrencode)
-#pkg_check_modules(JSONCPP REQUIRED jsoncpp)
-# json
-set(JSONCPP_INCLUDE_DIRS "/usr/include/jsoncpp")
-
-
-#curl
-set(CURL_LIBRARY "/usr/lib/aarch64-linux-gnu/libcurl.so")
-set(CURL_INCLUDE_DIR "/usr/include/aarch64-linux-gnu")
-find_package(CURL REQUIRED)
-
+# 动态链接的复杂库配置
+# pkg_check_modules(CURL REQUIRED libcurl) # 动态链接 libcurl
+find_package(OpenSSL REQUIRED) # 动态链接 OpenSSL
 pkg_check_modules(WEBP REQUIRED libwebp libwebpdemux libwebpmux)
-
-
 pkg_check_modules(JPEG REQUIRED libjpeg)
 pkg_check_modules(PNG REQUIRED libpng)
 
-#mqtt
+pkg_search_module(QRENCODE REQUIRED libqrencode)
+pkg_check_modules(JSONCPP REQUIRED jsoncpp)
+
+# 通过 FetchContent 获取 MQTT 库（本地编译时直接拉取源码）
+include(FetchContent)
+set(ENV{http_proxy} "http://192.168.4.111:1087")
+set(ENV{https_proxy} "http://192.168.4.111:1087")
+
+# -------------------------------------------------------------------
+# 1. 静态链接的小型库：jsoncpp 和 qrencode
+# -------------------------------------------------------------------
+# jsoncpp
+# FetchContent_Declare(
+# jsoncpp
+# GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp.git
+# GIT_TAG 1.9.5 # 指定稳定版本
+# CMAKE_ARGS -DJSONCPP_WITH_TESTS=OFF -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF -DBUILD_SHARED_LIBS=OFF
+# )
+# FetchContent_MakeAvailable(jsoncpp)
+
+# qrencode
+# FetchContent_Declare(
+# qrencode
+# GIT_REPOSITORY https://github.com/fukuchi/libqrencode.git
+# GIT_TAG v4.1.1 # 指定稳定版本
+# CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
+# )
+# FetchContent_MakeAvailable(qrencode)
+
+# http
+FetchContent_Declare(
+    cpp-httplib
+    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+    GIT_TAG v0.21.0 # 指定稳定版本
+    CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
+)
+
+# 添加https支持
+add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
+FetchContent_MakeAvailable(cpp-httplib)
+
+# mqtt
+FetchContent_Declare(
+    paho.mqtt.c
+    GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.c.git
+    GIT_TAG v1.3.10
+)
+
 FetchContent_Declare(
     paho.mqtt.cpp
     GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.cpp.git
-    GIT_TAG v1.5.3  # 指定你需要的版本
+    GIT_TAG v1.2.0
 )
-FetchContent_MakeAvailable(paho.mqtt.cpp)
+FetchContent_MakeAvailable(paho.mqtt.c paho.mqtt.cpp)
 
 # 字体支持
-#find_package(Freetype REQUIRED)
-
-# 设置 OpenSSL 的 ARM64 路径
-set(OPENSSL_ROOT_DIR "/usr/lib/aarch64-linux-gnu")
-set(OPENSSL_INCLUDE_DIR "${CMAKE_SYSROOT}/usr/include/aarch64-linux-gnu/openssl")
-find_package(OpenSSL REQUIRED)
-
-
+# find_package(Freetype REQUIRED)
 
 # 包含头文件
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
-    ${CURL_INCLUDE_DIRS}
+
+    # ${CMAKE_BINARY_DIR}/_deps/jsoncpp-src/include # 手动指定json头文件
+    ${CMAKE_BINARY_DIR}/_deps/cpp-httplib-src # 手动指定json头文件
+
+    # ${CURL_INCLUDE_DIRS}
     ${OPENSSL_INCLUDE_DIR}
-    ${JSONCPP_INCLUDE_DIRS}
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIR}
     ${WEBP_INCLUDE_DIRS}
+
+    ${JSONCPP_INCLUDE_DIRS}
     ${QRENCODE_INCLUDE_DIRS}
     ${PAHO_MQTT_C_INCLUDE_DIRS}
     ${PAHO_MQTT_CPP_INCLUDE_DIRS}
@@ -102,26 +120,26 @@ add_executable(eplayer
     src/TextRenderer.cpp
 )
 
-# 链接必要的库
+# 链接库（混合静态/动态）
 target_link_libraries(eplayer
-    ${CURL_LIBRARIES}
+
+    # 动态链接的复杂库
+    # ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    pthread
-    stdc++fs
-    paho-mqttpp3
-    #${PAHO_MQTT_C_LIBRARIES}
-    #${PAHO_MQTT_CPP_LIBRARIES}
     ${JPEG_LIBRARIES}
     ${PNG_LIBRARIES}
     ${WEBP_LIBRARIES}
+
+    # 系统库
+    pthread
+    stdc++fs
+
+    paho-mqttpp3 # MQTT 库
+    ${JSONCPP_LIBRARIES}
     ${QRENCODE_LIBRARIES}
-    #Freetype::Freetype
-)
 
+    # ${PAHO_MQTT_C_LIBRARIES}
+    # ${PAHO_MQTT_CPP_LIBRARIES}
 
-# 设置可执行文件的 RPATH 以确保在目标设备上能找到库
-set_target_properties(eplayer PROPERTIES
-    INSTALL_RPATH "${CMAKE_SYSROOT}/usr/lib/aarch64-linux-gnu"
-    BUILD_WITH_INSTALL_RPATH TRUE
+    # Freetype::Freetype
 )

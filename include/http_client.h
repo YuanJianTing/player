@@ -27,8 +27,9 @@ public:
 
 private:
     // 执行HTTP GET请求
-    std::string performGetRequest(const std::string &url, std::string &error_msg);
+    bool performGetRequest(const std::string &path, std::string &response, std::string &error_msg);
 
     std::string url_root_;
+    bool is_https_;
 };
 #endif // HTTP_CLIENT_H

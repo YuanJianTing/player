@@ -47,6 +47,7 @@ private:
     std::condition_variable queue_cv_;
     std::thread worker_thread_;
     bool stop_flag_;
+    bool is_https_;
 
     void worker();
     void process_task(const MediaItem &task);

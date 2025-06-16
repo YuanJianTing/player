@@ -27,11 +27,13 @@ sudo apt install -y build-essential cmake pkg-config
 
 # 安装核心库
 
-sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+#sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 
-apt-get install gstreamer1.0-plugins-base-apps
+#apt-get install gstreamer1.0-plugins-base-apps
 # 字体支持
 apt install libfreetype6-dev
+
+apt install libqrencode4 libqrencode-dev
 
 sudo apt install -y \
     libjsoncpp-dev \
@@ -78,10 +80,12 @@ mkdir build
 cd build
 
 # 生成Makefile
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/ubuntu/work/eplayer
 
 # 编译项目（使用4个线程并行编译）
 make -j4
+
+make install
 ```
 
 ## 运行项目
@@ -103,7 +107,7 @@ make -j4
 cmake --version
 
 # 检查gstreamer版本
-gst-inspect-1.0 --version
+#gst-inspect-1.0 --version
 
 # 检查jsoncpp头文件是否存在
 ls /usr/include/jsoncpp/json

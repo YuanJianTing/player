@@ -15,6 +15,7 @@
 
 Display::Display(const std::string &client_id, const char *fb_device) : device_id_(client_id), fb_device_(fb_device), m_text_renderer(std::make_unique<TextRenderer>())
 {
+    
     init_framebuffer();
     // 设置回调
     // player_.set_eos_callback([]()
