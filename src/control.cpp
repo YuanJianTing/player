@@ -51,7 +51,6 @@ void Control::show()
 
 void Control::start()
 {
-
     // 获取系统参数
     HttpClient client(url_root_);
 

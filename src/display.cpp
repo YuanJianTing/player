@@ -15,7 +15,7 @@
 
 Display::Display(const std::string &client_id, const char *fb_device) : device_id_(client_id), fb_device_(fb_device), m_text_renderer(std::make_unique<TextRenderer>())
 {
-    
+
     init_framebuffer();
     // 设置回调
     // player_.set_eos_callback([]()
@@ -314,16 +314,16 @@ void Display::clear_screen(uint32_t color)
 void Display::draw_text(const std::string &text, int x, int y,
                         const TextRenderConfig &config)
 {
-    try
-    {
-        m_text_renderer->init(config);
-        ImageData text_img = m_text_renderer->render_text(text);
-        display_image_data(text_img, x, y);
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Text render error: " << e.what() << std::endl;
-    }
+    // try
+    // {
+    //     m_text_renderer->init(config);
+    //     ImageData text_img = m_text_renderer->render_text(text);
+    //     display_image_data(text_img, x, y);
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     std::cerr << "Text render error: " << e.what() << std::endl;
+    // }
 }
 
 void Display::draw_text_multi(const std::vector<std::string> &lines, int x, int y, int line_spacing,

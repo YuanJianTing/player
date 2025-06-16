@@ -6,7 +6,7 @@
 
 int main()
 {
-    std::string url_root = "http://192.168.4.26:4011/";
+    std::string url_root = "http://192.168.4.26:4011";
     // std::string url_root = "http://114.55.52.37:8000/";
     // std::string url_root = "";
     std::string client_id = "6A10000000FF";

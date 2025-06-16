@@ -35,7 +35,7 @@ HttpClient::HttpClient(const std::string &url_root) : url_root_(url_root)
 
 bool HttpClient::getSystemInfo(SystemInfo &info, std::string &error_msg)
 {
-    std::string path = "api/system/systemInfo";
+    std::string path = "/api/system/systemInfo";
     std::string response;
 
     if (!performGetRequest(path, response, error_msg))
@@ -82,6 +82,7 @@ bool HttpClient::performGetRequest(const std::string &path, std::string &respons
 {
     try
     {
+        // std::cout << "http:" << url_root_ << std::endl;
         httplib::Client client(url_root_); // scheme + host
 
         // 设置超时（单位：秒）
@@ -96,7 +97,7 @@ bool HttpClient::performGetRequest(const std::string &path, std::string &respons
         }
 
         auto res = client.Get(path.c_str());
-
+        std::cout << "http:" << res->status << std::endl;
         if (!res)
         {
             error_msg = "HTTP请求失败: 无法连接到服务器";

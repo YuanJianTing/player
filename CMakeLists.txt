@@ -31,29 +31,9 @@ pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
 # 通过 FetchContent 获取 MQTT 库（本地编译时直接拉取源码）
 include(FetchContent)
-set(ENV{http_proxy} "http://192.168.4.111:1087")
-set(ENV{https_proxy} "http://192.168.4.111:1087")
+#set(ENV{http_proxy} "http://192.168.4.111:1087")
+#set(ENV{https_proxy} "http://192.168.4.111:1087")
 
-# -------------------------------------------------------------------
-# 1. 静态链接的小型库：jsoncpp 和 qrencode
-# -------------------------------------------------------------------
-# jsoncpp
-# FetchContent_Declare(
-# jsoncpp
-# GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp.git
-# GIT_TAG 1.9.5 # 指定稳定版本
-# CMAKE_ARGS -DJSONCPP_WITH_TESTS=OFF -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF -DBUILD_SHARED_LIBS=OFF
-# )
-# FetchContent_MakeAvailable(jsoncpp)
-
-# qrencode
-# FetchContent_Declare(
-# qrencode
-# GIT_REPOSITORY https://github.com/fukuchi/libqrencode.git
-# GIT_TAG v4.1.1 # 指定稳定版本
-# CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
-# )
-# FetchContent_MakeAvailable(qrencode)
 
 # http
 FetchContent_Declare(
