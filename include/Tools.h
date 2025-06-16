@@ -22,6 +22,10 @@ public:
     static ImageData create_image(const uint32_t color, const int img_width, const int img_height);
     // 获取wifi ssid
     static std::string get_current_wifi_ssid();
+    // 获取当前软件版本号
+    static std::string get_version();
+    // 获取固件版本
+    static std::string get_firmware();
 };
 
 #endif // TOOLS_H

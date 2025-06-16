@@ -117,3 +117,13 @@ std::string Tools::get_current_wifi_ssid()
     }
     return "";
 }
+
+std::string Tools::get_version()
+{
+    return "v3.0.1";
+}
+
+std::string Tools::get_firmware()
+{
+    return "Debian 6.1.140-1 (2025-05-22)";
+}

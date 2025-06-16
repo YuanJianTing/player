@@ -2,11 +2,9 @@
 #define DISPLAY_H
 
 #include <string>
-#include "GStreamerPlayer.h"
 #include <memory>
 #include <vector>
 #include "task_repository.h"
-#include "GstPlayer.h"
 #include "ImageDecoder.h"
 #include <mutex>
 #include <linux/fb.h>
@@ -26,10 +24,12 @@ private:
     /* data */
     std::string device_id_;
     const char *fb_device_;
-    GstPlayer player_;
+    // GstPlayer player_;
     std::vector<MediaItem> media_items_;
     FramebufferInfo fb_info_;
     std::mutex fb_mutex_;
+    std::string background_path_;
+    std::string price_path_;
 
     std::unique_ptr<TextRenderer> m_text_renderer;
 

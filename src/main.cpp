@@ -3,23 +3,9 @@
 #include <iostream>
 #include <control.h>
 #include "Tools.h"
-#include <GstConcatPlayer.h>
 
 int main()
 {
-
-    // putenv("GST_DEBUG=3"); // 设置中等详细级别的调试输出
-    // GstConcatPlayer player;
-    // player.set_window_size(0, 0, 800, 1280);
-    // player.add_uri("file:///data/download/26854ae43ae8c37d1d3628c0ba1457ca.mp4");
-    // player.add_uri("file:///data/download/4ee6c886a6c0738d1b072d16d0444906.mp4");
-    // player.play();
-
-    // GMainLoop *main_loop_ = g_main_loop_new(nullptr, FALSE);
-    // g_main_loop_run(main_loop_);
-
-    // return 0;
-
     std::string url_root = "http://192.168.4.26:4011/";
     // std::string url_root = "http://114.55.52.37:8000/";
     // std::string url_root = "";

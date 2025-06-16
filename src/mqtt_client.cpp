@@ -3,6 +3,7 @@
 #include <iostream>
 #include <json/json.h>
 #include <sstream>
+#include "Tools.h"
 
 MQTTClient::MQTTClient(const std::string &mqtt_url,
                        const std::string &client_id,
@@ -137,14 +138,14 @@ void MQTTClient::sendRegisterMessage()
     Json::Value root;
     root["MAC"] = client_id_;
     root["clientType"] = 2;
-    root["version"] = "1.0.0";
+    root["version"] = Tools::get_version();
     root["shopCode"] = "0001";
     root["width"] = 800;
     root["height"] = 1280;
-    root["IP"] = "";
+    root["IP"] = Tools::get_device_ip();
     root["deviceModel"] = "linux";
-    root["firmware"] = "linux-1.0.0";
-    root["SSID"] = "ETAG-R&D-TFT";
+    root["firmware"] = Tools::get_firmware();
+    root["SSID"] = Tools::get_current_wifi_ssid();
     root["hardware"] = "";
 
     Json::StreamWriterBuilder builder;

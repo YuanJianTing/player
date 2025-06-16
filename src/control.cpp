@@ -5,7 +5,6 @@
 #include <mqtt_client.h>
 #include <downloader.h>
 #include "task_repository.h"
-#include "GStreamerImage.h"
 
 Control::Control(const std::string &url_root, const std::string &client_id)
     : url_root_(url_root),

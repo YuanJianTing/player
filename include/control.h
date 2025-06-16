@@ -6,7 +6,6 @@
 #include "mqtt_client.h"
 #include "daemon_thread.h"
 #include "task_repository.h"
-#include "GStreamerPlayer.h"
 #include "display.h"
 
 class Control

@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <ft2build.h>
+// #include <ft2build.h>
 #include <ImageDecoder.h>
 
-#include FT_FREETYPE_H
+// #include FT_FREETYPE_H
 
 struct TextRenderConfig
 {
@@ -28,7 +28,7 @@ public:
     ImageData render_bg_text(const std::string &text);
 
 private:
-    FT_Library m_ft;
-    FT_Face m_face;
+    // FT_Library m_ft;
+    // FT_Face m_face;
     TextRenderConfig m_config;
 };

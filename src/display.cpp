@@ -1,7 +1,5 @@
 #include "display.h"
 #include <string>
-#include "GStreamerPlayer.h"
-#include "GstPlayer.h"
 #include <iostream>
 
 #include <fcntl.h>
@@ -26,7 +24,7 @@ Display::Display(const std::string &client_id, const char *fb_device) : device_i
 Display::~Display()
 {
     release_framebuffer();
-    player_.stop();
+    // player_.stop();
 }
 
 void Display::init_framebuffer()
@@ -120,7 +118,7 @@ void Display::show_info()
             ip};
         draw_text_multi(info, x + 10, y + qr_img.height + 10, 8);
 
-        draw_text("v2.0.1", x + 60, fb_info_.vinfo.yres - 50);
+        draw_text(Tools::get_version(), x + 60, fb_info_.vinfo.yres - 50);
     }
     catch (const std::exception &e)
     {
@@ -198,18 +196,17 @@ void Display::show_config()
 
 void Display::addMediaItem(const MediaItem &media, const std::string &local_path)
 {
-
     media_items_.push_back(media);
     if (media.type == 0)
     {
         if (media.group == 0)
         {
-            std::cout << "背景图：" << local_path << std::endl;
+            // std::cout << "背景图：" << local_path << std::endl;
             updateBackground(media, local_path);
         }
         else if (media.group == 1 || media.group == 99)
         {
-            std::cout << "价格图：" << local_path << std::endl;
+            // std::cout << "价格图：" << local_path << std::endl;
             updatePrice(media, local_path);
         }
     }
@@ -230,11 +227,29 @@ void Display::addMediaItem(const MediaItem &media, const std::string &local_path
 
 void Display::updateBackground(const MediaItem &media, const std::string &local_path)
 {
+    if (background_path_ == local_path)
+        return;
+    background_path_ = local_path;
     display_image(local_path.c_str(), media.left, media.top);
+
+    // 绘制价格图片
+    for (const auto &item : media_items_)
+    {
+        if (item.type == 0 && (item.group == 1 || item.group == 99))
+        {
+            if (price_path_.empty())
+            {
+                break;
+            }
+            updatePrice(item, price_path_);
+            break;
+        }
+    }
 }
 
 void Display::updatePrice(const MediaItem &media, const std::string &local_path)
 {
+    price_path_ = local_path;
     display_image(local_path.c_str(), media.left, media.top);
 }
 
@@ -328,11 +343,11 @@ void Display::draw_text_multi(const std::vector<std::string> &lines, int x, int 
 
 void Display::clear()
 {
-    player_.clear_list();
+    // player_.clear_list();
     media_items_.clear();
 
-    if (player_.getState() == GstPlayer::State::PLAYING)
-        player_.stop();
+    // if (player_.getState() == GstPlayer::State::PLAYING)
+    //     player_.stop();
 }
 
 std::string Display::getDeviceId() const
