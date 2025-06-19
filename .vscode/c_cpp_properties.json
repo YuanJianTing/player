@@ -7,7 +7,8 @@
                 "${workspaceFolder}/**",
                 "/usr/include",
                 "/usr/include/mqtt",
-                "${workspaceFolder}/build" // For generated headers
+                "${workspaceFolder}/build", // For generated headers
+                "${workspaceFolder}/build/_deps"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

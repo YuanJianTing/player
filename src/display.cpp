@@ -36,7 +36,8 @@ void Display::init_framebuffer()
     fb_info_.fd = open(fb_device_, O_RDWR);
     if (fb_info_.fd == -1)
     {
-        throw std::runtime_error("无法打开framebuffer设备: " + std::string(strerror(errno)));
+        return;
+        // throw std::runtime_error("无法打开framebuffer设备: " + std::string(strerror(errno)));
     }
 
     // 获取屏幕信息
@@ -314,16 +315,16 @@ void Display::clear_screen(uint32_t color)
 void Display::draw_text(const std::string &text, int x, int y,
                         const TextRenderConfig &config)
 {
-    // try
-    // {
-    //     m_text_renderer->init(config);
-    //     ImageData text_img = m_text_renderer->render_text(text);
-    //     display_image_data(text_img, x, y);
-    // }
-    // catch (const std::exception &e)
-    // {
-    //     std::cerr << "Text render error: " << e.what() << std::endl;
-    // }
+    try
+    {
+        m_text_renderer->init(config);
+        ImageData text_img = m_text_renderer->render_text(text);
+        display_image_data(text_img, x, y);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Text render error: " << e.what() << std::endl;
+    }
 }
 
 void Display::draw_text_multi(const std::vector<std::string> &lines, int x, int y, int line_spacing,

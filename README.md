@@ -31,9 +31,9 @@ sudo apt install -y build-essential cmake pkg-config
 
 #apt-get install gstreamer1.0-plugins-base-apps
 # 字体支持
-apt install libfreetype6-dev
+sudo apt install libfreetype6-dev
 
-apt install libqrencode4 libqrencode-dev
+sudo apt install -y libqrencode4 libqrencode-dev
 
 sudo apt install -y \
     libjsoncpp-dev \
@@ -80,7 +80,7 @@ mkdir build
 cd build
 
 # 生成Makefile
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/ubuntu/work/eplayer
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/ubuntu/eplayer
 
 # 编译项目（使用4个线程并行编译）
 make -j4

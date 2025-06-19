@@ -24,7 +24,6 @@ set(PAHO_WITH_SSL ON CACHE BOOL "Enable SSL support")
 find_package(PkgConfig REQUIRED)
 
 # 动态链接的复杂库配置
-pkg_check_modules(CURL REQUIRED libcurl) # 动态链接 libcurl
 find_package(OpenSSL REQUIRED) # 动态链接 OpenSSL
 pkg_check_modules(WEBP REQUIRED libwebp libwebpdemux libwebpmux)
 pkg_check_modules(JPEG REQUIRED libjpeg)
@@ -47,6 +46,18 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(jsoncpp)
 
+# http
+FetchContent_Declare(
+    cpp-httplib
+    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+    GIT_TAG v0.21.0 # 指定稳定版本
+    CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
+)
+
+# 添加https支持
+add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
+FetchContent_MakeAvailable(cpp-httplib)
+
 # qrencode
 FetchContent_Declare(
     qrencode
@@ -55,15 +66,6 @@ FetchContent_Declare(
     CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
 )
 FetchContent_MakeAvailable(qrencode)
-
-# http
-FetchContent_Declare(
-    cpp-httplib
-    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
-    GIT_TAG v0.21.1 # 指定稳定版本
-    CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
-)
-FetchContent_MakeAvailable(cpp-httplib)
 
 # mqtt
 FetchContent_Declare(
@@ -87,15 +89,12 @@ FetchContent_MakeAvailable(paho.mqtt.c paho.mqtt.cpp)
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}/_deps/jsoncpp-src/include # 手动指定json头文件
-    ${CURL_INCLUDE_DIRS}
+
+    ${CMAKE_BINARY_DIR}/_deps/cpp-httplib-src # 手动指定http头文件
     ${OPENSSL_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIR}
     ${WEBP_INCLUDE_DIRS}
-
-    # ${QRENCODE_INCLUDE_DIRS}
-    # ${PAHO_MQTT_C_INCLUDE_DIRS}
-    # ${PAHO_MQTT_CPP_INCLUDE_DIRS}
 )
 
 # 将源代码添加到此项目的可执行文件。
@@ -123,8 +122,9 @@ target_link_libraries(eplayer
     qrencode # qrencode 的静态库目标名
     paho-mqttpp3-static # MQTT 静态库
 
+    # cpp-httplib
+
     # 动态链接的复杂库
-    ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     ${JPEG_LIBRARIES}
     ${PNG_LIBRARIES}
@@ -158,29 +158,10 @@ file(GLOB_RECURSE DYNAMIC_LIBS
     "${WEBP_LIBRARIES}"
 )
 
-# "${PAHO_MQTT_C_LIBRARIES}"
-# "${PAHO_MQTT_CPP_LIBRARIES}"
-
 # 去重并过滤掉静态库
 list(REMOVE_DUPLICATES DYNAMIC_LIBS)
 list(FILTER DYNAMIC_LIBS EXCLUDE REGEX ".+\\.a$")
 
-# 安装动态库到 lib/ 目录
-# install(FILES ${DYNAMIC_LIBS}
-# DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-# )
-
 # 安装可执行文件和动态库
 install(TARGETS eplayer DESTINATION bin)
 install(FILES ${DYNAMIC_LIBS} DESTINATION lib)
-
-# 打印调试信息（可选）
-message(STATUS "静态链接的库:")
-message(STATUS "  - jsoncpp: jsoncpp_lib")
-message(STATUS "  - qrencode: qrencode")
-message(STATUS "  - paho-mqtt: paho-mqttpp3-static")
-message(STATUS "动态打包的库:")
-
-foreach(lib ${DYNAMIC_LIBS})
-    message(STATUS "  - ${lib}")
-endforeach()
