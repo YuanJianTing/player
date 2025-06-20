@@ -5,6 +5,7 @@
 #include <mqtt_client.h>
 #include <downloader.h>
 #include "task_repository.h"
+#include <logger.h>
 
 Control::Control(const std::string &url_root, const std::string &client_id)
     : url_root_(url_root),
@@ -59,14 +60,14 @@ void Control::start()
 
     if (client.getSystemInfo(info, error))
     {
-        std::cout << "系统信息获取成功:" << std::endl;
-        std::cout << "应用名称: " << info.appName << std::endl;
-        std::cout << "客户名称: " << info.customerName << std::endl;
-        std::cout << "MQTT地址: " << info.mqtt << std::endl;
+        LOGI("Control", "系统信息获取成功:");
+        LOGI("Control", "应用名称:%s", info.appName.c_str());
+        LOGI("Control", "客户名称:%s", info.customerName.c_str());
+        LOGI("Control", "MQTT地址:%s", info.mqtt.c_str());
     }
     else
     {
-        std::cerr << "获取配置信息错误: " << error << std::endl;
+        LOGE("Control", "获取配置信息错误:%s", error.c_str());
         return;
     }
 
@@ -79,7 +80,7 @@ void Control::start()
     // 确保连接成功
     if (!mqtt_client_->isConnected())
     {
-        std::cerr << "MQTT连接失败" << std::endl;
+        LOGE("Control", "MQTT连接失败");
         return;
     }
 }
@@ -87,7 +88,7 @@ void Control::start()
 // 处理接受到的消息
 void Control::handleMessage(const std::string &code, const std::string &body)
 {
-    std::cout << "Received message - Code: " << code << ", Body: " << body << std::endl;
+    LOGI("Control", "Received message - Code:%d ,Body: %s ", code, body.c_str());
 
     if ("0001" == code)
     {
@@ -103,7 +104,7 @@ void Control::handleMessage(const std::string &code, const std::string &body)
     else if ("0002" == code)
     {
         // 处理播放列表
-        printf("Received task, start caching");
+        LOGI("Control", "Received task, start caching ");
         std::string device_id = task_repository_.saveTask(body);
         if (device_id.empty())
             return;
@@ -149,12 +150,12 @@ void Control::handleMessage(const std::string &code, const std::string &body)
             }
             catch (const std::exception &e)
             {
-                std::cerr << "配置参数解析错误: " << e.what() << std::endl;
+                LOGE("Control", "配置参数解析错误:%s ", e.what());
             }
         }
         else
         {
-            std::cerr << "配置参数格式无效 " << std::endl;
+            LOGE("Control", "配置参数格式无效 ");
         }
     }
 }
@@ -163,7 +164,7 @@ void Control::handleMessage(const std::string &code, const std::string &body)
 /// @param device_id
 void Control::refresh(const std::string device_id)
 {
-    std::cout << "刷新设备播放列表: " << device_id << std::endl;
+    LOGI("Control", "刷新设备播放列表:%s ", device_id.c_str());
     auto playList = task_repository_.getPlayList(device_id);
     for (const auto &item : playList)
     {
@@ -189,7 +190,7 @@ void Control::downloadCallback(const MediaItem &media, const std::string &local_
     }
     else
     {
-        std::cout << "Failed: " << media.file_name << " Error: " << error << std::endl;
+        LOGE("Control", "Failed:%s Error:%s", media.file_name, error);
     }
 }
 
@@ -207,7 +208,7 @@ void Control::heartbeat(const std::int32_t &speed)
     }
     else
     {
-        std::cerr << "MQTT客户端未初始化，无法启动心跳线程" << std::endl;
+        LOGE("Control", "MQTT客户端未初始化，无法启动心跳线程");
     }
 }
 

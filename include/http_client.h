@@ -31,5 +31,7 @@ private:
 
     std::string url_root_;
     bool is_https_;
+    std::string host_;
+    int port_;
 };
 #endif // HTTP_CLIENT_H

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <control.h>
 #include "Tools.h"
+#include "logger.h"
 
 int main()
 {
@@ -33,8 +34,7 @@ int main()
     // 分离线程（如果不需等待线程结束）
     control_thread.detach();
     //  启动播放器
-    std::cout
-        << "启动播放器,工作目录：" << work_dir << std::endl;
+    LOGI("Startup", "启动播放器,工作目录：%s", work_dir.c_str());
 
     control.show();
 

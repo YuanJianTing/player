@@ -7,6 +7,7 @@
 #include <cctype>
 #include <iomanip>
 #include <string>
+#include <logger.h>
 
 MQTTClient::MQTTClient(const std::string &mqtt_url,
                        const std::string &client_id,
@@ -18,7 +19,8 @@ MQTTClient::MQTTClient(const std::string &mqtt_url,
       password_(password)
 {
 
-    std::cerr << "mqtt 地址：" << mqtt_url_ << " client_id:" << client_id_ << std::endl;
+    LOGI("Display", "mqtt 地址：%s client_id：%s", mqtt_url_.c_str(), client_id_.c_str());
+
     // 创建MQTT客户端
     client_ = std::make_shared<mqtt::async_client>(mqtt_url_, client_id_);
 
@@ -93,7 +95,7 @@ void MQTTClient::publish(const std::string &command,
     }
     catch (const mqtt::exception &exc)
     {
-        std::cerr << "Publish error: " << exc.what() << std::endl;
+        LOGE("Display", "Publish error：%s ", exc.what());
     }
 }
 
@@ -107,13 +109,13 @@ void MQTTClient::connect()
     try
     {
         client_->connect(conn_opts_)->wait();
-        std::cout << "服务器连接成功。 " << std::endl;
+        LOGI("Display", "服务器连接成功。");
         subscribe();
         sendRegisterMessage();
     }
     catch (const mqtt::exception &exc)
     {
-        std::cerr << "Connection error: " << exc.what() << std::endl;
+        LOGE("Display", "Connection error：%s ", exc.what());
     }
 }
 
@@ -125,11 +127,10 @@ void MQTTClient::subscribe()
     try
     {
         client_->subscribe(client_id_, 1)->wait();
-        std::cout << "开始订阅消息 " << client_id_ << std::endl;
     }
     catch (const mqtt::exception &exc)
     {
-        std::cerr << "Subscribe error: " << exc.what() << std::endl;
+        LOGE("Display", "Subscribe error：%s ", exc.what());
     }
 }
 
@@ -154,7 +155,7 @@ void MQTTClient::sendRegisterMessage()
     Json::StreamWriterBuilder builder;
     const std::string payload = Json::writeString(builder, root);
 
-    std::cout << "注册设备： " << payload << std::endl;
+    LOGI("Display", "注册设备：%s ", payload.c_str());
 
     try
     {
@@ -166,7 +167,7 @@ void MQTTClient::sendRegisterMessage()
     }
     catch (const mqtt::exception &exc)
     {
-        std::cerr << "Register message error: " << exc.what() << std::endl;
+        LOGE("Display", "Register message error：%s ", exc.what());
     }
 }
 

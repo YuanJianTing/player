@@ -31,19 +31,17 @@ pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 # 通过 FetchContent 获取 MQTT 库（本地编译时直接拉取源码）
 include(FetchContent)
 
-#set(ENV{http_proxy} "http://192.168.4.151:1087")
-#set(ENV{https_proxy} "http://192.168.4.151:1087")
+# set(ENV{http_proxy} "http://192.168.4.151:1087")
+# set(ENV{https_proxy} "http://192.168.4.151:1087")
 
 # http
 FetchContent_Declare(
     cpp-httplib
 
-    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
-    GIT_TAG v0.21.0 # 指定稳定版本
-    CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
-
-    SOURCE_DIR ./build/_deps/cpp-httplib-src
-
+    # GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+    # GIT_TAG v0.21.0 # 指定稳定版本
+    # CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
+    SOURCE_DIR ../package/cpp-httplib-src
 )
 
 # 添加https支持
@@ -54,17 +52,17 @@ FetchContent_MakeAvailable(cpp-httplib)
 FetchContent_Declare(
     paho.mqtt.c
 
-    GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.c.git
-    GIT_TAG v1.3.10
-    SOURCE_DIR ./build/_deps/paho.mqtt.c-src
+    # GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.c.git
+    # GIT_TAG v1.3.10
+    SOURCE_DIR ../package/paho.mqtt.c-src
 )
 
 FetchContent_Declare(
     paho.mqtt.cpp
 
-    GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.cpp.git
-    GIT_TAG v1.2.0
-    SOURCE_DIR ./build/_deps/paho.mqtt.cpp-src
+    # GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.cpp.git
+    # GIT_TAG v1.2.0
+    SOURCE_DIR ../package/paho.mqtt.cpp-src
 )
 FetchContent_MakeAvailable(paho.mqtt.c paho.mqtt.cpp)
 
@@ -72,9 +70,9 @@ FetchContent_MakeAvailable(paho.mqtt.c paho.mqtt.cpp)
 FetchContent_Declare(
     std
 
-    GIT_REPOSITORY https://github.com/nothings/stb.git
-    GIT_TAG master
-    SOURCE_DIR ./build/_deps/std-src
+    # GIT_REPOSITORY https://github.com/nothings/stb.git
+    # GIT_TAG master
+    SOURCE_DIR ../package/std-src
 )
 FetchContent_MakeAvailable(std)
 
@@ -132,7 +130,7 @@ target_link_libraries(eplayer
     stdc++fs
 
     paho-mqttpp3 # MQTT 库
-    
+
     ${JSONCPP_LIBRARIES}
     ${QRENCODE_LIBRARIES}
 

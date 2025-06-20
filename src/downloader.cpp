@@ -13,6 +13,7 @@
 #include <queue>
 #include <filesystem>
 #include "Tools.h"
+#include <logger.h>
 
 Downloader::Downloader(const std::string &url_root)
     : url_root_(url_root), stop_flag_(false)
@@ -112,8 +113,8 @@ void Downloader::process_task(const MediaItem &task)
         {
             if (!verify_md5(local_path, task.MD5))
             {
-                std::cout << "MD5验证不通过。\n"
-                          << local_path << std::endl;
+                LOGW("Downloader", "MD5验证不通过。%s ", local_path.c_str());
+
                 success = false;
                 error_msg = "MD5 mismatch";
                 std::filesystem::remove(local_path);
@@ -122,7 +123,7 @@ void Downloader::process_task(const MediaItem &task)
         }
         else
         {
-            std::cout << "单次下载文件失败" << std::endl;
+            LOGW("Downloader", "单次下载文件失败 ");
             error_msg = "Download failed";
         }
     }
@@ -134,7 +135,8 @@ size_t Downloader::get_file_size(const std::string &url)
 {
     try
     {
-        std::cout << "下载地址： " << url << std::endl;
+        LOGI("Downloader", "下载地址：%s ", url.c_str());
+
         httplib::Result res = get_http_client(url.c_str(), 10);
         if (res && res->has_header("Content-Length"))
         {
@@ -151,7 +153,8 @@ size_t Downloader::get_file_size(const std::string &url)
 bool Downloader::download_file_multithread(const std::string &url, const std::string &local_path)
 {
     size_t file_size = get_file_size(url);
-    std::cout << "获取到文件大小: " << file_size << std::endl;
+    LOGI("Downloader", "获取到文件大小 %d ", file_size);
+
     if (file_size == 0)
         return false;
 
@@ -335,8 +338,7 @@ bool Downloader::verify_md5(const std::string &file_path, const std::string &exp
         md5_str << std::hex << std::setw(2) << std::setfill('0') << (int)result[i];
     }
 
-    std::cout << "计算的MD5: " << md5_str.str() << std::endl;
-    std::cout << "期望的MD5: " << expected_md5 << std::endl;
+    LOGI("Downloader", "计算的MD5:%s 期望的MD5:%s", md5_str.str().c_str(), expected_md5.c_str());
 
     return md5_str.str() == expected_md5;
 }
@@ -375,8 +377,6 @@ httplib::Result Downloader::get_http_client(const std::string &url, int timeout)
         host = host_port;
         port = (protocol == "https") ? 443 : 80;
     }
-
-    std::cout << "path=" << path << std::endl;
 
     httplib::Client client(host, port);
     client.set_connection_timeout(10);

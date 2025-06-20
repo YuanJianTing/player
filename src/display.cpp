@@ -12,6 +12,7 @@
 #include <Framebuffer.h>
 #include <Tools.h>
 #include <QrCodeGenerator.h>
+#include <logger.h>
 
 Display::Display(const std::string &client_id, const char *fb_device) : device_id_(client_id), fb_device_(fb_device), m_text_renderer(std::make_unique<TextRenderer>())
 {
@@ -89,8 +90,10 @@ void Display::ensure_framebuffer_mapped()
 void Display::show_info()
 {
     std::string ip = Tools::get_device_ip();
-    std::cout << "设备ip " << ip << "屏幕id:" << fb_info_.fd << std::endl;
-    std::cout << "设备分辨率： " << fb_info_.vinfo.xres << "x" << fb_info_.vinfo.yres << std::endl;
+
+    LOGI("Display", "设备ip:%s 屏幕id:%d", ip.c_str(), fb_info_.fd);
+    LOGI("Display", "设备分辨率：:%d x%d", fb_info_.vinfo.xres, fb_info_.vinfo.yres);
+
     try
     {
         clear_screen();
@@ -125,7 +128,7 @@ void Display::show_info()
     }
     catch (const std::exception &e)
     {
-        std::cerr << "初始化显示配置错误: " << e.what() << std::endl;
+        LOGE("Display", "初始化显示配置错误:%s ", e.what());
     }
 }
 
@@ -194,7 +197,7 @@ void Display::show_config()
     }
     catch (const std::exception &e)
     {
-        std::cerr << "show_config错误: " << e.what() << std::endl;
+        LOGE("Display", "show_config error :%s ", e.what());
     }
 }
 
@@ -267,7 +270,7 @@ void Display::display_image(const std::string &image_path, const int offset_x, c
     }
     catch (const std::exception &e)
     {
-        std::cerr << "图片显示错误: " << e.what() << std::endl;
+        LOGE("Display", "图片显示错误 :%s ", e.what());
     }
 }
 
@@ -297,6 +300,7 @@ void Display::display_image_data(const ImageData &image_data, const int offset_x
     }
     catch (const std::exception &e)
     {
+        // LOGE("Display", "绘制到framebuffer失败 :%s ", e.what());
         throw std::runtime_error("绘制到framebuffer失败: " + std::string(e.what()));
     }
 }
@@ -310,7 +314,7 @@ void Display::clear_screen(uint32_t color)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "clear_screen错误: " << e.what() << std::endl;
+        LOGE("Display", "clear_screen error :%s ", e.what());
     }
 }
 
@@ -325,7 +329,7 @@ void Display::draw_text(const std::string &text, int x, int y,
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Text render error: " << e.what() << std::endl;
+        LOGE("Display", "Text render error :%s ", e.what());
     }
 }
 

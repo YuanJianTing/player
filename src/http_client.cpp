@@ -2,6 +2,7 @@
 #include <httplib.h>
 #include <sstream>
 #include <json/json.h>
+#include <logger.h>
 
 HttpClient::HttpClient(const std::string &url_root) : url_root_(url_root)
 {
@@ -21,13 +22,13 @@ HttpClient::HttpClient(const std::string &url_root) : url_root_(url_root)
     size_t colon_pos = host_port.find(':');
     if (colon_pos != std::string::npos)
     {
-        std::string host_ = host_port.substr(0, colon_pos);
-        int port_ = std::stoi(host_port.substr(colon_pos + 1));
+        host_ = host_port.substr(0, colon_pos);
+        port_ = std::stoi(host_port.substr(colon_pos + 1));
     }
     else
     {
-        std::string host_ = host_port;
-        int port_ = (protocol == "https") ? 443 : 80;
+        host_ = host_port;
+        port_ = (protocol == "https") ? 443 : 80;
     }
 
     is_https_ = (protocol == "https");
@@ -35,7 +36,7 @@ HttpClient::HttpClient(const std::string &url_root) : url_root_(url_root)
 
 bool HttpClient::getSystemInfo(SystemInfo &info, std::string &error_msg)
 {
-    std::string path = "api/system/systemInfo";
+    std::string path = "/api/system/systemInfo";
     std::string response;
 
     if (!performGetRequest(path, response, error_msg))
@@ -82,8 +83,8 @@ bool HttpClient::performGetRequest(const std::string &path, std::string &respons
 {
     try
     {
-        // std::cout << "http:" << url_root_ << std::endl;
-        httplib::Client client(url_root_); // scheme + host
+        LOGI("HttpClient", "http:%s", path.c_str());
+        httplib::Client client(host_, port_); // scheme + host
 
         // 设置超时（单位：秒）
         client.set_connection_timeout(10);
@@ -97,7 +98,6 @@ bool HttpClient::performGetRequest(const std::string &path, std::string &respons
         }
 
         auto res = client.Get(path.c_str());
-
         if (!res)
         {
             error_msg = "HTTP请求失败: 无法连接到服务器";
