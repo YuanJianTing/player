@@ -1,11 +1,12 @@
-#define STB_TRUETYPE_IMPLEMENTATION
 #include "TextRenderer.h"
 #include "stb_truetype.h"
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-_ TextRenderer::TextRenderer()
+#include <cmath>
+
+TextRenderer::TextRenderer()
 {
 }
 

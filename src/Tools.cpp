@@ -10,11 +10,17 @@
 #include <array>
 #include <memory>
 #include <regex>
+#include <filesystem>
+
+std::string Tools::getExecutablePath()
+{
+    return std::filesystem::current_path().string();
+}
 
 std::string Tools::get_work_dir()
 {
     const char *env_path = std::getenv("EPLAYER_DIR");
-    return env_path ? env_path : "/data/";
+    return env_path ? env_path : getExecutablePath() + "/data/";
 }
 
 std::string Tools::get_download_dir()

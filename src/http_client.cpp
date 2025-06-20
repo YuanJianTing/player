@@ -35,7 +35,7 @@ HttpClient::HttpClient(const std::string &url_root) : url_root_(url_root)
 
 bool HttpClient::getSystemInfo(SystemInfo &info, std::string &error_msg)
 {
-    std::string path = "/api/system/systemInfo";
+    std::string path = "api/system/systemInfo";
     std::string response;
 
     if (!performGetRequest(path, response, error_msg))
@@ -97,13 +97,12 @@ bool HttpClient::performGetRequest(const std::string &path, std::string &respons
         }
 
         auto res = client.Get(path.c_str());
-        std::cout << "http:" << res->status << std::endl;
+
         if (!res)
         {
             error_msg = "HTTP请求失败: 无法连接到服务器";
             return false;
         }
-
         if (res->status != 200)
         {
             error_msg = "HTTP请求失败: 状态码 " + std::to_string(res->status);

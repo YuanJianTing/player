@@ -19,32 +19,6 @@ Downloader::Downloader(const std::string &url_root)
 {
     work_dir_ = Tools::get_download_dir();
     std::filesystem::create_directory(work_dir_);
-    // 解析URL获取主机和端口
-    size_t protocol_pos = url_root.find("://");
-    if (protocol_pos == std::string::npos)
-    {
-        throw std::runtime_error("Invalid URL format");
-    }
-
-    std::string protocol = url_root.substr(0, protocol_pos);
-    std::string host_port_path = url_root.substr(protocol_pos + 3);
-
-    size_t slash_pos = host_port_path.find('/');
-    std::string host_port = host_port_path.substr(0, slash_pos);
-
-    size_t colon_pos = host_port.find(':');
-    if (colon_pos != std::string::npos)
-    {
-        std::string host_ = host_port.substr(0, colon_pos);
-        int port_ = std::stoi(host_port.substr(colon_pos + 1));
-    }
-    else
-    {
-        std::string host_ = host_port;
-        int port_ = (protocol == "https") ? 443 : 80;
-    }
-
-    is_https_ = (protocol == "https");
     worker_thread_ = std::thread(&Downloader::worker, this);
 }
 
@@ -160,27 +134,8 @@ size_t Downloader::get_file_size(const std::string &url)
 {
     try
     {
-        size_t protocol_pos = url.find("://");
-        if (protocol_pos == std::string::npos)
-        {
-            return 0;
-        }
-
-        std::string protocol = url.substr(0, protocol_pos);
-        std::string host_port_path = url.substr(protocol_pos + 3);
-
-        size_t slash_pos = host_port_path.find('/');
-        std::string path = host_port_path.substr(slash_pos);
-
-        httplib::Client client(url_root_);
-        client.set_connection_timeout(10);
-
-        if (is_https_)
-        {
-            client.enable_server_certificate_verification(false);
-        }
-
-        auto res = client.Head(path.c_str());
+        std::cout << "下载地址： " << url << std::endl;
+        httplib::Result res = get_http_client(url.c_str(), 10);
         if (res && res->has_header("Content-Length"))
         {
             return std::stoul(res->get_header_value("Content-Length"));
@@ -218,6 +173,20 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
 
     size_t slash_pos = host_port_path.find('/');
     std::string path = host_port_path.substr(slash_pos);
+    std::string host_port = host_port_path.substr(0, slash_pos);
+    size_t colon_pos = host_port.find(':');
+    std::string host;
+    int port = 80;
+    if (colon_pos != std::string::npos)
+    {
+        host = host_port.substr(0, colon_pos);
+        port = std::stoi(host_port.substr(colon_pos + 1));
+    }
+    else
+    {
+        host = host_port;
+        port = (protocol == "https") ? 443 : 80;
+    }
 
     for (int i = 0; i < thread_count; ++i)
     {
@@ -229,7 +198,7 @@ bool Downloader::download_file_multithread(const std::string &url, const std::st
         threads.emplace_back([=, &download_results]()
                              {
             try {
-                httplib::Client client(url_root_);
+                httplib::Client client(host,port);
                 client.set_connection_timeout(10);
                 client.set_read_timeout(30);
                 
@@ -298,28 +267,7 @@ bool Downloader::download_file(const std::string &url, const std::string &local_
 {
     try
     {
-        size_t protocol_pos = url.find("://");
-        if (protocol_pos == std::string::npos)
-        {
-            return false;
-        }
-
-        std::string protocol = url.substr(0, protocol_pos);
-        std::string host_port_path = url.substr(protocol_pos + 3);
-
-        size_t slash_pos = host_port_path.find('/');
-        std::string path = host_port_path.substr(slash_pos);
-
-        httplib::Client client(url_root_);
-        client.set_connection_timeout(10);
-        client.set_read_timeout(30);
-
-        if (is_https_)
-        {
-            client.enable_server_certificate_verification(false);
-        }
-
-        auto res = client.Get(path.c_str());
+        httplib::Result res = get_http_client(url, 60);
         if (res && res->status == 200)
         {
             std::ofstream out(local_path, std::ios::binary);
@@ -396,6 +344,10 @@ bool Downloader::verify_md5(const std::string &file_path, const std::string &exp
 void Downloader::update_url(const std::string &url)
 {
     url_root_ = url;
+}
+
+httplib::Result Downloader::get_http_client(const std::string &url, int timeout)
+{
     // 解析URL获取主机和端口
     size_t protocol_pos = url.find("://");
     if (protocol_pos == std::string::npos)
@@ -408,18 +360,33 @@ void Downloader::update_url(const std::string &url)
 
     size_t slash_pos = host_port_path.find('/');
     std::string host_port = host_port_path.substr(0, slash_pos);
+    std::string path = host_port_path.substr(slash_pos);
 
     size_t colon_pos = host_port.find(':');
+    std::string host;
+    int port = 80;
     if (colon_pos != std::string::npos)
     {
-        std::string host_ = host_port.substr(0, colon_pos);
-        int port_ = std::stoi(host_port.substr(colon_pos + 1));
+        host = host_port.substr(0, colon_pos);
+        port = std::stoi(host_port.substr(colon_pos + 1));
     }
     else
     {
-        std::string host_ = host_port;
-        int port_ = (protocol == "https") ? 443 : 80;
+        host = host_port;
+        port = (protocol == "https") ? 443 : 80;
     }
 
-    is_https_ = (protocol == "https");
+    std::cout << "path=" << path << std::endl;
+
+    httplib::Client client(host, port);
+    client.set_connection_timeout(10);
+    client.set_read_timeout(timeout);
+
+    if (protocol == "https")
+    {
+        client.enable_server_certificate_verification(false);
+    }
+
+    httplib::Result res = client.Get(path.c_str());
+    return res;
 }

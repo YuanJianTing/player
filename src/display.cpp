@@ -118,7 +118,8 @@ void Display::show_info()
         std::vector<std::string> info = {
             device_id_,
             ip};
-        draw_text_multi(info, x + 10, y + qr_img.height + 10, 8);
+        // 显示设备id
+        draw_text_multi(info, x + 50, y + qr_img.height + 10, 8);
 
         draw_text(Tools::get_version(), x + 60, fb_info_.vinfo.yres - 50);
     }
@@ -184,6 +185,7 @@ void Display::show_config()
         int x = (window_width - qr_img.width) / 2;
         display_image_data(qr_img, x - 40, 360);
         int y = 380 + qr_img.height;
+        // 显示设备id
         draw_text(device_id_, 210, y, {.size = 40});
         if (!ip.empty())
         {

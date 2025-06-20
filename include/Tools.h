@@ -26,6 +26,7 @@ public:
     static std::string get_version();
     // 获取固件版本
     static std::string get_firmware();
+    static std::string getExecutablePath();
 };
 
 #endif // TOOLS_H

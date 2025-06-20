@@ -11,6 +11,7 @@
 #include "task_repository.h"
 #include <memory>
 #include <vector>
+#include <httplib.h>
 
 class Downloader
 {
@@ -47,10 +48,11 @@ private:
     std::condition_variable queue_cv_;
     std::thread worker_thread_;
     bool stop_flag_;
-    bool is_https_;
 
     void worker();
     void process_task(const MediaItem &task);
+
+    httplib::Result get_http_client(const std::string &url, int timeout = 30);
     size_t get_file_size(const std::string &url);
     bool download_file_multithread(const std::string &url, const std::string &local_path);
     /// @brief 单线程下载文件

@@ -2,10 +2,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-// #include <ft2build.h>
 #include <ImageDecoder.h>
-
-// #include FT_FREETYPE_H
+#include <stb_truetype.h>
 
 struct TextRenderConfig
 {
