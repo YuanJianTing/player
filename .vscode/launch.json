@@ -2,14 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Debug eplayer",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/eplayer",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/vcpkg/installed/arm64-linux/lib:${env:LD_LIBRARY_PATH}"
+                }
+            ],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
@@ -19,28 +24,8 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "cmake: build"
-        },
-        {
-            "name": "CMake 调试",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/eplayer",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
-            "setupCommands": [
-                {
-                    "description": "为 gdb 启用整齐打印",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "CMake 构建"
+            "preLaunchTask": "CMake Build",
+            "miDebuggerPath": "gdb"
         }
     ]
 }

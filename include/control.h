@@ -18,7 +18,7 @@ private:
     TaskRepository task_repository_;
     std::shared_ptr<Display> display_;
 
-    std::shared_ptr<MQTTClient> mqtt_client_;
+    std::shared_ptr<mqtt_client> mqtt_client_;
     std::shared_ptr<DaemonThread> daemon_thread_;
 
     void handleMessage(const std::string &code, const std::string &body);

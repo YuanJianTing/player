@@ -72,7 +72,7 @@ void Control::start()
     }
 
     // 链接mqtt服务器
-    mqtt_client_ = std::make_shared<MQTTClient>("tcp://" + info.mqtt, client_id_, "LCD", "eTagTech@Pass");
+    mqtt_client_ = std::make_shared<mqtt_client>("tcp://" + info.mqtt, client_id_, "LCD", "eTagTech@Pass");
     // 设置回调函数
     mqtt_client_->setMessageCallback([this](const std::string &code, const std::string &body)
                                      { this->handleMessage(code, body); });

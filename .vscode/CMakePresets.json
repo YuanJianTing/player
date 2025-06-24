@@ -1,0 +1,20 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "vcpkg",
+            "displayName": "vcpkg Toolchain",
+            "description": "Configure with vcpkg toolchain",
+            "toolchainFile": "/home/ubuntu/work/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Ninja"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "vcpkg-release",
+            "configurePreset": "vcpkg",
+            "configuration": "Release"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "name": "eplayer",
+    "version": "1.0.0",
+    "dependencies": [
+        "openssl",
+        "jsoncpp",
+        "libqrencode",
+        "cpp-httplib",
+        "paho-mqtt",
+        "libjpeg-turbo",
+        "libpng",
+        "libwebp"
+    ]
+}

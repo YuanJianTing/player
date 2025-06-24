@@ -1,4 +1,3 @@
-// mqtt_client.cpp
 #include "mqtt_client.h"
 #include <iostream>
 #include <json/json.h>
@@ -9,10 +8,10 @@
 #include <string>
 #include <logger.h>
 
-MQTTClient::MQTTClient(const std::string &mqtt_url,
-                       const std::string &client_id,
-                       const std::string &account,
-                       const std::string &password)
+mqtt_client::mqtt_client(const std::string &mqtt_url,
+                         const std::string &client_id,
+                         const std::string &account,
+                         const std::string &password)
     : mqtt_url_(mqtt_url),
       client_id_(client_id),
       account_(account),
@@ -21,120 +20,133 @@ MQTTClient::MQTTClient(const std::string &mqtt_url,
 
     LOGI("Display", "mqtt 地址：%s client_id：%s", mqtt_url_.c_str(), client_id_.c_str());
 
-    // 创建MQTT客户端
-    client_ = std::make_shared<mqtt::async_client>(mqtt_url_, client_id_);
+    // 初始化MQTT客户端
+    int rc;
+    MQTTClient_create(&client_, mqtt_url_.c_str(), client_id_.c_str(),
+                      MQTTCLIENT_PERSISTENCE_NONE, NULL);
 
-    // 创建并设置回调
-    callback_ = std::make_shared<MQTTCallback>(*this);
-    client_->set_callback(*callback_);
+    // 设置回调
+    MQTTClient_setCallbacks(client_, this, connectionLost, messageArrived, deliveryComplete);
 
     // 设置连接选项
-    conn_opts_ = mqtt::connect_options();
-    conn_opts_.set_keep_alive_interval(20);
-    conn_opts_.set_clean_session(true);
-    conn_opts_.set_user_name(account_);
-    conn_opts_.set_password(password_);
-
-    // conn_opts_.set_will
+    conn_opts_.keepAliveInterval = 20;
+    conn_opts_.cleansession = 1;
+    conn_opts_.username = account_.c_str();
+    conn_opts_.password = password_.c_str();
+    conn_opts_.MQTTVersion = MQTTVERSION_3_1_1;
 
     connect();
 }
 
-void MQTTClient::handleMessage(mqtt::const_message_ptr msg)
+mqtt_client::~mqtt_client()
 {
-    std::string topic = msg->get_topic();
-    std::string payload = msg->to_string();
+    disconnect();
+    MQTTClient_destroy(&client_);
+}
 
-    // std::cout << "收到消息： topic=" << topic << " body:" << payload << std::endl;
-    if (message_callback_)
+void mqtt_client::connectionLost(void *context, char *cause)
+{
+    mqtt_client *self = static_cast<mqtt_client *>(context);
+    LOGE("Display", "Connection lost: %s", cause ? cause : "unknown reason");
+    // 尝试重新连接
+    self->connect();
+}
+
+int mqtt_client::messageArrived(void *context, char *topicName, int topicLen, MQTTClient_message *message)
+{
+    mqtt_client *self = static_cast<mqtt_client *>(context);
+
+    std::string payload(static_cast<char *>(message->payload), message->payloadlen);
+
+    if (self->message_callback_)
     {
         if (payload.size() >= 4)
         {
             std::string code = payload.substr(0, 4);
             std::string body = payload.substr(4);
-            message_callback_(code, body);
+            self->message_callback_(code, body);
         }
     }
+
+    MQTTClient_free(topicName);
+    MQTTClient_freeMessage(&message);
+    return 1;
 }
 
-void MQTTClient::disconnect()
+void mqtt_client::deliveryComplete(void *context, MQTTClient_deliveryToken dt)
 {
-    if (client_ && client_->is_connected())
+    // 消息发布完成回调
+}
+
+void mqtt_client::disconnect()
+{
+    if (isConnected())
     {
-        client_->disconnect()->wait();
+        MQTTClient_disconnect(client_, 10000);
     }
 }
 
-MQTTClient::~MQTTClient()
-{
-    if (client_ && client_->is_connected())
-    {
-        client_->disconnect()->wait();
-    }
-}
-
-void MQTTClient::setMessageCallback(MessageCallback callback)
+void mqtt_client::setMessageCallback(MessageCallback callback)
 {
     message_callback_ = callback;
 }
 
-void MQTTClient::publish(const std::string &command,
-                         const std::string &message,
-                         int qos)
+void mqtt_client::publish(const std::string &command,
+                          const std::string &message,
+                          int qos)
 {
     if (!isConnected())
         return;
 
     std::string topic = "lcd/" + command;
     std::string payload = client_id_ + "&6A&" + urlEncode(message);
-    // std::cout << "发送消息：" << payload << std::endl;
-    try
+
+    MQTTClient_message pubmsg = MQTTClient_message_initializer;
+    pubmsg.payload = const_cast<char *>(payload.c_str());
+    pubmsg.payloadlen = static_cast<int>(payload.length());
+    pubmsg.qos = qos;
+    pubmsg.retained = 0;
+
+    MQTTClient_deliveryToken token;
+    int rc = MQTTClient_publishMessage(client_, topic.c_str(), &pubmsg, &token);
+    if (rc != MQTTCLIENT_SUCCESS)
     {
-        auto msg = mqtt::make_message(topic, payload, qos, false);
-        client_->publish(msg)->wait();
-    }
-    catch (const mqtt::exception &exc)
-    {
-        LOGE("Display", "Publish error：%s ", exc.what());
+        LOGE("Display", "Publish error: %d", rc);
     }
 }
 
-bool MQTTClient::isConnected() const
+bool mqtt_client::isConnected() const
 {
-    return client_ && client_->is_connected();
+    return MQTTClient_isConnected(client_);
 }
 
-void MQTTClient::connect()
+void mqtt_client::connect()
 {
-    try
+    int rc = MQTTClient_connect(client_, &conn_opts_);
+    if (rc != MQTTCLIENT_SUCCESS)
     {
-        client_->connect(conn_opts_)->wait();
-        LOGI("Display", "服务器连接成功。");
-        subscribe();
-        sendRegisterMessage();
+        LOGE("Display", "Connection error: %d", rc);
+        return;
     }
-    catch (const mqtt::exception &exc)
-    {
-        LOGE("Display", "Connection error：%s ", exc.what());
-    }
+
+    LOGI("Display", "服务器连接成功。");
+    subscribe();
+    sendRegisterMessage();
 }
 
-void MQTTClient::subscribe()
+void mqtt_client::subscribe()
 {
     if (!isConnected())
         return;
 
-    try
+    int rc = MQTTClient_subscribe(client_, client_id_.c_str(), 1);
+    if (rc != MQTTCLIENT_SUCCESS)
     {
-        client_->subscribe(client_id_, 1)->wait();
-    }
-    catch (const mqtt::exception &exc)
-    {
-        LOGE("Display", "Subscribe error：%s ", exc.what());
+        LOGE("Display", "Subscribe error: %d", rc);
     }
 }
 
-void MQTTClient::sendRegisterMessage()
+void mqtt_client::sendRegisterMessage()
 {
     if (!isConnected())
         return;
@@ -157,21 +169,11 @@ void MQTTClient::sendRegisterMessage()
 
     LOGI("Display", "注册设备：%s ", payload.c_str());
 
-    try
-    {
-
-        publish("register", payload);
-        // std::cout << "获取服务器配置 " << std::endl;
-        // 获取服务器配置
-        publish("get_config", "");
-    }
-    catch (const mqtt::exception &exc)
-    {
-        LOGE("Display", "Register message error：%s ", exc.what());
-    }
+    publish("register", payload);
+    publish("get_config", "");
 }
 
-std::string MQTTClient::urlEncode(const std::string &value)
+std::string mqtt_client::urlEncode(const std::string &value)
 {
     if (value.empty())
     {
@@ -184,17 +186,14 @@ std::string MQTTClient::urlEncode(const std::string &value)
 
     for (auto c : value)
     {
-        // 保留字母数字和特定字符不编码
         if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
         {
             escaped << c;
         }
-        // 空格编码为 '+'
         else if (c == ' ')
         {
             escaped << '+';
         }
-        // 其他字符进行百分号编码
         else
         {
             escaped << '%' << std::setw(2) << static_cast<int>(static_cast<unsigned char>(c));

@@ -1,64 +1,42 @@
-// mqtt_client.h
 #ifndef MQTT_CLIENT_H
 #define MQTT_CLIENT_H
 
 #include <string>
 #include <functional>
-#include <memory>
-#include <mqtt/async_client.h>
-#include <mqtt/connect_options.h>
-#include <mqtt/message.h>
-#include <cstdlib>
-#include <curl/curl.h>
+#include <MQTTClient.h> // Paho MQTT C 头文件
 
-class MQTTClient {
+class mqtt_client
+{
 public:
-    using MessageCallback = std::function<void(const std::string& code, const std::string& body)>;
+    using MessageCallback = std::function<void(const std::string &, const std::string &)>;
 
-    MQTTClient(const std::string& mqtt_url, 
-               const std::string& client_id,
-               const std::string& account,
-               const std::string& password);
-    
-    ~MQTTClient();
+    mqtt_client(const std::string &mqtt_url,
+                const std::string &client_id,
+                const std::string &account,
+                const std::string &password);
+    ~mqtt_client();
 
     void setMessageCallback(MessageCallback callback);
-    void publish(const std::string& command, 
-                 const std::string& message, 
-                 int qos = 1);
-
+    void publish(const std::string &command, const std::string &message, int qos = 1);
     bool isConnected() const;
     void disconnect();
+    void connect();
 
 private:
-    // 内部回调类
-    class MQTTCallback : public mqtt::callback {
-    public:
-        MQTTCallback(MQTTClient& client) : client_(client) {}
-        
-        void message_arrived(mqtt::const_message_ptr msg) override {
-            client_.handleMessage(msg);
-        }
-        
-    private:
-        MQTTClient& client_;
-    };
-
-    void connect();
     void subscribe();
-    
     void sendRegisterMessage();
-    void handleMessage(mqtt::const_message_ptr msg);
-    static std::string urlEncode(const std::string& value);
+    std::string urlEncode(const std::string &value);
+    static void connectionLost(void *context, char *cause);
+    static int messageArrived(void *context, char *topicName, int topicLen, MQTTClient_message *message);
+    static void deliveryComplete(void *context, MQTTClient_deliveryToken dt);
 
     std::string mqtt_url_;
     std::string client_id_;
     std::string account_;
     std::string password_;
     MessageCallback message_callback_;
-    std::shared_ptr<mqtt::async_client> client_;
-    std::shared_ptr<MQTTCallback> callback_;
-    mqtt::connect_options conn_opts_;
+    MQTTClient client_; // 明确使用全局命名空间的MQTTClient
+    MQTTClient_connectOptions conn_opts_;
 };
 
 #endif // MQTT_CLIENT_H

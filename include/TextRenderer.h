@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <ImageDecoder.h>
-#include <stb_truetype.h>
+#include "stb_truetype.h"
 
 struct TextRenderConfig
 {

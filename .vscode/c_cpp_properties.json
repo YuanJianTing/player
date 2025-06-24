@@ -4,17 +4,18 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/**",
-                "/usr/include",
-                "/usr/include/mqtt",
-                "${workspaceFolder}/build", // For generated headers
-                "${workspaceFolder}/build/_deps"
+                "~/work/vcpkg/installed/arm64-linux/include",
+                "${workspaceFolder}/vcpkg_installed/arm64-linux/include"
             ],
-            "defines": [],
+            "defines": [
+                "CPPHTTPLIB_OPENSSL_SUPPORT",
+                "PAHO_MQTT_USE_OPENSSL=1"
+            ],
             "compilerPath": "/usr/bin/g++",
-            "cStandard": "gnu17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm64",
+            "configurationProvider": "ms-vscode.cmake-tools",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],

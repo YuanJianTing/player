@@ -1,103 +1,72 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 project(eplayer)
 
-# 设置交叉编译工具链（通过外部传入或在此指定）
-# if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-# set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/aarch64-toolchain.cmake")
-# endif()
+# 设置 vcpkg 工具链
+#set(CMAKE_TOOLCHAIN_FILE "/home/ubuntu/work/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+# 设置 vcpkg 工具链（如果使用）
+if(DEFINED ENV{VCPKG_ROOT})
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+endif()
+
+# 手动指定 vcpkg 安装目录
+set(VCPKG_INSTALLED_DIR ${CMAKE_SOURCE_DIR}/vcpkg_installed)
+list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
+
+
+# 设置静态链接
+set(VCPKG_TARGET_TRIPLET "arm64-linux" CACHE STRING "")
+set(VCPKG_LIBRARY_LINKAGE "static" CACHE STRING "")
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# 设置源码根目录变量
-set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-
-# 启用 SSL 支持（MQTT 需要）
-set(PAHO_WITH_SSL ON CACHE BOOL "Enable SSL support")
+# 或者明确指定不使用SSL版本
+set(PAHO_WITH_SSL OFF CACHE BOOL "Disable SSL support in Paho MQTT")
 
 # 查找必要的库
-find_package(PkgConfig REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(JPEG REQUIRED)
+find_package(PNG REQUIRED)
+find_package(WebP CONFIG REQUIRED 
+    PATHS "/home/ubuntu/work/vcpkg/packages/libwebp_arm64-linux/share/WebP"
+    NO_DEFAULT_PATH)
+find_package(jsoncpp REQUIRED)
 
-# 动态链接的复杂库配置
-find_package(OpenSSL REQUIRED) # 动态链接 OpenSSL
-pkg_check_modules(WEBP REQUIRED libwebp libwebpdemux libwebpmux)
-pkg_check_modules(JPEG REQUIRED libjpeg)
-pkg_check_modules(PNG REQUIRED libpng)
+find_path(QRENCODE_INCLUDE_DIR NAMES qrencode.h)
+find_library(QRENCODE_LIBRARY_RELEASE qrencode)
+#find_library(QRENCODE_LIBRARY_DEBUG qrencoded)
+#set(QRENCODE_LIBRARIES optimized ${QRENCODE_LIBRARY_RELEASE} debug ${QRENCODE_LIBRARY_DEBUG})
+message(STATUS "LibQREncode found: ${QRENCODE_LIBRARY_RELEASE}")
 
-pkg_search_module(QRENCODE REQUIRED libqrencode)
-pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
-# 通过 FetchContent 获取 MQTT 库（本地编译时直接拉取源码）
-include(FetchContent)
 
-# set(ENV{http_proxy} "http://192.168.4.151:1087")
-# set(ENV{https_proxy} "http://192.168.4.151:1087")
+find_package(httplib CONFIG REQUIRED)
+find_package(eclipse-paho-mqtt-c CONFIG REQUIRED)
 
-# http
-FetchContent_Declare(
-    cpp-httplib
 
-    # GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
-    # GIT_TAG v0.21.0 # 指定稳定版本
-    # CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
-    SOURCE_DIR ../package/cpp-httplib-src
-)
+#set(ENV{http_proxy} "http://192.168.4.151:1087")
+#set(ENV{https_proxy} "http://192.168.4.151:1087")
+# stb 单文件库（vcpkg 中没有，仍使用 FetchContent）
+#include(FetchContent)
 
 # 添加https支持
 add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
-FetchContent_MakeAvailable(cpp-httplib)
 
-# mqtt
-FetchContent_Declare(
-    paho.mqtt.c
-
-    # GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.c.git
-    # GIT_TAG v1.3.10
-    SOURCE_DIR ../package/paho.mqtt.c-src
-)
-
-FetchContent_Declare(
-    paho.mqtt.cpp
-
-    # GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.cpp.git
-    # GIT_TAG v1.2.0
-    SOURCE_DIR ../package/paho.mqtt.cpp-src
-)
-FetchContent_MakeAvailable(paho.mqtt.c paho.mqtt.cpp)
-
-# 字体绘制、图像处理、音频处理、实用工具​、数学与算法​
-FetchContent_Declare(
-    std
-
-    # GIT_REPOSITORY https://github.com/nothings/stb.git
-    # GIT_TAG master
-    SOURCE_DIR ../package/std-src
-)
-FetchContent_MakeAvailable(std)
-
+message( ${CMAKE_BINARY_DIR} )
 # 包含头文件
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
-
-    ${CMAKE_BINARY_DIR}/_deps/std-src
-
-    # ${CMAKE_BINARY_DIR}/_deps/jsoncpp-src/include # 手动指定json头文件
-    ${CMAKE_BINARY_DIR}/_deps/cpp-httplib-src # 手动指定json头文件
-
     ${OPENSSL_INCLUDE_DIR}
-    ${JPEG_INCLUDE_DIR}
-    ${PNG_INCLUDE_DIR}
+    ${JPEG_INCLUDE_DIRS}
+    ${PNG_INCLUDE_DIRS}
     ${WEBP_INCLUDE_DIRS}
-
-    ${JSONCPP_INCLUDE_DIRS}
-    ${QRENCODE_INCLUDE_DIRS}
-    ${PAHO_MQTT_C_INCLUDE_DIRS}
-    ${PAHO_MQTT_CPP_INCLUDE_DIRS}
-    ${stb_SOURCE_DIR}
+    ${QRENCODE_INCLUDE_DIR}
 )
 
-# 将源代码添加到此项目的可执行文件。
+
+# 添加可执行文件
 add_executable(eplayer
     src/main.cpp
     src/downloader.cpp
@@ -115,25 +84,30 @@ add_executable(eplayer
     src/stb_init.cpp
 )
 
-# 链接库（混合静态/动态）
+# 链接库（全部静态链接）
 target_link_libraries(eplayer
-
-    # 动态链接的复杂库
-    # ${CURL_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
+    # vcpkg 提供的静态库
+    jsoncpp
+    httplib::httplib
+    # target_link_libraries(main PRIVATE eclipse-paho-mqtt-c::paho-mqtt3a-static eclipse-paho-mqtt-c::paho-mqtt3c-static eclipse-paho-mqtt-c::paho-mqtt3as-static eclipse-paho-mqtt-c::paho-mqtt3cs-static)
+    eclipse-paho-mqtt-c::paho-mqtt3cs-static
+    # 系统库
+    OpenSSL::SSL
+    OpenSSL::Crypto
     ${JPEG_LIBRARIES}
     ${PNG_LIBRARIES}
     ${WEBP_LIBRARIES}
-
-    # 系统库
+    ${QRENCODE_LIBRARY_RELEASE}
     pthread
     stdc++fs
-
-    paho-mqttpp3 # MQTT 库
-
-    ${JSONCPP_LIBRARIES}
-    ${QRENCODE_LIBRARIES}
-
-    # ${PAHO_MQTT_C_LIBRARIES}
-    # ${PAHO_MQTT_CPP_LIBRARIES}
+    dl
 )
+
+# 设置 RPATH
+set_target_properties(eplayer PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)
+
+# 安装目标
+install(TARGETS eplayer DESTINATION bin)
