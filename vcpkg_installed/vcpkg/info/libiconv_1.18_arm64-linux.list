@@ -1,0 +1,7 @@
+arm64-linux/
+arm64-linux/share/
+arm64-linux/share/iconv/
+arm64-linux/share/iconv/vcpkg-cmake-wrapper.cmake
+arm64-linux/share/libiconv/
+arm64-linux/share/libiconv/vcpkg.spdx.json
+arm64-linux/share/libiconv/vcpkg_abi_info.txt

@@ -1,0 +1,168 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 13a0b1152a2621d73968608f2171d2c60cb741ff46f430f0f8ec9cf98d71e73a
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: f3eb3ad4fcd42463e9f70118c6adee96402d9e40fe673eca95d01764553e57ca
+Status: install ok installed
+
+Package: brotli
+Version: 1.1.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 9adc39cd6ed315d1f248aa8f91733fd067b3df2eb74738f442a783d3655af95b
+Description: a generic-purpose lossless compression algorithm that compresses data using a combination of a modern variant of the LZ77 algorithm, Huffman coding and 2nd order context modeling.
+Status: install ok installed
+
+Package: cpp-httplib
+Version: 0.21.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: a7b997c2d45425b7122d2590e17af2df3555f22478493e4e9618f38fd4eb6386
+Description: A single file C++11 header-only HTTP/HTTPS server and client library
+Default-Features: brotli
+Status: install ok installed
+
+Package: cpp-httplib
+Feature: brotli
+Depends: brotli
+Architecture: arm64-linux
+Multi-Arch: same
+Description: Enables brotli compression support using brotli
+Status: install ok installed
+
+Package: jsoncpp
+Version: 1.9.6
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: eaa397ff26f49c74fe2c9bb4454e79a2c8f49535756c38bfb6d61f2d9c248375
+Description: JsonCpp is a C++ library that allows manipulating JSON values, including serialization and deserialization to and from strings. It can also preserve existing comment in unserialization/serialization steps, making it a convenient format to store user input files.
+Status: install ok installed
+
+Package: libjpeg-turbo
+Version: 3.1.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 8e997d8a33a10a40ba7a6161eea6c3dcef5f3a0278f932befa3e2e3506666b73
+Description: libjpeg-turbo is a JPEG image codec that uses SIMD instructions (MMX, SSE2, NEON, AltiVec) to accelerate baseline JPEG compression and decompression on x86, x86-64, ARM, and PowerPC systems.
+Status: install ok installed
+
+Package: zlib
+Version: 1.3.1
+Depends: vcpkg-cmake
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: d0acfea3c5b7f7e4db555ec67c160d17b291353e225a4f7f87815d51f0a6175b
+Description: A compression library
+Status: install ok installed
+
+Package: libpng
+Version: 1.6.48
+Depends: vcpkg-cmake, vcpkg-cmake-config, zlib
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 11378c60b291285693d94f266e2e349386ffaadfb313e2379e56ac4ac9b4cfcb
+Description: libpng is a library implementing an interface for reading and writing PNG (Portable Network Graphics) format files
+Status: install ok installed
+
+Package: libiconv
+Version: 1.18
+Port-Version: 1
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: d601fa493ade09489b4b68001a0443f220fc14087c21a18bf73f46eaed3406f5
+Description: iconv() text conversion.
+    This port installs GNU libiconv if the system C runtime doesn't provide a suitable iconv() implementation.
+Status: install ok installed
+
+Package: libqrencode
+Version: 4.1.1
+Port-Version: 2
+Depends: libiconv, libpng, vcpkg-cmake
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: d989d420e3732c18c56860876be69a972d735309704864c6a786960349a842f6
+Description: libqrencode - a fast and compact QR Code encoding library
+Status: install ok installed
+
+Package: libwebp
+Version: 1.5.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 8ae0cb807eb3512069f36124bbfb48168ac8050ddc99dc82345782959b8af789
+Description: WebP codec: library to encode and decode images in WebP format
+Default-Features: libwebpmux, nearlossless, simd
+Status: install ok installed
+
+Package: libwebp
+Feature: libwebpmux
+Architecture: arm64-linux
+Multi-Arch: same
+Description: Build the libwebpmux library
+Status: install ok installed
+
+Package: libwebp
+Feature: nearlossless
+Architecture: arm64-linux
+Multi-Arch: same
+Description: Enable near-lossless encoding
+Status: install ok installed
+
+Package: libwebp
+Feature: simd
+Architecture: arm64-linux
+Multi-Arch: same
+Description: Enable any SIMD optimization.
+Status: install ok installed
+
+Package: vcpkg-cmake-get-vars
+Version: 2025-05-29
+Depends: vcpkg-cmake
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 02e18bef96e93d51bba1bc049f3325a27cda0d1621cb981bf788d0d01480a93e
+Status: install ok installed
+
+Package: openssl
+Version: 3.5.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config, vcpkg-cmake-get-vars
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: e5608b0120ace0f8f67f77416de844d36f4e55a08949ee3621c88ddd8bdb65ed
+Description: OpenSSL is an open source project that provides a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.
+Status: install ok installed
+
+Package: libuuid
+Version: 1.0.3
+Port-Version: 15
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: 12c7d0df71e5d173f99fe640718855fc127c49dada153fbfeb1d7fa2b1cbdc46
+Description: Universally unique id library
+Status: install ok installed
+
+Package: paho-mqtt
+Version: 1.3.14
+Depends: libuuid, openssl, vcpkg-cmake, vcpkg-cmake-config
+Architecture: arm64-linux
+Multi-Arch: same
+Abi: d722602b70e4c608f4d66fc62a80bd600b5da9c2ff080d89350108846143f7a0
+Description: Paho project provides open-source client implementations of MQTT and MQTT-SN messaging protocols aimed at new, existing, and emerging applications for the Internet of Things
+Status: install ok installed
+

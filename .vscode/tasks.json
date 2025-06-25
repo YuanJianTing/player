@@ -2,22 +2,35 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CMake Build",
+            "label": "cmake",
             "type": "shell",
-            "command": "cmake --build ${workspaceFolder}/build --config Debug -j $(nproc)",
+            "command": "cmake",
+            "args": [
+                "-S",
+                "${workspaceFolder}",
+                "-B",
+                "${workspaceFolder}/build",
+                "-DCMAKE_TOOLCHAIN_FILE=/home/ubuntu/work/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "CMake 配置任务"
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build"
+            ],
             "group": "build",
             "problemMatcher": [
                 "$gcc"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "label": "Clean Build",
-            "type": "shell",
-            "command": "rm -rf ${workspaceFolder}/build && mkdir ${workspaceFolder}/build && cd ${workspaceFolder}/build && cmake ..",
-            "problemMatcher": []
+            ]
         }
     ]
 }

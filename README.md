@@ -25,21 +25,7 @@ sudo apt update
 # 安装编译工具和基础依赖
 sudo apt install -y build-essential cmake pkg-config
 
-# 字体支持
-sudo apt install libfreetype6-dev
 
-sudo apt install -y libqrencode4 libqrencode-dev
-
-sudo apt install -y \
-    libjsoncpp-dev \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libpaho-mqttpp-dev \
-    libpaho-mqtt-dev \
-    libpng-dev \
-    libjpeg-dev \
-    curl \
-    libwebp-dev
 ```+
 
 ## 安装开发工具（VSCode）
@@ -55,11 +41,6 @@ apt install gcc-aarch64-linux-gnu
 # 验证安装
 aarch64-linux-gnu-gcc --version
 
-# 安装drm_info 工具 记录下可用的 plane-id 和显示模式
-apt-get install drm-info
-
-# 如果在x86、x64设备中调试，则需要安装 qemu arm64模拟器
-sudo apt install qemu-system-arm
 
 ```
 
@@ -73,6 +54,13 @@ sudo apt install qemu-system-arm
 # 创建构建目录并进入
 mkdir build
 cd build
+
+# 编译
+mkdir -p build/release
+cd build/release
+cmake ../.. -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release --parallel 4
+
 
 # 生成Makefile
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/ubuntu/eplayer

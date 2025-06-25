@@ -2,30 +2,56 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug eplayer",
+            "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/eplayer",
+            "program": "${workspaceFolder}/build/${buildType}/${workspaceFolderBasename}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [
-                {
-                    "name": "LD_LIBRARY_PATH",
-                    "value": "${workspaceFolder}/vcpkg/installed/arm64-linux/lib:${env:LD_LIBRARY_PATH}"
-                }
-            ],
+            "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
                 {
-                    "description": "Enable pretty-printing for gdb",
+                    "description": "为 gdb 启用整齐打印",
                     "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "CMake Build",
-            "miDebuggerPath": "gdb"
+            "preLaunchTask": "build",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "(gdb) 启动 - 带参数",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/${buildType}/${workspaceFolderBasename}",
+            "args": [
+                "--input",
+                "data.txt",
+                "--verbose"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "(gdb) 附加到进程",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/build/${buildType}/${workspaceFolderBasename}",
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }

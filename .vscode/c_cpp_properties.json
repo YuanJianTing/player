@@ -3,20 +3,15 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/include",
-                "~/work/vcpkg/installed/arm64-linux/include",
-                "${workspaceFolder}/vcpkg_installed/arm64-linux/include"
+                "${workspaceFolder}/**",
+                "/home/ubuntu/work/vcpkg/installed/arm64-linux/include/**"
             ],
-            "defines": [
-                "CPPHTTPLIB_OPENSSL_SUPPORT",
-                "PAHO_MQTT_USE_OPENSSL=1"
-            ],
+            "defines": [],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-arm64",
-            "configurationProvider": "ms-vscode.cmake-tools",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

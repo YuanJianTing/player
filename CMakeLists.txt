@@ -1,26 +1,33 @@
 cmake_minimum_required(VERSION 3.15)
 project(eplayer)
 
-# 设置 vcpkg 工具链
-#set(CMAKE_TOOLCHAIN_FILE "/home/ubuntu/work/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
-# 设置 vcpkg 工具链（如果使用）
-if(DEFINED ENV{VCPKG_ROOT})
-    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-endif()
+# 全局静态链接设置
+set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+#set(CMAKE_EXE_LINK_DEFAULT_LIBRARIES "-static-libgcc -static-libstdc++")
 
-# 手动指定 vcpkg 安装目录
-set(VCPKG_INSTALLED_DIR ${CMAKE_SOURCE_DIR}/vcpkg_installed)
-list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
+# vcpkg 工具链设置
+# if(DEFINED ENV{VCPKG_ROOT})
+#     set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+#     set(VCPKG_TARGET_TRIPLET "arm64-linux-static" CACHE STRING "")
+# endif()
 
-
-# 设置静态链接
-set(VCPKG_TARGET_TRIPLET "arm64-linux" CACHE STRING "")
-set(VCPKG_LIBRARY_LINKAGE "static" CACHE STRING "")
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# 优化选项
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_compile_options(-O3 -flto -fno-exceptions -fno-rtti)
+    add_link_options(-flto)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-fexceptions)
+endif()
 
 # 或者明确指定不使用SSL版本
 set(PAHO_WITH_SSL OFF CACHE BOOL "Disable SSL support in Paho MQTT")
@@ -32,14 +39,10 @@ find_package(PNG REQUIRED)
 find_package(WebP CONFIG REQUIRED 
     PATHS "/home/ubuntu/work/vcpkg/packages/libwebp_arm64-linux/share/WebP"
     NO_DEFAULT_PATH)
-find_package(jsoncpp REQUIRED)
+find_package(jsoncpp CONFIG REQUIRED)
 
 find_path(QRENCODE_INCLUDE_DIR NAMES qrencode.h)
 find_library(QRENCODE_LIBRARY_RELEASE qrencode)
-#find_library(QRENCODE_LIBRARY_DEBUG qrencoded)
-#set(QRENCODE_LIBRARIES optimized ${QRENCODE_LIBRARY_RELEASE} debug ${QRENCODE_LIBRARY_DEBUG})
-message(STATUS "LibQREncode found: ${QRENCODE_LIBRARY_RELEASE}")
-
 
 
 find_package(httplib CONFIG REQUIRED)
@@ -86,8 +89,9 @@ add_executable(eplayer
 
 # 链接库（全部静态链接）
 target_link_libraries(eplayer
+$<IF:$<TARGET_EXISTS:jsoncpp_static>,jsoncpp_static,jsoncpp>
     # vcpkg 提供的静态库
-    jsoncpp
+     JsonCpp::JsonCpp
     httplib::httplib
     # target_link_libraries(main PRIVATE eclipse-paho-mqtt-c::paho-mqtt3a-static eclipse-paho-mqtt-c::paho-mqtt3c-static eclipse-paho-mqtt-c::paho-mqtt3as-static eclipse-paho-mqtt-c::paho-mqtt3cs-static)
     eclipse-paho-mqtt-c::paho-mqtt3cs-static
@@ -101,13 +105,23 @@ target_link_libraries(eplayer
     pthread
     stdc++fs
     dl
+    -static
 )
 
-# 设置 RPATH
-set_target_properties(eplayer PROPERTIES
-    INSTALL_RPATH "$ORIGIN/../lib"
-    BUILD_WITH_INSTALL_RPATH TRUE
-)
-
-# 安装目标
+# 安装设置
 install(TARGETS eplayer DESTINATION bin)
+
+# 验证链接
+add_custom_command(TARGET eplayer POST_BUILD
+    COMMAND ${CMAKE_OBJDUMP} -p $<TARGET_FILE:eplayer> | grep NEEDED
+    COMMENT "Verifying linked libraries"
+)
+
+# # 设置 RPATH
+# set_target_properties(eplayer PROPERTIES
+#     INSTALL_RPATH "$ORIGIN/../lib"
+#     BUILD_WITH_INSTALL_RPATH TRUE
+# )
+
+# # 安装目标
+# install(TARGETS eplayer DESTINATION bin)

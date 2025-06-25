@@ -2,19 +2,47 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "vcpkg",
-            "displayName": "vcpkg Toolchain",
-            "description": "Configure with vcpkg toolchain",
-            "toolchainFile": "/home/ubuntu/work/vcpkg/scripts/buildsystems/vcpkg.cmake",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "generator": "Ninja"
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Default build using Ninja",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "/home/ubuntu/work/vcpkg/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_TARGET_TRIPLET": "arm64-linux",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed"
+            }
+        },
+        {
+            "name": "debug",
+            "inherits": "default",
+            "displayName": "Debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "default",
+            "displayName": "Release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed"
+            }
         }
     ],
     "buildPresets": [
         {
-            "name": "vcpkg-release",
-            "configurePreset": "vcpkg",
-            "configuration": "Release"
+            "name": "debug",
+            "configurePreset": "debug",
+            "displayName": "Build Debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release",
+            "displayName": "Build Release"
         }
     ]
 }
